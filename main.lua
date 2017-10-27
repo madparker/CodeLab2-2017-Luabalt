@@ -152,6 +152,7 @@ function love.draw()
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 end
 
+--Chao
 function updateTilesetBatch()
   tilesetBatch:clear()
 
