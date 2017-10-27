@@ -162,6 +162,7 @@ function updateTilesetBatch()
   tilesetBatch:flush()
 end
 
+--player jumps here
 function love.keypressed( key, isrepeat )
   if key == "up" and onGround then
     body:applyLinearImpulse(0, -500)
