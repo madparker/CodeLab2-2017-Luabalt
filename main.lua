@@ -194,6 +194,7 @@ function beginContact(bodyA, bodyB, coll)
 end
 
 -- This is called every time a collision end.
+--David's code
 function endContact(bodyA, bodyB, coll)
   onGround = false
   local aData=bodyA:getUserData()
@@ -205,6 +206,7 @@ function endContact(bodyA, bodyB, coll)
   end
 end
 
+--David's code
 function love.focus(f)
   if not f then
     print("LOST FOCUS")
@@ -213,6 +215,7 @@ function love.focus(f)
   end
 end
 
+--David's code
 function love.quit()
   print("Thanks for playing! Come back soon!")
 end

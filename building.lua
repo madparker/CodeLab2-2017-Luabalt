@@ -13,6 +13,7 @@ building = {
 
 building.__index = building -- failed table lookups on the instances should fallback to the class table, to get methods
 
+--David's Code
 function building:makeBuilding(x, y, tileSize)
 
 
