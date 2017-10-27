@@ -1,3 +1,4 @@
+--assign require files
 local anim8 = require 'anim8'
 require 'building'
 
