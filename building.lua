@@ -9,7 +9,7 @@ building = {
   height = 0,
   body,
   shape
-} -- the table representing the class, which will double as the metatable for the instances
+} -- the table representing the class, which will double as the metatable for the instances 1
 
 building.__index = building -- failed table lookups on the instances should fallback to the class table, to get methods
 
