@@ -6,6 +6,7 @@ tileQuads = {} -- parts of the tileset used for different tiles
 
 local time = 0
 
+--	CHRIS
 function love.load()
   width = 600
   height = 300
@@ -107,6 +108,7 @@ function love.load()
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
 end
 
+-- CHRIS
 function love.update(dt)
 
   currentAnim:update(dt)
@@ -135,6 +137,7 @@ function love.update(dt)
   end
 end
 
+-- CHRIS
 function love.draw()
   love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
   love.graphics.setColor(255, 255, 255)
@@ -152,6 +155,7 @@ function love.draw()
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 end
 
+--Chao
 function updateTilesetBatch()
   tilesetBatch:clear()
 
