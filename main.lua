@@ -2,50 +2,85 @@
 local anim8 = require 'anim8'
 require 'building'
 
-tileQuads = {} -- parts of the tileset used for different tiles
+-- Parts of the tileset used for different tiles
+tileQuads = {} 
 
+-- Time variable. Used for animations
 local time = 0
 
 --	CHRIS
+--	PLEASE NOTE:
+	--	If a function seems to be missing parameters from
+	--	its definition assume those values to be zero or nill.
+	--	For all method signatures only significant parameters 
+	--	are included.
 function love.load()
   width = 600
   height = 300
 
+  -- Makes a window of the specified height and width and makes the window sized fixed
   love.window.setMode(width, height, {resizable=false})
+  -- Sets title fo the window
   love.window.setTitle("Luabalt")
 
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
+
+  -- newWorld Method
+	--	Signature:	newWorld(xg, yg, sleep)
+	--	Definition: Establishes the physics for our game
+	--	Parameters:
+	--				number		xg		: gravity's force in the horizontal direction
+	--				number		yg		: gravity's force in the vertical direction
+	--				bool		sleep	: whether bodies in the world are allowed to sleep (I don't know what sleep means in this context)
+	--	Returns: 
+	--				A world with physics
+
   -- Create a world with standard gravity
   world = love.physics.newWorld(0, 9.81*15, true)
 
-  background=love.graphics.newImage('media/iPadMenu_atlas0.png')
-  --Make nearest neighbor, so pixels are sharp
+  -- Sets background image 
+  background = love.graphics.newImage('media/iPadMenu_atlas0.png')
+  -- Make nearest neighbor, so pixels are sharp
   background:setFilter("nearest", "nearest")
 
-  --Get Tile Image
+  -- Get Tile Image
   tilesetImage=love.graphics.newImage('media/play1_atlas0.png')
-  --Make nearest neighbor, so pixels are sharp
+  -- Make nearest neighbor, so pixels are sharp
   tilesetImage:setFilter("nearest", "nearest") -- this "linear filter" removes some artifacts if we were to scale the tiles
   tileSize = 16
  
-  -- crate
+  -- newQuad Method
+	--	Signature:	newQuad( x, y, width, height, sw, sh )
+	--	Definition: Returns the quad from an Image using user definied parameters
+	--	Parameters:
+	--				number		x		: top-left position in the Image along the x-axis.
+	--				number		y		: top-left position in the Image along the y-axis
+	--				number		width	: width of the Image in pixels
+	--				number		height	: height of the Image in pixels
+	--				number		sw		: reference width of the Image (in our case the game window's width)
+	--				number		sh		: reference height of theImage (In our case the game window's height)
+	--
+	--	Returns: 
+	--				Quad
+  
+  -- Reference quad for the crate
   tileQuads[0] = love.graphics.newQuad(0, 0, 
     18, 18,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- left corner
+  -- Left corner
   tileQuads[1] = love.graphics.newQuad(228, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- top middle
+  -- Top middle
   tileQuads[2] = love.graphics.newQuad(324, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- right middle
+  -- Right middle
   tileQuads[3] = love.graphics.newQuad(387, 68, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- middle1
+  -- Middle1
   tileQuads[4] = love.graphics.newQuad(100, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
@@ -53,82 +88,313 @@ function love.load()
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
 
+  -- newSpriteBatch Method
+	--	Signature:	newSpriteBatch(image, maxSprites)
+	--	Definition: Groups sprites together to render images on screen faster
+	--	Parameters:
+	--				Image		image		: the image to use for sprites
+	--				number		maxSprites	: the max number a sprite batch can contain
+	--
+	--	Returns: 
+	--				SpriteBatch
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
+
+  -- newBody Method
+	--	Signature:	newBody(world, x, y, type)
+	--	Definition: Creates a new body in our world at the user definied location 
+	--				(This is similer to Unity's rigidbody system)
+	--	Parameters:
+	--				World		world		: the world our body will exist in 
+	--										  (world is defined on Line 31 in our game)
+	--				number		x			: the x position of our body
+	--				number		y			: the y position of our body
+	--				BodyType	type		: the type of body
+					-- What is a Bodytype
+						--	A collection of rules that define a body's interaction with the 
+						--	physics of the game
+						--	Bodytype types:
+						--				string		"static"	: does not move
+						--				string		"dynamic"	: collides with all bodies
+						--				string		"kinematic"	: only collides with "dynamic" bodies
+	--
+	--	Returns: 
+	--				Body
 
   -- Create a Body for the crate.
   crate_body = love.physics.newBody(world, 770, 200, "dynamic")
+
+  -- newRectangle Method
+	--	Signature:	newRectangleShape(x, y, width, height)
+	--	Definition: Creates the collision shape for our body (in this case a rectangle)
+	--	Parameters:
+	--				number		x			: offset along x axis
+	--				number		y			: offset along y axis
+	--				number		width		: width of collision shape
+	--				number		height		: height of collision shape
+	--	Returns: 
+	--				Shape
   crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
+  
+  -- newFixture Method
+	--	Signature:	newFixture(body, shape)
+	--	Definition: Attaches the collision shape to the Body
+	--	Parameters:
+	--				Body		body		: the body to have the collision shape attached
+	--				Shape		shape		: thee shape to be attached to the body
+	--	
+	--	Returns: 
+	--				Fixture (i.e. A body with a collision shape attached)
   fixture = love.physics.newFixture(crate_body, crate_box)
-  fixture:setUserData("Crate") -- Set a string userdata
+  -- setUserData Method
+	--	Signature:	setUserData(value)
+	--	Definition: associates a lua value with the Fixture
+	--	Parameters:
+	--				any			value		: the value to be associated with the Fixture
+	--
+	--	Returns: 
+	--				Nothing
+
+  -- Now we can refer to the crate by using the string "Crate"
+  fixture:setUserData("Crate")
+
+  -- setMassData Method
+	--	Signature:	setMassData(x, y, mass, inertia)
+	--	Definition:	Overrides current mass info. All physics bodies have mass. 
+	--				At this point in the code our crate has no mass info.
+	--	Parameters:
+	--				number		x			: x position for center of mass
+	--				number		y			: y position for center of mass
+	--				number		mass		: the mass of the object
+	--				number		inertia		: rotational inertia
+	--
+	--	Returns: 
+	--				Nothing
+
+  -- computeMass Method
+	--	Signature:	computeMass(density)
+	--	Definition: figures out the mass, inertia and center of mass for a Shape
+	--	Parameters:
+	--				number		density		: density of the shape
+	--
+	--	Returns:
+	--				number		x			: x position for center of mass
+	--				number		y			: y position for center of mass
+	--				number		mass		: the mass of the object
+	--				number		inertia		: rotational inertia
+
   crate_body:setMassData(crate_box:computeMass( 1 ))
 
   text = "hello World"
 
+  -- What Is A Building
+	--	An Image with a Body, Shape, and Fixture
+  -- makeBuilding Method
+	--	Signature:	makeBuilding(x, y)
+	--	Definition: Creates a build at the user defined position
+	--	Parameters:
+	--				number		x			: x position of the building
+	--				number		y			: y position of the building
+	--
+	--	Returns:
+	--				Building	
+  
+  -- These are the two buildings we see at the start of the game
   building1 = building:makeBuilding(750, 16)
   building2 = building:makeBuilding(1200, 16)
 
+  -- Sets player image
   playerImg = love.graphics.newImage("media/player2.png")
+
   -- Create a Body for the player.
+  -- "Dynamic" Bodytype collides with all bodies
   body = love.physics.newBody(world, 400, 100, "dynamic")
+
   -- Create a shape for the body.
   player_box = love.physics.newRectangleShape(15, 15, 30, 30)
+
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
-  fixture:setUserData("Player") -- Set a string userdata
+
+  -- We can now refer to the player using the string "Player"
+  fixture:setUserData("Player")
   
   -- Calculate the mass of the body based on attatched shapes.
   -- This gives realistic simulations.
   body:setMassData(player_box:computeMass( 1 ))
+
+  -- setFixedRotation Method
+	--	Signature:	setFixedRotation(isFixed)
+	--	Definition: Tells the body if its rotation is staionary or not
+	--	Parameters:
+	--				bool		isFixed		: If true we do not rotate
+	--
+	--	Returns:
+	--				Nothing
+
+  -- The player is not allowed to rotate
   body:setFixedRotation(true)
-  --the player an init push.
+
+  -- applyLinearImpulse Method
+	--	Signature: applyLinearImpulse(ix, iy)
+	--	Definition: applies force to the body. In this case it is a linear force
+	--	Parameters:
+	--				number		ix			: force applied to the center of mass in the horizontal direction
+	--				number		iy			: force applied to the center of mass in the vertical direction
+	--
+	--	Returns:
+	--				Nothing
+
+  -- The player an init push.
+  -- This is what makes the player move to the right
   body:applyLinearImpulse(1000, 0)
+
+  -- setCallbacks Method
+	--	Signature:	setCallbacks(beginContact, endContact)
+	--	Definition: Sets functions for the collision callbacks during the world update.
+	--				The first two arguments are the colliding fixtures.
+	--	Parameters:
+	--				function	beginContact : gets called when two fixtures overlap
+	--				function	endContact	 : Gets called when two fixtures cease to overlap. 
+	--										   This will also be called outside of a world update, 
+	--										   when colliding objects are destroyed.
+	--
+	--	Returns:
+	--				Nothing
 
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
 
+  -- Sets font size to 12
   love.graphics.setNewFont(12)
+
+  -- Sets background color using RGB
   love.graphics.setBackgroundColor(155,155,155)
 
+  -- What is anim8
+	-- An animation library for LÖVE
+
+  -- newGrid Method
+	--	Signature:	newGrid(frameWidth, frameHeight, imageWidth, imageHeight)
+	--	Definition: Creates a grid to be applied to a spritesheet
+	--	Parameters:
+	--				number		frameWidth	: width of the frame
+	--				number		frameHeight : height of the frame
+	--				number		imageWidth	: width of the image
+	--				number		imageHeight : height of the image
+	--
+	--	Returns:
+	--				A local gird from anim8 to apply to a spritesheet
+
+  -- We will use the grid g to define the frames of our animation
   local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
+
+  -- newAnimation Method
+	--	Signature:	newAnimation(frames, durations, onLoop)
+	--	Definition: Creates a new animation
+	--	Parameters:
+	--				Image[]		frames		: the images to use for the animations
+	--										  grid(range, row)
+	--				number		durations	: duration of all frames in animation
+									--	duration can be a number or table
+										-- if number	:	All frames have the same value
+										-- if table		:	You can specify durations for all frames individually, 
+										--					like this: {0.1, 0.5, 0.1} or you can specify durations 
+										--					for ranges of frames: {['3-5']=0.2}.
+	--				string		onLoop		: should animation loop. Animation loops by default
+						--	Types of Animation loops
+							--	"loops"			- loops animation
+							--	"pauseAtEnd"	- pauses the animation at the end
+	--
+	--	Returns:
+	--			An Animation using the images specified
+	
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
   rollAnim = anim8.newAnimation(g('9-19',2), 0.05)
 
+  -- Sets current animation
   currentAnim = inAirAnim
 
+  -- newSource Method
+	--	Signature:	newSource(path, type)
+	--	Definition: Establishes a source of audio
+	--	Parameters:
+	--				string		path		: the file path to find the audio file
+	--				SourceType	type		: how the audio file is played
+					-- What is a Source Type:
+						--	SourceType types:
+						--				"stream"	: Stream the sound; decode it gradually. 
+						--							  Use for Background Music
+						--				"static"	: Decode the entire sound at once.
+						--							  Use for Sound effects.
+	--
+	--	Returns:
+	--			An Audio file
+
   music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
+  -- Volume: 1.0 is max and 0.0 is off.
   music:setVolume(0.1)
-  love.audio.play(music)
+  --love.audio.play(music)
 
+  -- Sets the run sound effect
   runSound = love.audio.newSource("media/foot1.mp3", "static")
-  runSound:setLooping(true);
+  --runSound:setLooping(true);
 
 
-  shape = love.physics.newRectangleShape(450, 500, 100, 100)
+  -- Makes a shape. I don't know the reason why
+  shape = love.physics.newRectangleShape(0, 00, 100, 100)
+
+  -- We could use this shape to tell the game if the player has died
+	--shapeBody = love.physics.newBody(world, 0, 0, "dynamic")
+	--shapeBody:applyLinearImpulse(1000, 0)
+	--shapeFixture = love.physics.newFixture(shapeBody, shape)
+	--shapeFixture:setUserData("Shape")
 end
 
 -- CHRIS
 function love.update(dt)
-
+  -- Updates the animation using deltaTime
   currentAnim:update(dt)
+  -- Updates the world using deltaTime
   world:update(dt)
 
+  -- Updates the building using the player's body, deltaTime and the building itself
   building1:update(body, dt, building2)
   building2:update(body, dt, building1)
 
+  -- BUG : Game does not end when player falls off screen
+		--  CATEGORY: GAME LOGIC
+		--  STATUS  : NOT FIXED
+  -- We can use this to move a death boundary to detect if the player has died
+	--shapeBody:setPosition(body:getX(), 500)
+	--newShape = love.physics.newRectangleShape(shapeBody:getX(), shapeBody:getY(), 
+	--                                          100, 
+    --                                          100)
+	--shape = newShape
+
+  -- Updates which tiles to render on screen
   updateTilesetBatch()
 
+  -- Set current animation to in air animation if 0.25 of a second has passed since we did the jump animation
   if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then
     currentAnim = inAirAnim
     currentAnim:gotoFrame(1)
   end
 
+  -- Set current animation to run animation if 0.5 of a second has passed since we did the roll animation
   if (time < love.timer.getTime( ) - 0.5) and currentAnim == rollAnim then
     currentAnim = runAnim
     currentAnim:gotoFrame(1)
   end
 
+  -- BUG : Game camera keeps moving when player is offscreen
+		--  CATEGORY: GAME LOGIC
+		--  STATUS  : NOT FIXED
+  -- If the current animation is the run animation
+	-- Apply force proportional to the amount of time passed multiplied by a factor of 250
+  -- OTHERWISE (If our animation is not the running animation)
+	-- Apply force proportional to the amount of time passed multiplied by a factor of 100
   if(currentAnim == runAnim) then
     --print("ON GROUND")
     body:applyLinearImpulse(250 * dt, 0)
@@ -139,19 +405,57 @@ end
 
 -- CHRIS
 function love.draw()
+  -- draw Method
+	--	Signature:	draw( drawable, x, y, r, sx, sy, ox, oy, kx, ky )
+	--	Definition: Renders the image at the position and scale
+	--	Parameters:
+	--				Drawable		drawable	: the thing to be rendered. Image extends from Drawable
+	--				number			x			: the position to draw the object (x-axis)
+	--				number			y			: the position to draw the object (y-axis)
+	--				number			r			: the orientation of the object
+	--				number			sx			: Scale factor (x-axis)
+	--				number			sy			: Scale factor (y-axis)
+	--				number			ox			: Origin offset (x-axis)
+	--				number			ox			: Origin offset (y-axis)
+	--				number			kx			: Shearing factor (x-axis)
+	--				number			ky			: Shearing factor (y-axis)
+										--	What is Shearing factor
+											-- The distance a point moves due to shear divided by the 
+											-- perpendicular distance of a point from the invariant line.
+											--What is shear
+												-- A transformation in which all points along a given line L 
+												-- remain fixed while other points are shifted parallel to L 
+												-- by a distance proportional to their perpendicular distance 
+												-- from L
+	--
+	--	Returns: Nothing
+
+  -- Draws the background
   love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+
+  -- Sets color of all graphics to White
   love.graphics.setColor(255, 255, 255)
+
+  -- Prints text on the game window with a user defined offset
   love.graphics.print(text, 10, 10)
 
+  -- This keeps the player in the middle of the screen
   love.graphics.translate(width/2 - body:getX(), 0)
    
+  -- Draws the current animation
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
+  -- Sets color of all graphics to Red
   --love.graphics.setColor(255, 0, 0)
+  -- Draws the collision rectangle of building1
   --love.graphics.polygon("line", building1.shape:getPoints())
+  -- Draws teh collision rectangle of building2
   --love.graphics.polygon("line", building2.shape:getPoints())
 
+  -- Sets color of all graphics to White (again)
   love.graphics.setColor(255, 255, 255)
+
+  -- draws all tiles in the tilesetBatch
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 end
 
