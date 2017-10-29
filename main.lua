@@ -474,7 +474,8 @@ function updateTilesetBatch()
   tilesetBatch:flush()
 end
 
---This funcion is called when thre is a key input
+--This funcion is called when there is a key input
+--Potential bug: isrepeat is not using in this function, which made the player could keep jumping and never fall.
 function love.keypressed( key, isrepeat )
   --If up key was pressed and the character is on the ground, then do these:
   if key == "up" and onGround then
