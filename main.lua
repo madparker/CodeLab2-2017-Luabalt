@@ -199,8 +199,12 @@ end
 
 -- This is called every time a collision end.
 --David's code
+--Gets called when two fixtures cease to overlap.
+--takes the initial body, the second body, and the collider
 function endContact(bodyA, bodyB, coll)
+--when contact ends, that means we are either falling or jumping, so we're no longer on the ground 
   onGround = false
+
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   text = "Collision ended: " .. aData .. " and " .. bData
