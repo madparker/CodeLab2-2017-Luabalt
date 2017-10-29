@@ -30,7 +30,7 @@ function building:setupBuilding(x, tileSize) --makes building
   self.x = x
   self.y = 300
 
-  self.width  = math.ceil((love.math.random( ) * 10) + 20) --sets width and height randomly
+  self.width  = math.ceil((love.math.random( ) * 10) + 50) --sets width and height randomly
   self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7
   self.body = love.physics.newBody(world, 0, 0, "static") --sets stuff for physics, physics styuffs
@@ -43,7 +43,7 @@ end
 
 function building:update(body, dt, other_building)
 
-  if self.x + self.width/2 * self.tileSize < body:getX() then
+  if self.x + self.width/2 * self.tileSize < body:getX() - 20 then 
       self:setupBuilding(
           other_building.x + other_building.width  * self.tileSize + 150, 
           16)

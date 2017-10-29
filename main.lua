@@ -54,16 +54,16 @@ function love.load() --loads the game
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500) --creates a new sprite batch! max number of sprites the batch can contain
 
   -- Create a Body for the crate.
-  crate_body = love.physics.newBody(world, 770, 200, "dynamic") --where to create body, coords, and body type
+  crate_body = love.physics.newBody(world, 850, 200, "dynamic") --where to create body, coords, and body type
   crate_box = love.physics.newRectangleShape(8, 8, 16, 16) --x, y, width, height
-  fixture = love.physics.newFixture(crate_body, crate_box) --creates and attaches a fixture to the body
-  fixture:setUserData("Crate") -- Set a string userdata
+  crate_fixture = love.physics.newFixture(crate_body, crate_box) --creates and attaches a fixture to the body
+  crate_fixture:setUserData("Crate") -- Set a string userdata
   crate_body:setMassData(crate_box:computeMass( 1 )) --sets mass
 
   text = "hello World" --hi
 
   building1 = building:makeBuilding(750, 16) --
-  building2 = building:makeBuilding(1200, 16) --
+  building2 = building:makeBuilding(1800, 16) --
 
   playerImg = love.graphics.newImage("media/player2.png") --sets player img, getting spritey for playey
   -- Create a Body for the player.
@@ -126,11 +126,15 @@ function love.update(dt) --delta time
     currentAnim:gotoFrame(1)
   end
 
-  if(currentAnim == runAnim) then
-    --print("ON GROUND")
-    body:applyLinearImpulse(250 * dt, 0) --continually apply forces, higher if we are running
+  if(body:getY() < height) then
+    if(currentAnim == runAnim) then
+      --print("ON GROUND")
+      body:applyLinearImpulse(250 * dt, 0) --continually apply forces, higher if we are running
+    else
+      body:applyLinearImpulse(100 * dt, 0)
+    end
   else
-    body:applyLinearImpulse(100 * dt, 0)
+    body:setLinearVelocity(0,0)
   end
 end
 
@@ -170,6 +174,7 @@ function love.keypressed( key, isrepeat ) --jumpey buttoney
     time = love.timer.getTime( ) --timey getty timey setty
   end
   if key == "r" then
+    love.audio.stop()
     love.load()
   end
 end
@@ -184,7 +189,7 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
 
   print (text)
 
-  if((aData == "Player" or bData == "Player") and cy ~= 0) then --if player is colliding FIRST BUG SOLVED YEAYAYAYAHA
+  if((aData == "Player" or bData == "Player") and (aData ~= "Crate" and bData ~= "Crate") and cy ~= 0) then --if player is colliding FIRST BUG SOLVED YEAYAYAYAHA
 
     onGround = true --player is grounded, his mom is very upset
     currentAnim = rollAnim --sets player animation
@@ -193,19 +198,29 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
     runSound:play() --plays run sound
 
   end
+
+  if((aData == "Player" or bData == "Player") and (aData == "Crate" or bData == "Crate")) then --if player is colliding FIRST BUG SOLVED YEAYAYAYAHA
+    body:applyLinearImpulse(-50, 0)
+    currentAnim = rollAnim
+    currentAnim:gotoFrame(1)
+    time = love.timer.getTime( )
+    crate_fixture:destroy()
+  end
+
 end
 
 -- This is called every time a collision end.
 function endContact(bodyA, bodyB, coll) --touchey stoppey pwease
 
-  onGround = false --no longer grounded, groundey nopey, startey smokey
+  
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   cx,cy = coll:getNormal() --direction of collision
   text = "Collision ended: " .. aData .. " and " .. bData
 
-  if((aData == "Player" or bData == "Player")) then
-    runSound:stop(); --stopey soundey when touchey stoppey pwease
+  if((aData == "Player" or bData == "Player")and (aData ~= "Crate" and bData ~= "Crate")) then
+    runSound:stop() --stopey soundey when touchey stoppey pwease
+    onGround = false --no longer grounded, groundey nopey, startey smokey
   end
 end
 
