@@ -509,16 +509,26 @@ function endContact(bodyA, bodyB, coll)
 --when contact ends, that means we are either falling or jumping, so we're no longer on the ground 
   onGround = false
 
+  --these two local variables store the names of the objects overlapping
+  --or maybe it's the "fixture" of the object because they are using the same strings as the fixture
+  --as of right now, this is pretty much always the player and the building
+  --"text" is the means by which we can log to the console.
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   text = "Collision ended: " .. aData .. " and " .. bData
 
+  --if contact ends between the player and something, then that means the player is not grounded
+  --as such, the running sound, as declared in load, stops.
   if(aData == "Player" or bData == "Player") then
     runSound:stop();
   end
 end
 
 --David's code
+--focus is a callback function that is triggered when the window loses "focus"
+--focus in this case is whether the window is clicked on
+--so if you click to another window, the game loses "focus"
+--just in general, we might want to say that if the window is NOT in focus, pause the game
 function love.focus(f)
   if not f then
     print("LOST FOCUS")
@@ -528,6 +538,7 @@ function love.focus(f)
 end
 
 --David's code
+--callback function triggered when game is closed
 function love.quit()
   print("Thanks for playing! Come back soon!")
 end
