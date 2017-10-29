@@ -11,7 +11,7 @@ local time = 0
 --	CHRIS
 --	PLEASE NOTE:
 	--	If a function seems to be missing parameters from
-	--	its definition assume those values to be zero or nill.
+	--	its definition assume those values to be zero or null.
 	--	For all method signatures only significant parameters 
 	--	are included.
 function love.load()
@@ -460,42 +460,57 @@ function love.draw()
 end
 
 --Chao
+--This function is called when we need to render tiles on screen
 function updateTilesetBatch()
+  --clear all the tiles in the tilesetbatch
   tilesetBatch:clear()
-
+  --add tilequads into tilesetbatch, with paramters of tilequad type, crate_body x, y, position and it's angle.
+  --Potential Bug: it's only add one type of tilequads
   tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
-
+  -- call building.draw function in the building script, draw two of them
   building1:draw(tilesetBatch, tileQuads);
   building2:draw(tilesetBatch, tileQuads);
-
+  --save tilesetBatch
   tilesetBatch:flush()
 end
 
+--This funcion is called when thre is a key input
 function love.keypressed( key, isrepeat )
+  --If up key was pressed and the character is on the ground, then do these:
   if key == "up" and onGround then
+    -- apply a linear impulse to up direction on the character
     body:applyLinearImpulse(0, -500)
+    -- set the current animation to jump anim
     currentAnim = jumpAnim
+    --play jumpanim
     currentAnim:gotoFrame(1)
+    -- get the time when we start to do the jump animation
     time = love.timer.getTime( )
   end
 end
 
 -- This is called every time a collision begin.
 function beginContact(bodyA, bodyB, coll)
+  --Get the userdata from these two body, which we will print out later
   local aData=bodyA:getUserData()
   local bData =bodyB:getUserData()
-
+  -- get the collider position, x and y
   cx,cy = coll:getNormal()
+  --save the information we got from aData and bData, and also the position where collision happened
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
-
+  --print out the information we just saved
   print (text)
-
+  -- if one of the body is player, then do these:
   if(aData == "Player" or bData == "Player") then
-
+    --Yes, player is on ground
     onGround = true
+    --set the current animation to roll anim
     currentAnim = rollAnim
+    --play rollanim
     currentAnim:gotoFrame(1)
+    --get the time we start to do the roll anim
     time = love.timer.getTime( )
+    --Yes, I am running, so play the run sound
     runSound:play()
 
   end
