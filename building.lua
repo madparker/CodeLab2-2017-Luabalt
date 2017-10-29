@@ -1,5 +1,5 @@
 building = { 
-  tileSize = 16,
+  tileSize = 16, 
 
   screen_height,
 
@@ -13,26 +13,27 @@ building = {
 
 building.__index = building -- failed table lookups on the instances should fallback to the class table, to get methods
 
-function building:makeBuilding(x, y, tileSize)
+--function building:makeBuilding(x, y, tileSize) --makes building
+function building:makeBuilding(x, tileSize)
+ 
+  local self = setmetatable({}, building) --set the metatable for the given table
 
-
-  local self = setmetatable({}, building)
-
-  self:setupBuilding(x, y, tileSize)
+  --self:setupBuilding(x, y, tileSize) --calls setupBuilding
+  self:setupBuilding(x, tileSize)
 
   return self
 end
 
-function building:setupBuilding(x, tileSize)
+function building:setupBuilding(x, tileSize) --makes building
 
-  self.tileSize = tileSize
+  self.tileSize = tileSize --sets size, and positions
   self.x = x
   self.y = 300
 
-  self.width  = math.ceil((love.math.random( ) * 10) + 20)
+  self.width  = math.ceil((love.math.random( ) * 10) + 20) --sets width and height randomly
   self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7
-  self.body = love.physics.newBody(world, 0, 0, "static")
+  self.body = love.physics.newBody(world, 0, 0, "static") --sets stuff for physics, physics styuffs
   self.shape = love.physics.newRectangleShape(self.x, self.y, 
                                               self.tileSize * self.width, 
                                               self.tileSize * self.height)
