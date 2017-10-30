@@ -124,10 +124,15 @@ function building:draw(tilesetBatch, tileQuads)
             tilesetBatch:add(tileQuads[2], x1 + x * tileSize, y1 + y * tileSize, 0)
           else 
             num = math.floor(x + y + x1 + y1)
-            if (num)%5 == 0 then
-              --tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
+			-- BUG : Game renders checkered building
+			--  CATEGORY: COSMETIC
+			--  STATUS  : PENDING REVIEW
+			-- There may be a case where we want to draw a different quad depending
+			-- on the quad's position in the building, but for now a solid brick building is fine
+            if (num)%1 == 0 then
+              tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
             else
-              tilesetBatch:add(tileQuads[4], x1 + x * tileSize, y1 + y * tileSize, 0)
+              tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
             end
           end
         end
