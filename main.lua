@@ -8,6 +8,13 @@ tileQuads = {}
 -- Time variable. Used for animations
 local time = 0
 
+-- We use these variables to make our game code easier to read
+-- Our game states are defined by these numbers
+local GAME_START	= 0
+local GAME_PLAY		= 1
+local GAME_OVER		= 2
+local state = GAME_START
+
 --	CHRIS
 --	PLEASE NOTE:
 	--	If a function seems to be missing parameters from
@@ -346,66 +353,127 @@ function love.load()
   shape = love.physics.newRectangleShape(0, 00, 100, 100)
 
   -- We could use this shape to tell the game if the player has died
-	--shapeBody = love.physics.newBody(world, 0, 0, "dynamic")
-	--shapeBody:applyLinearImpulse(1000, 0)
-	--shapeFixture = love.physics.newFixture(shapeBody, shape)
-	--shapeFixture:setUserData("Shape")
+	shapeBody = love.physics.newBody(world, 0, 0, "dynamic")
+	shapeBody:applyLinearImpulse(1000, 0)
+	shapeFixture = love.physics.newFixture(shapeBody, shape)
+	shapeFixture:setUserData("Shape")
+end
+
+function restartGame()
+ -- Sets the state to GAME_PLAY for now, but in the future 
+ -- This should set the state to GAME_START
+ state = GAME_PLAY
+ -- Calls the load function to reset our variables
+ -- We could have a reload function instead of calling the load function
+ love.load()
 end
 
 -- CHRIS
 function love.update(dt)
-  -- Updates the animation using deltaTime
-  currentAnim:update(dt)
-  -- Updates the world using deltaTime
-  world:update(dt)
+ -- A simple state machine to make our game have different screens
+ if(state == GAME_START) then
+		startScreen(dt)
+ elseif (state == GAME_PLAY) then
+		gameScreen(dt)
+ elseif (state == GAME_END) then
+		endScreen(dt)
+ end
+end
 
-  -- Updates the building using the player's body, deltaTime and the building itself
-  building1:update(body, dt, building2)
-  building2:update(body, dt, building1)
+function startScreen(dt)
+ -- Input is handled in love.keypressed so we don't need an update function for now
+end
 
-  -- BUG : Game does not end when player falls off screen
-		--  CATEGORY: GAME LOGIC
-		--  STATUS  : NOT FIXED
-  -- We can use this to move a death boundary to detect if the player has died
-	--shapeBody:setPosition(body:getX(), 500)
-	--newShape = love.physics.newRectangleShape(shapeBody:getX(), shapeBody:getY(), 
-	--                                          100, 
-    --                                          100)
-	--shape = newShape
+function prepGameScreen()
+  -- Sets font size to 12
+  love.graphics.setNewFont(12)
+  -- Resets the text field 
+  text = "hello world"
+  state = GAME_PLAY
+end
 
-  -- Updates which tiles to render on screen
-  updateTilesetBatch()
+function gameScreen(dt)
+-- Updates the animation using deltaTime
+	currentAnim:update(dt)
+	-- Updates the world using deltaTime
+	world:update(dt)
 
-  -- Set current animation to in air animation if 0.25 of a second has passed since we did the jump animation
-  if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then
-    currentAnim = inAirAnim
-    currentAnim:gotoFrame(1)
-  end
+	-- Updates the building using the player's body, deltaTime and the building itself
+	building1:update(body, dt, building2)
+	building2:update(body, dt, building1)
 
-  -- Set current animation to run animation if 0.5 of a second has passed since we did the roll animation
-  if (time < love.timer.getTime( ) - 0.5) and currentAnim == rollAnim then
-    currentAnim = runAnim
-    currentAnim:gotoFrame(1)
-  end
+	-- BUG : Game does not end when player falls off screen
+			--  CATEGORY: GAME LOGIC
+			--  STATUS  : NOT FIXED
+	-- We can use this to move a death boundary to detect if the player has died
+		shapeBody:setPosition(body:getX(), 500)
+		newShape = love.physics.newRectangleShape(shapeBody:getX(), shapeBody:getY(), 
+		                                          100, 
+	                                            100)
+		shape = newShape
 
-  -- BUG : Game camera keeps moving when player is offscreen
-		--  CATEGORY: GAME LOGIC
-		--  STATUS  : NOT FIXED
-  -- If the current animation is the run animation
-	-- Apply force proportional to the amount of time passed multiplied by a factor of 250
-  -- OTHERWISE (If our animation is not the running animation)
-	-- Apply force proportional to the amount of time passed multiplied by a factor of 100
-  if(currentAnim == runAnim) then
-    --print("ON GROUND")
-    body:applyLinearImpulse(250 * dt, 0)
-  else
-    body:applyLinearImpulse(100 * dt, 0)
-  end
+	-- Updates which tiles to render on screen
+	updateTilesetBatch()
+
+	-- Set current animation to in air animation if 0.25 of a second has passed since we did the jump animation
+	if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then
+	  currentAnim = inAirAnim
+	  currentAnim:gotoFrame(1)
+	end
+
+	-- Set current animation to run animation if 0.5 of a second has passed since we did the roll animation
+	if (time < love.timer.getTime( ) - 0.5) and currentAnim == rollAnim then
+	  currentAnim = runAnim
+	  currentAnim:gotoFrame(1)
+	end
+
+	-- BUG : Game camera keeps moving when player is offscreen
+			--  CATEGORY: GAME LOGIC
+			--  STATUS  : NOT FIXED
+	-- If the current animation is the run animation
+		-- Apply force proportional to the amount of time passed multiplied by a factor of 250
+	-- OTHERWISE (If our animation is not the running animation)
+		-- Apply force proportional to the amount of time passed multiplied by a factor of 100
+	if(currentAnim == runAnim) then
+	  --print("ON GROUND")
+	  body:applyLinearImpulse(250 * dt, 0)
+	else
+	  body:applyLinearImpulse(100 * dt, 0)
+	end
+end
+
+function endScreen(dt)
+-- Input is handled in love.keypressed so we don't need an update function for now
 end
 
 -- CHRIS
 function love.draw()
-  -- draw Method
+ -- A simple state machine to make our game draw different screens
+ if(state == GAME_START) then
+		drawStartScreen()
+ elseif (state == GAME_PLAY) then
+		drawGameScreen()
+ elseif (state == GAME_OVER) then
+		drawEndScreen()
+ end
+end
+
+function drawStartScreen()
+ love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+ love.graphics.setColor(255, 255, 255)
+
+ -- Two graphic draw calls are made to make the font render in two sizes
+ -- I couldn't think of another way to do this
+ love.graphics.setNewFont(76)
+ text = "LUABALT".. "\n"
+ love.graphics.print(text, width/5, height/3)
+ love.graphics.setNewFont(32)
+ text = "Press ENTER To Play"
+ love.graphics.print(text, width/5, height * 2 /3)
+end
+
+function drawGameScreen()
+-- draw Method
 	--	Signature:	draw( drawable, x, y, r, sx, sy, ox, oy, kx, ky )
 	--	Definition: Renders the image at the position and scale
 	--	Parameters:
@@ -446,17 +514,31 @@ function love.draw()
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
   -- Sets color of all graphics to Red
-  --love.graphics.setColor(255, 0, 0)
+  love.graphics.setColor(255, 0, 0)
   -- Draws the collision rectangle of building1
   --love.graphics.polygon("line", building1.shape:getPoints())
   -- Draws teh collision rectangle of building2
   --love.graphics.polygon("line", building2.shape:getPoints())
-
+  love.graphics.polygon("line", shape:getPoints())
   -- Sets color of all graphics to White (again)
   love.graphics.setColor(255, 255, 255)
 
   -- draws all tiles in the tilesetBatch
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
+end
+
+function drawEndScreen()
+ love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+ love.graphics.setColor(255, 255, 255)
+
+ -- Two graphic draw calls are made to make the font render in two sizes
+ -- I couldn't think of another way to do this
+ love.graphics.setNewFont(76)
+ text = "GAME OVER".. "\n"
+ love.graphics.print(text, width/10, height/3)
+ love.graphics.setNewFont(32)
+ text = "Press BACKSPACE To Try Again"
+ love.graphics.print(text, width/10, height * 2 /3)
 end
 
 --Chao
@@ -488,6 +570,26 @@ function love.keypressed( key, isrepeat )
     -- get the time when we start to do the jump animation
     time = love.timer.getTime( )
   end
+
+  -- Press tab to return to the main menu from the GAME_PLAY screen and GAME_OVER screen
+  if (key == "tab" and state ~= GAME_START) then
+   state = GAME_START
+  end
+
+  -- Press Enter to start the game if we are at the main menu
+  if(key == "return" and state == GAME_START) then
+   prepGameScreen()
+  end
+
+  -- Press q to restart Game Screen
+  if(key == "q") then
+   restartGame()
+  end
+
+  -- Restart the game if backspace is pressed and is game over or if player presses q
+  if (key == "backspace" and state == GAME_OVER) then
+	state = GAME_START
+  end
 end
 
 -- This is called every time a collision begin.
@@ -501,6 +603,11 @@ function beginContact(bodyA, bodyB, coll)
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
   --print out the information we just saved
   print (text)
+
+  if((aData == "Player" and bData == "Shape") or(aData == "Shape" and bData == "Player")) then
+	state = GAME_OVER
+  end
+
   -- if one of the body is player, then do these:
   if(aData == "Player" or bData == "Player") then
     --Yes, player is on ground
