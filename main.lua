@@ -404,7 +404,7 @@ function gameScreen(dt)
 
 	-- BUG : Game does not end when player falls off screen
 			--  CATEGORY: GAME LOGIC
-			--  STATUS  : NOT FIXED
+			--  STATUS  : PENDING REVIEW
 	-- We can use this to move a death boundary to detect if the player has died
 		shapeBody:setPosition(body:getX(), 500)
 		newShape = love.physics.newRectangleShape(shapeBody:getX(), shapeBody:getY(), 
@@ -429,7 +429,7 @@ function gameScreen(dt)
 
 	-- BUG : Game camera keeps moving when player is offscreen
 			--  CATEGORY: GAME LOGIC
-			--  STATUS  : NOT FIXED
+			--  STATUS  : PENDING REVIEW
 	-- If the current animation is the run animation
 		-- Apply force proportional to the amount of time passed multiplied by a factor of 250
 	-- OTHERWISE (If our animation is not the running animation)
