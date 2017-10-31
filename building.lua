@@ -42,7 +42,7 @@ end
 
 function building:update(body, dt, other_building)
 
-  if self.x + self.width/2 * self.tileSize < body:getX() then
+  if self.x + self.width/2 * self.tileSize < body:getX() - 300 then
       self:setupBuilding(
           other_building.x + other_building.width  * self.tileSize + 150, 
           16)
@@ -66,7 +66,7 @@ function building:draw(tilesetBatch, tileQuads)
           else 
             num = math.floor(x + y + x1 + y1)
             if (num)%5 == 0 then
-              --tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
+              tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
             else
               tilesetBatch:add(tileQuads[4], x1 + x * tileSize, y1 + y * tileSize, 0)
             end
