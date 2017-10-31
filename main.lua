@@ -62,7 +62,7 @@ function love.load()
 
   text = "hello World"
 
-  building1 = building:makeBuilding(750, 16)
+  building1 = building:makeBuilding(700, 16)
   building2 = building:makeBuilding(1200, 16)
 
   playerImg = love.graphics.newImage("media/player2.png")
@@ -95,8 +95,8 @@ function love.load()
 
   currentAnim = inAirAnim
 
-  music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
-  music:setVolume(0.1)
+  music = love.audio.newSource("media/BornToRun.mp3", "stream")
+  music:setVolume(0.4)
   love.audio.play(music)
 
   runSound = love.audio.newSource("media/foot1.mp3", "static")
@@ -127,7 +127,7 @@ function love.update(dt)
   end
 
   if(body:getY() >= 300) then
-    love.load()
+    love.event.quit("restart")
   end
 
   if(currentAnim == runAnim) then
