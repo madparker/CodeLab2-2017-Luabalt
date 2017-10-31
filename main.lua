@@ -578,6 +578,7 @@ function love.keypressed( key, isrepeat )
 
   -- Press Enter to start the game if we are at the main menu
   if(key == "return" and state == GAME_START) then
+   restartGame()
    prepGameScreen()
   end
 

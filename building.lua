@@ -111,7 +111,13 @@ function building:draw(tilesetBatch, tileQuads)
   --the collection of quads that make up the crates (I think, since when this is being called, the tileBatch are the crates)
   --pretty sure this sets crates on the building depending on how big the building is
   --so if the building meets none of the conditions for adding a crate, don't add a crate
-  tilesetBatch:add(tileQuads[0], self.x, self.y, 0)
+  -- BUG : Game renders crate in the middle of building
+			--  CATEGORY: GAME RULES
+			--  STATUS  : NOT FIXED
+  -- This adds the crate sprite to the tilsetBatch to render.
+  -- I set this to be the building's height to show we are redning crates
+  -- At this point no physics have been added to the crates so they will not fall
+  tilesetBatch:add(tileQuads[0], self.x, self.height, 0)
   for x=self.width - 1, 0, -1 do 
     for y=0,self.height - 1, 1 do
       if x == 0 and y == 0 then
