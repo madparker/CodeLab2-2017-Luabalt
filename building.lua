@@ -42,7 +42,7 @@ end
 
 function building:update(body, dt, other_building)
 
-  if self.x + self.width/2 * self.tileSize < body:getX() then
+  if self.x + self.width/2 * self.tileSize < body:getX() - 300 then
       self:setupBuilding(
           other_building.x + other_building.width  * self.tileSize + 150, 
           16)
