@@ -184,7 +184,12 @@ function beginContact(bodyA, bodyB, coll)
 
   if(aData == "Player" or bData == "Player") then
 
-    onGround = true
+  	-- check to make sure collision normal is in vertical direction
+  	-- this prevents jumping when along building wall
+  	if(cx == 0) then
+    	onGround = true
+	end
+
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
