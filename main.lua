@@ -11,7 +11,7 @@ function love.load()
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
-
+  
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
   -- Create a world with standard gravity
@@ -67,7 +67,7 @@ function love.load()
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
-  body = love.physics.newBody(world, 400, 100, "dynamic")
+  body = love.physics.newBody(world, 600, 100, "dynamic")
   -- Create a shape for the body.
   player_box = love.physics.newRectangleShape(15, 15, 30, 30)
   -- Create fixture between body and shape
@@ -124,6 +124,10 @@ function love.update(dt)
   if (time < love.timer.getTime( ) - 0.5) and currentAnim == rollAnim then
     currentAnim = runAnim
     currentAnim:gotoFrame(1)
+  end
+
+  if(body:getY() >= 300) then
+    love.load()
   end
 
   if(currentAnim == runAnim) then
@@ -221,3 +225,4 @@ end
 function love.quit()
   print("Thanks for playing! Come back soon!")
 end
+
