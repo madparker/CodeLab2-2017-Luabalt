@@ -15,7 +15,7 @@ function love.load()
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
   -- Create a world with standard gravity
-  world = love.physics.newWorld(0, 9.81*15, true)
+  world = love.physics.newWorld(0, 30*15, true)
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
@@ -62,7 +62,7 @@ function love.load()
 
   text = "hello World"
 
-  building1 = building:makeBuilding(750, 16)
+  building1 = building:makeBuilding(700, 16)
   building2 = building:makeBuilding(1200, 16)
 
   playerImg = love.graphics.newImage("media/player2.png")
@@ -127,12 +127,13 @@ function love.update(dt)
   end
 
   if(body:getY() >= 300) then
-    love.load()
+    -- love.load()
+    love.event.quit("restart")
   end
 
   if(currentAnim == runAnim) then
     --print("ON GROUND")
-    body:applyLinearImpulse(250 * dt, 0)
+    body:applyLinearImpulse(750 * dt, 0)
   else
     body:applyLinearImpulse(100 * dt, 0)
   end
@@ -169,7 +170,7 @@ end
 --player jumps here
 function love.keypressed( key, isrepeat )
   if key == "up" and onGround then
-    body:applyLinearImpulse(0, -500)
+    body:applyLinearImpulse(0, -1000)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
