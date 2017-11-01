@@ -211,7 +211,7 @@ function beginContact(bodyA, bodyB, coll)
 	end
 
 	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
-         body:applyLinearImpulse(-100, 0)
+         body:applyLinearImpulse(-500, 0)
     end
 
 
