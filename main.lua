@@ -204,8 +204,17 @@ function beginContact(bodyA, bodyB, coll)
 -- If one of the two objects that collided are The Player, set OnGround to true. 
   if(aData == "Player" or bData == "Player") then
 
--- Play animations and sound
-    onGround = true
+	-- Play animations and sound
+    -- Checks for collision between player and building and compares the y normal to see if the player is grounded or not
+    if(cy ~= 0 and ((aData == "Player" and bData == "Building") or (aData == "Building" and bData == "Player"))) then
+		onGround = true
+	end
+
+	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
+         body:applyLinearImpulse(-500, 0)
+    end
+
+
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
