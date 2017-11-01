@@ -179,11 +179,18 @@ function beginContact(bodyA, bodyB, coll)
   cx,cy = coll:getNormal()
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
+
   print (text)
 
   if(aData == "Player" or bData == "Player") then
+	-- Checks for collision between player and building and compares the y normal to see if the player is grounded or not
+	if(cy ~= 0 and ((aData == "Player" and bData == "Building") or (aData == "Building" and bData == "Player"))) then
+		onGround = true
+	end
 
-    onGround = true
+	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
+		 body:applyLinearImpulse(-100, 0)
+	end
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
