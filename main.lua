@@ -127,6 +127,10 @@ function love.update(dt)
   end
 
   if(body:getY() >= 300) then
+<<<<<<< HEAD
+    -- love.load()
+=======
+>>>>>>> 9051c9a5c5817d8bea035d0a4416e40c2e7aa8f5
     love.event.quit("restart")
   end
 
