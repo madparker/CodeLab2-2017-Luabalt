@@ -63,7 +63,7 @@ function love.load()
   text = "hello World"
 
   building1 = building:makeBuilding(700, 16)
-  building2 = building:makeBuilding(1200, 16)
+  building2 = building:makeBuilding(1300, 16)
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
@@ -127,10 +127,6 @@ function love.update(dt)
   end
 
   if(body:getY() >= 300) then
-<<<<<<< HEAD
-    -- love.load()
-=======
->>>>>>> 9051c9a5c5817d8bea035d0a4416e40c2e7aa8f5
     love.event.quit("restart")
   end
 
@@ -147,7 +143,7 @@ function love.draw()
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
-  love.graphics.translate(width/2 - body:getX(), 0)
+  love.graphics.translate(width*.1 - body:getX(), 0)
    
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
@@ -194,8 +190,8 @@ function beginContact(bodyA, bodyB, coll)
 
   	-- check to make sure collision normal is in vertical direction
   	-- this prevents jumping when along building wall
-  	if(cx == 0) then
-    	onGround = true
+    if(cx == 0) then
+      onGround = true
 	end
 
     currentAnim = rollAnim
