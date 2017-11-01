@@ -100,7 +100,8 @@ function love.load()
   love.audio.play(music)
 
   runSound = love.audio.newSource("media/foot1.mp3", "static")
-  runSound:setLooping(true);
+  runSound:setLooping(true)
+  runSound:setVolume(0.05)
 
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
@@ -127,10 +128,6 @@ function love.update(dt)
   end
 
   if(body:getY() >= 300) then
-<<<<<<< HEAD
-    -- love.load()
-=======
->>>>>>> 9051c9a5c5817d8bea035d0a4416e40c2e7aa8f5
     love.event.quit("restart")
   end
 
@@ -147,7 +144,7 @@ function love.draw()
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
-  love.graphics.translate(width/2 - body:getX(), 0)
+  love.graphics.translate(width * 0.1 - body:getX(), 0)
    
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
