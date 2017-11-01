@@ -16,7 +16,7 @@ function love.load()
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
   -- Create a world with standard gravity
-  world = love.physics.newWorld(0, 9.81*15, true)
+  world = love.physics.newWorld(0, 9.81*100, true)
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
@@ -139,9 +139,9 @@ function love.update(dt)
   if(currentAnim == runAnim) then
     --apples a force on the player body (x value)
     --print("ON GROUND")
-    body:applyLinearImpulse(250 * dt, 0)
+    body:applyLinearImpulse(1400 * dt, 0)
   else
-    body:applyLinearImpulse(100 * dt, 0)
+    body:applyLinearImpulse(750 * dt, 0)
   end
 end
 
@@ -178,10 +178,13 @@ end
 function love.keypressed( key, isrepeat )
   -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
   if key == "up" and onGround then
-    body:applyLinearImpulse(0, -500)
+    body:applyLinearImpulse(0, -1500)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
+  end
+    if key == "down" then
+    love.load()
   end
 end
 
