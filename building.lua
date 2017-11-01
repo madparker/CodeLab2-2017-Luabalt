@@ -15,9 +15,9 @@ building.__index = building -- failed table lookups on the instances should fall
 
 function building:makeBuilding(x, y, tileSize)
 
-
   local self = setmetatable({}, building)
 
+-- Calls the building setup function, passing coordinates and a tile size
   self:setupBuilding(x, y, tileSize)
 
   return self

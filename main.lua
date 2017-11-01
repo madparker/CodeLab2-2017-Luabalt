@@ -6,6 +6,7 @@ tileQuads = {} -- parts of the tileset used for different tiles
 local time = 0
 
 function love.load()
+  -- Set the width and height of the window (in pixels)
   width = 600
   height = 300
 
@@ -62,6 +63,8 @@ function love.load()
 
   text = "hello World"
 
+  --Makes buildings by calling the "make building" function on the building script
+
   building1 = building:makeBuilding(750, 16)
   building2 = building:makeBuilding(1200, 16)
 
@@ -72,6 +75,7 @@ function love.load()
   player_box = love.physics.newRectangleShape(15, 15, 30, 30)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
+
   fixture:setUserData("Player") -- Set a string userdata
   
   -- Calculate the mass of the body based on attatched shapes.
@@ -87,6 +91,8 @@ function love.load()
   love.graphics.setNewFont(12)
   love.graphics.setBackgroundColor(155,155,155)
 
+  --Cache the animations 
+
   local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
@@ -95,6 +101,7 @@ function love.load()
 
   currentAnim = inAirAnim
 
+ -- Cache the audio
   music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
   music:setVolume(0.1)
   love.audio.play(music)
@@ -111,10 +118,13 @@ function love.update(dt)
   currentAnim:update(dt)
   world:update(dt)
 
+  -- Calls the Update functions in the building script. Passes it its body, delta time and the next building (loop)
   building1:update(body, dt, building2)
   building2:update(body, dt, building1)
 
   updateTilesetBatch()
+
+  --transitions animations?
 
   if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then
     currentAnim = inAirAnim
@@ -127,6 +137,7 @@ function love.update(dt)
   end
 
   if(currentAnim == runAnim) then
+    --apples a force on the player body (x value)
     --print("ON GROUND")
     body:applyLinearImpulse(250 * dt, 0)
   else
@@ -135,6 +146,7 @@ function love.update(dt)
 end
 
 function love.draw()
+  -- Sets up the level and player sprites / tilesets
   love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
@@ -162,7 +174,9 @@ function updateTilesetBatch()
   tilesetBatch:flush()
 end
 
+-- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
+  -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
   if key == "up" and onGround then
     body:applyLinearImpulse(0, -500)
     currentAnim = jumpAnim
@@ -173,16 +187,21 @@ end
 
 -- This is called every time a collision begin.
 function beginContact(bodyA, bodyB, coll)
+
+  -- Get information on the two colliding objects 
   local aData=bodyA:getUserData()
   local bData =bodyB:getUserData()
 
+-- Get the X and Y coordinates of the collision
   cx,cy = coll:getNormal()
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
   print (text)
 
+-- If one of the two objects that collided are The Player, set OnGround to true. 
   if(aData == "Player" or bData == "Player") then
 
+-- Play animations and sound
     onGround = true
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
@@ -194,16 +213,19 @@ end
 
 -- This is called every time a collision end.
 function endContact(bodyA, bodyB, coll)
+-- Sets on ground to false (jump state) (animation calls are made in the key press function)
   onGround = false
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   text = "Collision ended: " .. aData .. " and " .. bData
-
+-- If on the the jumping bodies is the Player, stop the running sound
   if(aData == "Player" or bData == "Player") then
     runSound:stop();
   end
 end
 
+
+-- Checks if game window is active and selected (in focus) 
 function love.focus(f)
   if not f then
     print("LOST FOCUS")
@@ -212,6 +234,7 @@ function love.focus(f)
   end
 end
 
+-- Prints message when the game window is closed.
 function love.quit()
   print("Thanks for playing! Come back soon!")
 end
