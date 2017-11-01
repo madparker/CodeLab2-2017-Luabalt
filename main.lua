@@ -7,8 +7,8 @@ local time = 0
 
 function love.load()
   -- Set the width and height of the window (in pixels)
-  width = 600
-  height = 300
+  width = 910
+  height = 320
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -151,7 +151,7 @@ function love.draw()
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
-  love.graphics.translate(width/2 - body:getX(), 0)
+  love.graphics.translate(width/100 - body:getX(), 0)
    
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
