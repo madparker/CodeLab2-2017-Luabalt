@@ -54,11 +54,11 @@ function love.load()
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
   -- Create a Body for the crate.
-  crate_body = love.physics.newBody(world, 770, 200, "dynamic")
-  crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
-  fixture = love.physics.newFixture(crate_body, crate_box)
-  fixture:setUserData("Crate") -- Set a string userdata
-  crate_body:setMassData(crate_box:computeMass( 1 ))
+  --crate_body = love.physics.newBody(world, 770, 200, "dynamic")
+  --crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
+  --fixture = love.physics.newFixture(crate_body, crate_box)
+  --fixture:setUserData("Crate") -- Set a string userdata
+  --crate_body:setMassData(crate_box:computeMass( 1 ))
 
   text = "hello World"
 
@@ -159,7 +159,7 @@ end
 function updateTilesetBatch()
   tilesetBatch:clear()
 
-  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  --tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
 
   building1:draw(tilesetBatch, tileQuads);
   building2:draw(tilesetBatch, tileQuads);
@@ -193,7 +193,7 @@ function beginContact(bodyA, bodyB, coll)
   	-- this prevents jumping when along building wall
   	if(cx == 0) then
     	onGround = true
-	end
+	  end
 
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
