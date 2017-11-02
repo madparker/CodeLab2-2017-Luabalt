@@ -23,13 +23,13 @@ function building:makeBuilding(x, y, tileSize)
   return self
 end
 
-function building:setupBuilding(x, tileSize)
+function building:setupBuilding(x,  tileSize)
 
   self.tileSize = tileSize
   self.x = x
   self.y = 320
 
-  self.width  = math.ceil((love.math.random( ) * 10) + 20)
+  self.width  = math.ceil((love.math.random( ) * 10) + 30)
   self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7
   self.body = love.physics.newBody(world, 0, 0, "static")
@@ -44,7 +44,7 @@ function building:update(body, dt, other_building)
 
   if self.x + self.width/2 * self.tileSize < body:getX() then
       self:setupBuilding(
-          other_building.x + other_building.width  * self.tileSize + 150, 
+          other_building.x + other_building.width  * self.tileSize + 230, 
           16)
   end
 end
