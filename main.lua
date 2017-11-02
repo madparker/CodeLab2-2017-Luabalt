@@ -62,7 +62,7 @@ function love.load()
   fixture:setUserData("Crate") -- Set a string userdata
   crate_body:setMassData(crate_box:computeMass( 1 ))
 
-  text = "hello World"
+  --text = "hello World"
 
   --Makes buildings by calling the "make building" function on the building script
 
@@ -89,7 +89,8 @@ function love.load()
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
 
-  love.graphics.setNewFont(12)
+  --love.graphics.setNewFont(12)
+  font = love.graphics.setNewFont("media/Flixel.ttf",14)
   love.graphics.setBackgroundColor(155,155,155)
 
   --Cache the animations 
@@ -132,7 +133,8 @@ function love.update(dt)
   distance = round(body:getX(),-2) -- -2 as decimal places, lol
 
 
-  print(distance/100)
+distanceText = distance/100 .. "m"
+  --print(distance/100)
 
   --transitions animations?
 
@@ -157,9 +159,10 @@ end
 
 function love.draw()
   -- Sets up the level and player sprites / tilesets
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+  love.graphics.draw(background, 0, 0, 0, 1.78, 1.78, 0, 200)
   love.graphics.setColor(255, 255, 255)
-  love.graphics.print(text, 10, 10)
+  --love.graphics.print(text, 10, 10)
+  love.graphics.print(distanceText, 850, 10)
 
   love.graphics.translate(width/100 - body:getX(), 0)
    
@@ -208,9 +211,9 @@ function beginContact(bodyA, bodyB, coll)
 
 -- Get the X and Y coordinates of the collision
   cx,cy = coll:getNormal()
-  text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
+  --text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
-  print (text)
+  --print (text)
 
 -- If one of the two objects that collided are The Player, set OnGround to true. 
   if(aData == "Player" or bData == "Player") then
