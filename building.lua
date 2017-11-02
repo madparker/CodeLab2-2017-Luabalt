@@ -58,20 +58,20 @@ function building:draw(tilesetBatch, tileQuads)
     for y=0,self.height - 1, 1 do
       if x == 0 and y == 0 then
         tilesetBatch:add(tileQuads[1], x1 + x * tileSize, y1 + y * tileSize, 0)
-      else
-        if y == 0 and x == self.width - 1 then
-          tilesetBatch:add(tileQuads[3], x1 + x * tileSize, y1 + y * tileSize, 0)
-        else 
-          if y == 0 then
-            tilesetBatch:add(tileQuads[2], x1 + x * tileSize, y1 + y * tileSize, 0)
-          else 
-            num = math.floor(x + y + x1 + y1)
-            if (num)%5 == 0 then
-              --tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
-            else
-              tilesetBatch:add(tileQuads[4], x1 + x * tileSize, y1 + y * tileSize, 0)
-            end
-          end
+      elseif y == 0 and x == self.width - 1 then
+        tilesetBatch:add(tileQuads[3], x1 + x * tileSize, y1 + y * tileSize, 0)
+      elseif y == 0 then
+        tilesetBatch:add(tileQuads[2], x1 + x * tileSize, y1 + y * tileSize, 0)
+      elseif x == 0 then
+        tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
+      elseif x == self.width - 1 then
+        tilesetBatch:add(tileQuads[6], x1 + x * tileSize, y1 + y * tileSize, 0)
+      else 
+        num = math.floor(y + y1)
+        if (num)%2 == 0 then
+          tilesetBatch:add(tileQuads[7], x1 + x * tileSize, y1 + y * tileSize, 0)
+        else
+          tilesetBatch:add(tileQuads[4], x1 + x * tileSize, y1 + y * tileSize, 0)
         end
       end
     end

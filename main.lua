@@ -5,6 +5,11 @@ tileQuads = {} -- array? parts of the tileset used for different tiles
 
 local time = 0 
 
+local jumpForce = -1500;
+local gravityScale = 100;
+local runForce = 1000;
+
+
 function love.load() --loads the game
   width = 600 --size of window
   height = 300
@@ -15,7 +20,7 @@ function love.load() --loads the game
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
   -- Create a world with standard gravity
-  world = love.physics.newWorld(0, 9.81*15, true)
+  world = love.physics.newWorld(0, 9.81*gravityScale, true)
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
@@ -27,19 +32,19 @@ function love.load() --loads the game
   tilesetImage:setFilter("nearest", "nearest") -- this "linear filter" removes some artifacts if we were to scale the tiles
   tileSize = 16 --declares the size of the tile
  
-  -- crate
+  -- cratey
   tileQuads[0] = love.graphics.newQuad(0, 0,  --this is grabbing the graphics from the sprite sheet
-    16, 16,
+    18, 18,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- left corner
+  -- toppy lefty corner
   tileQuads[1] = love.graphics.newQuad(228, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- top middle
+  -- toppy middley
   tileQuads[2] = love.graphics.newQuad(324, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- right middle
+  -- toppy righty corner
   tileQuads[3] = love.graphics.newQuad(387, 68, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
@@ -47,15 +52,27 @@ function love.load() --loads the game
   tileQuads[4] = love.graphics.newQuad(100, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
-  tileQuads[5] = love.graphics.newQuad(116, 0, 
+  --lefty middley
+  tileQuads[5] = love.graphics.newQuad(36, 0, 
     16, 16,
+    tilesetImage:getWidth(), tilesetImage:getHeight())
+  --righty middley
+  tileQuads[6] = love.graphics.newQuad(164, 0, 
+    16, 16,
+    tilesetImage:getWidth(), tilesetImage:getHeight())
+  -- window
+  tileQuads[7] = love.graphics.newQuad(0,173,
+   16, 16,
+   tilesetImage:getWidth(), tilesetImage:getHeight())
+  endQuad = love.graphics.newQuad(40, 18,
+    390, 50,
     tilesetImage:getWidth(), tilesetImage:getHeight())
 
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500) --creates a new sprite batch! max number of sprites the batch can contain
 
   -- Create a Body for the crate.
   crate_body = love.physics.newBody(world, 850, 200, "dynamic") --where to create body, coords, and body type
-  crate_box = love.physics.newRectangleShape(8, 8, 16, 16) --x, y, width, height
+  crate_box = love.physics.newRectangleShape(9, 9, 18, 18) --x, y, width, height
   crate_fixture = love.physics.newFixture(crate_body, crate_box) --creates and attaches a fixture to the body
   crate_fixture:setUserData("Crate") -- Set a string userdata
   crate_body:setMassData(crate_box:computeMass( 1 )) --sets mass
@@ -79,7 +96,7 @@ function love.load() --loads the game
   body:setMassData(player_box:computeMass( 1 )) --playey massey
   body:setFixedRotation(true) --player won't rotate, rotatey nopey
   --the player an init push.
-  body:applyLinearImpulse(1000, 0) -- applies force, shovey playey
+  body:applyLinearImpulse(2000, 0) -- applies force, shovey playey
 
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact) 
@@ -129,21 +146,28 @@ function love.update(dt) --delta time
   if(body:getY() < height) then
     if(currentAnim == runAnim) then
       --print("ON GROUND")
-      body:applyLinearImpulse(250 * dt, 0) --continually apply forces, higher if we are running
+      body:applyLinearImpulse(runForce * dt, 0) --continually apply forces, higher if we are running
     else
-      body:applyLinearImpulse(100 * dt, 0)
+      body:applyLinearImpulse(runForce * 0.5 * dt, 0)
     end
   else
     body:setLinearVelocity(0,0)
+    gameyEndy = true
+    text = "You ran for "..math.floor (body:getX()).." pixels!\nPressy R to restarty!"
+    print (text)
   end
 end
 
+
 function love.draw() --drawey everythingey
+
   love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200) 
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
-
-  love.graphics.translate(width/40 - body:getX(), 0) -- camey movey
+  if gameyEndy == true then
+    love.graphics.draw(tilesetImage, endQuad, 105, 50)
+  end
+  love.graphics.translate(width/40 - body:getX(), 0) -- camerey movey
    
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle()) --playey drawey
 
@@ -153,6 +177,8 @@ function love.draw() --drawey everythingey
  
   love.graphics.setColor(255, 255, 255) --color setty
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
+
+  
 end
 
 function updateTilesetBatch()
@@ -168,12 +194,13 @@ end
 
 function love.keypressed( key, isrepeat ) --jumpey buttoney
   if key == "up" and onGround then --if up key and grounded, get high
-    body:applyLinearImpulse(0, -500) --applyey forcey uppy
+    body:applyLinearImpulse(0, jumpForce) --applyey forcey uppy
     currentAnim = jumpAnim --anime changey jumpey
     currentAnim:gotoFrame(1) --framey changey
     time = love.timer.getTime( ) --timey getty timey setty
   end
-  if key == "r" then
+  if key == "r" and gameyEndy == true then
+    gameyEndy = false
     love.audio.stop()
     love.load()
   end
