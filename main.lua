@@ -108,9 +108,19 @@ function love.load()
   music:setVolume(0.1)
   love.audio.play(music)
 
-  runSound = love.audio.newSource("media/foot1.mp3", "static")
-  runSound:setLooping(true);
+  runSound = love.audio.newSource("media/footsteps.wav", "static")
+  runSound:setVolume(0.3)
+  runSound:setLooping(true)
 
+  --footstep1 = love.audio.newSource("media/foot1.wav"), "static")
+  --footstep2 = love.audio.newSource("media/foot2.wav", "static")
+  --footstep3 = love.audio.newSource("media/foot3.wav", "static")
+
+  jumpSound = love.audio.newSource("media/jump.wav", "static")
+  jumpSound:setVolume(0.4)
+  
+  landSound = love.audio.newSource("media/land.wav", "static")
+  landSound:setVolume(0.4)
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
 end
@@ -203,7 +213,13 @@ function love.keypressed( key, isrepeat )
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
+<<<<<<< HEAD
+    love.audio.play(jumpSound)
+  end
+    if key == "down" then
+=======
     elseif key == "space" and dead == true then
+>>>>>>> a492dfb79f05e476bcbebd1b78ab367451ea42a3
       love.audio.stop()
       love.load()
   end
@@ -239,6 +255,7 @@ function beginContact(bodyA, bodyB, coll)
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
+    landSound:play()
     runSound:play()
 
   end
