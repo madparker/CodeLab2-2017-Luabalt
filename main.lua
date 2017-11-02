@@ -9,6 +9,8 @@ function love.load()
   -- Set the width and height of the window (in pixels)
   width = 910
   height = 320
+  distance = 0
+  dead = false
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -61,18 +63,18 @@ function love.load()
   fixture:setUserData("Crate") -- Set a string userdata
   crate_body:setMassData(crate_box:computeMass( 2 ))
 
-  text = "hello World"
+  --text = "hello World"
 
   --Makes buildings by calling the "make building" function on the building script
 
-  building1 = building:makeBuilding(750, 16)
-  building2 = building:makeBuilding(1200, 16)
+  building1 = building:makeBuilding(650, 16)
+  building2 = building:makeBuilding(1330, 16)
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
   body = love.physics.newBody(world, 400, 100, "dynamic")
   -- Create a shape for the body.
-  player_box = love.physics.newRectangleShape(15, 15, 30, 30)
+  player_box = love.physics.newRectangleShape(28, 28, 30, 30)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
 
@@ -88,12 +90,12 @@ function love.load()
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
 
-  love.graphics.setNewFont(12)
+  love.graphics.setNewFont("media/Flixel.ttf", 14)
   love.graphics.setBackgroundColor(155,155,155)
 
   --Cache the animations 
 
-  local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
+  local g = anim8.newGrid(30*1.5, 30*1.5, playerImg:getWidth()*1.5, playerImg:getHeight()*1.5)
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
@@ -112,6 +114,11 @@ function love.load()
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
 end
+-- added function to round numbers
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
 
 function love.update(dt)
 
@@ -123,6 +130,18 @@ function love.update(dt)
   building2:update(body, dt, building1)
 
   updateTilesetBatch()
+  distance = round(body:getX(),-2) -- -2 as decimal places, lol
+  distanceText = distance/100 .. "m"
+
+
+if body:getY() > height then
+      dead = true
+  end
+
+if dead == true then
+      love.audio.stop(runSound)
+      body:setLinearVelocity(0,0)
+  end
 
   --transitions animations?
 
@@ -136,20 +155,22 @@ function love.update(dt)
     currentAnim:gotoFrame(1)
   end
 
-  if(currentAnim == runAnim) then
+  if currentAnim == runAnim and dead == false then
     --apples a force on the player body (x value)
     --print("ON GROUND")
     body:applyLinearImpulse(1100 * dt, 0)
-  else
+  elseif dead == false then
     body:applyLinearImpulse(550 * dt, 0)
   end
 end
+
 
 function love.draw()
   -- Sets up the level and player sprites / tilesets
   love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
   love.graphics.setColor(255, 255, 255)
-  love.graphics.print(text, 10, 10)
+  --love.graphics.print(text, 10, 10)
+  love.graphics.print(distanceText, 850, 10)
 
   love.graphics.translate(width/100 - body:getX(), 0)
    
@@ -177,13 +198,12 @@ end
 -- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
   -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
-  if key == "up" and onGround then
+  if key == "space" and onGround and dead==false then
     body:applyLinearImpulse(0, -1500)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-  end
-    if key == "down" then
+    elseif key == "space" and dead == true then
       love.audio.stop()
       love.load()
   end
@@ -198,9 +218,9 @@ function beginContact(bodyA, bodyB, coll)
 
 -- Get the X and Y coordinates of the collision
   cx,cy = coll:getNormal()
-  text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
+  --text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
-  print (text)
+  --print (text)
 
 -- If one of the two objects that collided are The Player, set OnGround to true. 
   if(aData == "Player" or bData == "Player") then

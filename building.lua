@@ -25,16 +25,14 @@ function building:makeBuilding(x, y, tileSize)
   return self
 end
 
-function building:setupBuilding(x, tileSize)
+function building:setupBuilding(x,  tileSize)
 
   self.tileSize = tileSize
   self.x = x
-  self.y = 300
-  
-  self.width  = math.ceil((love.math.random( ) * 10) + 20)
-  self.height = math.ceil(5 + love.math.random( ) * 7)
-    print(self.height)
+  self.y = 320
 
+  self.width  = math.ceil((love.math.random( ) * 10) + 30)
+  self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7
   self.body = love.physics.newBody(world, 0, 0, "static")
   self.shape = love.physics.newRectangleShape(self.x, self.y, 
@@ -43,6 +41,7 @@ function building:setupBuilding(x, tileSize)
   fixture = love.physics.newFixture(self.body, self.shape)
   fixture:setUserData("Building")
 
+  
   -- Create a Body for the crate.
   self.crate_body = love.physics.newBody(world, self.x, self.y-(self.tileSize *(self.height-5)), "dynamic")
   self.crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
@@ -56,7 +55,7 @@ function building:update(body, dt, other_building)
 
   if self.x + self.width/2 * self.tileSize < body:getX() then
       self:setupBuilding(
-          other_building.x + other_building.width  * self.tileSize + 150, 
+          other_building.x + other_building.width  * self.tileSize + 230, 
           16)
   end
 end
@@ -64,7 +63,7 @@ end
 function building:draw(tilesetBatch, tileQuads)
   x1, y1 = self.shape:getPoints()
 
-  tilesetBatch:add(tileQuads[0], self.crate_body:getX(), self.crate_body:getY(),self.crate_body:getAngle())
+	tilesetBatch:add(tileQuads[0], self.crate_body:getX(), self.crate_body:getY(),self.crate_body:getAngle())
   for x=self.width - 1, 0, -1 do 
     for y=0,self.height - 1, 1 do
       if x == 0 and y == 0 then
