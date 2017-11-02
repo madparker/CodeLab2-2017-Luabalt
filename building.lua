@@ -8,6 +8,8 @@ building = {
   width = 0,
   height = 0,
   body,
+  crate_body,
+  crate_box,
   shape
 } -- the table representing the class, which will double as the metatable for the instances
 
@@ -63,6 +65,11 @@ function building:setupBuilding(x, tileSize)
 
   --now we can refer to the building by using the string "Building"
   fixture:setUserData("Building")
+
+  self.crate_body = love.physics.newBody(world, self.x, self.y - (self.tileSize * (self.height - 5)), "dynamic")
+  self.crate_box = love.physics.newRectangleShape(9, 9, 18, 18);
+  fixture = love.physics.newFixture(self.crate_body, self.crate_box)
+  fixture:setUserData("Crate")
 end
 
 --this is the update function that runs on buildings that were made
@@ -117,7 +124,7 @@ function building:draw(tilesetBatch, tileQuads)
   -- This adds the crate sprite to the tilsetBatch to render.
   -- I set this to be the building's height to show we are redning crates
   -- At this point no physics have been added to the crates so they will not fall
-  tilesetBatch:add(tileQuads[0], self.x, self.height, 0)
+  tilesetBatch:add(tileQuads[0], self.crate_body:getX(), self.crate_body:getY(), self.crate_body:getAngle())
   for x=self.width - 1, 0, -1 do 
     for y=0,self.height - 1, 1 do
       if x == 0 and y == 0 then

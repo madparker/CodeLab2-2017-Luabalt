@@ -44,7 +44,8 @@ function love.load()
 	--				A world with physics
 
   -- Create a world with standard gravity
-  world = love.physics.newWorld(0, 9.81*15, true)
+  --change multiplier from 15 to 100
+  world = love.physics.newWorld(0, 9.81*100, true)
 
   -- Sets background image 
   background = love.graphics.newImage('media/iPadMenu_atlas0.png')
@@ -206,8 +207,8 @@ function love.load()
 	--				Building	
   
   -- These are the two buildings we see at the start of the game
-  building1 = building:makeBuilding(750, 16)
-  building2 = building:makeBuilding(1200, 16)
+  building1 = building:makeBuilding(650, 16)
+  building2 = building:makeBuilding(1100, 16)
 
   -- Sets player image
   playerImg = love.graphics.newImage("media/player2.png")
@@ -436,9 +437,11 @@ function gameScreen(dt)
 		-- Apply force proportional to the amount of time passed multiplied by a factor of 100
 	if(currentAnim == runAnim) then
 	  --print("ON GROUND")
-	  body:applyLinearImpulse(250 * dt, 0)
+	  --changed 250 to 1000
+	  --changed 100 to 500
+	  body:applyLinearImpulse(1000 * dt, 0)
 	else
-	  body:applyLinearImpulse(100 * dt, 0)
+	  body:applyLinearImpulse(500 * dt, 0)
 	end
 end
 
@@ -508,7 +511,8 @@ function drawGameScreen()
   love.graphics.print(text, 10, 10)
 
   -- This keeps the player in the middle of the screen
-  love.graphics.translate(width/2 - body:getX(), 0)
+  -- set it from 2 to 100 to put player at the edge of screen
+  love.graphics.translate(width/100 - body:getX(), 0)
    
   -- Draws the current animation
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
@@ -562,7 +566,7 @@ function love.keypressed( key, isrepeat )
   --If up key was pressed and the character is on the ground, then do these:
   if key == "up" and onGround then
     -- apply a linear impulse to up direction on the character
-    body:applyLinearImpulse(0, -500)
+    body:applyLinearImpulse(0, -1500)
     -- set the current animation to jump anim
     currentAnim = jumpAnim
     --play jumpanim
