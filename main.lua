@@ -139,9 +139,9 @@ function love.update(dt)
   if(currentAnim == runAnim) then
     --apples a force on the player body (x value)
     --print("ON GROUND")
-    body:applyLinearImpulse(1400 * dt, 0)
+    body:applyLinearImpulse(1100 * dt, 0)
   else
-    body:applyLinearImpulse(750 * dt, 0)
+    body:applyLinearImpulse(550 * dt, 0)
   end
 end
 
@@ -184,7 +184,8 @@ function love.keypressed( key, isrepeat )
     time = love.timer.getTime( )
   end
     if key == "down" then
-    love.load()
+      love.audio.stop()
+      love.load()
   end
 end
 
