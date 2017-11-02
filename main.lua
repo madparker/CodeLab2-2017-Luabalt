@@ -72,7 +72,7 @@ function love.load()
   -- Create a Body for the player.
   body = love.physics.newBody(world, 400, 100, "dynamic")
   -- Create a shape for the body.
-  player_box = love.physics.newRectangleShape(15, 15, 30, 30)
+  player_box = love.physics.newRectangleShape(30, 30, 30, 30)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
 
@@ -93,7 +93,7 @@ function love.load()
 
   --Cache the animations 
 
-  local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
+  local g = anim8.newGrid(30*1.5, 30*1.5, playerImg:getWidth()*1.5, playerImg:getHeight()*1.5)
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
