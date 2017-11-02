@@ -59,7 +59,7 @@ function love.load()
   crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
   fixture = love.physics.newFixture(crate_body, crate_box)
   fixture:setUserData("Crate") -- Set a string userdata
-  crate_body:setMassData(crate_box:computeMass( 1 ))
+  crate_body:setMassData(crate_box:computeMass( 2 ))
 
   text = "hello World"
 
@@ -147,7 +147,7 @@ end
 
 function love.draw()
   -- Sets up the level and player sprites / tilesets
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+  love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
