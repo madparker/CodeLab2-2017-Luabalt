@@ -213,13 +213,13 @@ function love.keypressed( key, isrepeat )
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-<<<<<<< HEAD
+
     love.audio.play(jumpSound)
   end
     if key == "down" then
-=======
+
     elseif key == "space" and dead == true then
->>>>>>> a492dfb79f05e476bcbebd1b78ab367451ea42a3
+
       love.audio.stop()
       love.load()
   end
