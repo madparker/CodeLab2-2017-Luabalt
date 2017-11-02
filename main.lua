@@ -138,10 +138,8 @@ if body:getY() > height then
 
 if dead == true then
       love.audio.stop(runSound)
+      body:setLinearVelocity(0,0)
   end
-
-  --print(distance/100)
-  print (dead)
 
   --transitions animations?
 
@@ -166,7 +164,7 @@ end
 
 function love.draw()
   -- Sets up the level and player sprites / tilesets
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+  love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
@@ -196,13 +194,12 @@ end
 -- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
   -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
-  if key == "space" and onGround then
+  if key == "space" and onGround and dead==false then
     body:applyLinearImpulse(0, -1500)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-  end
-    if key == "down" then
+    elseif key == "space" and dead == true then
       love.audio.stop()
       love.load()
   end
