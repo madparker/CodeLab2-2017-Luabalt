@@ -10,6 +10,7 @@ function love.load()
   width = 910
   height = 320
   distance = 0
+  dead = false
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -132,9 +133,17 @@ function love.update(dt)
   updateTilesetBatch()
   distance = round(body:getX(),-2) -- -2 as decimal places, lol
 
+if body:getY() > height then
+      dead = true
+  end
 
 distanceText = distance/100 .. "m"
   --print(distance/100)
+
+if dead == true then
+      love.audio.stop(runSound)
+      body:setLinearVelocity(0,0)
+  end
 
   --transitions animations?
 
@@ -148,17 +157,18 @@ distanceText = distance/100 .. "m"
     currentAnim:gotoFrame(1)
   end
 
-  if(currentAnim == runAnim) then
+  if currentAnim == runAnim and dead == false then
     --apples a force on the player body (x value)
     --print("ON GROUND")
     body:applyLinearImpulse(1100 * dt, 0)
-  else
+  elseif dead == false then
     body:applyLinearImpulse(550 * dt, 0)
   end
 end
 
 function love.draw()
   -- Sets up the level and player sprites / tilesets
+
   love.graphics.draw(background, 0, 0, 0, 1.78, 1.78, 0, 200)
   love.graphics.setColor(255, 255, 255)
   --love.graphics.print(text, 10, 10)
@@ -190,13 +200,12 @@ end
 -- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
   -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
-  if key == "space" and onGround then
+  if key == "space" and onGround and dead==false then
     body:applyLinearImpulse(0, -1500)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-  end
-    if key == "down" then
+    elseif key == "space" and dead == true then
       love.audio.stop()
       love.load()
   end
