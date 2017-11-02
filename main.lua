@@ -10,6 +10,7 @@ function love.load()
   width = 910
   height = 320
   distance = 0
+  dead = false
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -131,8 +132,16 @@ function love.update(dt)
   updateTilesetBatch()
   distance = round(body:getX(),-2) -- -2 as decimal places, lol
 
+if body:getY() > height then
+      dead = true
+  end
 
-  print(distance/100)
+if dead == true then
+      love.audio.stop(runSound)
+  end
+
+  --print(distance/100)
+  print (dead)
 
   --transitions animations?
 
@@ -146,11 +155,11 @@ function love.update(dt)
     currentAnim:gotoFrame(1)
   end
 
-  if(currentAnim == runAnim) then
+  if currentAnim == runAnim and dead == false then
     --apples a force on the player body (x value)
     --print("ON GROUND")
     body:applyLinearImpulse(1100 * dt, 0)
-  else
+  elseif dead == false then
     body:applyLinearImpulse(550 * dt, 0)
   end
 end
