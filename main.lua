@@ -177,7 +177,7 @@ end
 -- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
   -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
-  if key == "up" and onGround then
+  if key == "space" and onGround then
     body:applyLinearImpulse(0, -1500)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
