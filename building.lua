@@ -27,7 +27,7 @@ function building:setupBuilding(x,  tileSize)
 
   self.tileSize = tileSize
   self.x = x
-  self.y = 300
+  self.y = 320
 
   self.width  = math.ceil((love.math.random( ) * 10) + 30)
   self.height = math.ceil(5 + love.math.random( ) * 7)

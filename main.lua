@@ -9,6 +9,7 @@ function love.load()
   -- Set the width and height of the window (in pixels)
   width = 910
   height = 320
+  distance = 0
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -72,7 +73,7 @@ function love.load()
   -- Create a Body for the player.
   body = love.physics.newBody(world, 400, 100, "dynamic")
   -- Create a shape for the body.
-  player_box = love.physics.newRectangleShape(15, 15, 30, 30)
+  player_box = love.physics.newRectangleShape(28, 28, 30, 30)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
 
@@ -93,7 +94,7 @@ function love.load()
 
   --Cache the animations 
 
-  local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
+  local g = anim8.newGrid(30*1.5, 30*1.5, playerImg:getWidth()*1.5, playerImg:getHeight()*1.5)
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
@@ -112,6 +113,11 @@ function love.load()
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
 end
+-- added function to round numbers
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
 
 function love.update(dt)
 
@@ -123,6 +129,10 @@ function love.update(dt)
   building2:update(body, dt, building1)
 
   updateTilesetBatch()
+  distance = round(body:getX(),-2) -- -2 as decimal places, lol
+
+
+  print(distance/100)
 
   --transitions animations?
 
