@@ -8,13 +8,13 @@ local time = 0
 t = 0
 shakeDuration = -1
 shakeMagnitude = 0
-onGround = true;
 
 function love.load()
   -- Set the width and height of the window (in pixels)
   width = 910
   height = 320
   distance = 0
+  onGround = true;
   dead = false
 
   love.window.setMode(width, height, {resizable=false})
