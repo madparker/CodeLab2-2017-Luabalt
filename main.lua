@@ -53,6 +53,10 @@ function love.load()
   tileQuads[5] = love.graphics.newQuad(116, 0, 
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
+  -- game over text
+  tileQuads[6] = love.graphics.newQuad(42, 20, 
+    390, 48,
+    tilesetImage:getWidth(), tilesetImage:getHeight())
 
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
@@ -192,7 +196,11 @@ function love.draw()
 
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
+if (dead==true) then
+  love.graphics.draw(tilesetImage,tileQuads[6],body:getX()+width/2 - 390/2, height/2 - 48/2)
 end
+end
+
 
 function updateTilesetBatch()
   tilesetBatch:clear()
