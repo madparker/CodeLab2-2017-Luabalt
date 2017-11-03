@@ -129,7 +129,7 @@ function love.load()
 	--				Body
 
   -- Create a Body for the crate.
-  crate_body = love.physics.newBody(world, 770, 200, "dynamic")
+  --crate_body = love.physics.newBody(world, 770, 200, "dynamic")
 
   -- newRectangle Method
 	--	Signature:	newRectangleShape(x, y, width, height)
@@ -141,7 +141,7 @@ function love.load()
 	--				number		height		: height of collision shape
 	--	Returns: 
 	--				Shape
-  crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
+  --crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
   
   -- newFixture Method
 	--	Signature:	newFixture(body, shape)
@@ -152,7 +152,7 @@ function love.load()
 	--	
 	--	Returns: 
 	--				Fixture (i.e. A body with a collision shape attached)
-  fixture = love.physics.newFixture(crate_body, crate_box)
+  --fixture = love.physics.newFixture(crate_body, crate_box)
   -- setUserData Method
 	--	Signature:	setUserData(value)
 	--	Definition: associates a lua value with the Fixture
@@ -163,7 +163,7 @@ function love.load()
 	--				Nothing
 
   -- Now we can refer to the crate by using the string "Crate"
-  fixture:setUserData("Crate")
+  --fixture:setUserData("Crate")
 
   -- setMassData Method
 	--	Signature:	setMassData(x, y, mass, inertia)
@@ -190,7 +190,7 @@ function love.load()
 	--				number		mass		: the mass of the object
 	--				number		inertia		: rotational inertia
 
-  crate_body:setMassData(crate_box:computeMass( 1 ))
+  --crate_body:setMassData(crate_box:computeMass( 1 ))
 
   text = "hello World"
 
@@ -207,8 +207,8 @@ function love.load()
 	--				Building	
   
   -- These are the two buildings we see at the start of the game
-  building1 = building:makeBuilding(650, 16)
-  building2 = building:makeBuilding(1200, 16)
+  building1 = building:makeBuilding(650, 16, false)
+  building2 = building:makeBuilding(1200, 16, true)
 
   -- Sets player image
   playerImg = love.graphics.newImage("media/player2.png")
@@ -552,10 +552,10 @@ function updateTilesetBatch()
   tilesetBatch:clear()
   --add tilequads into tilesetbatch, with paramters of tilequad type, crate_body x, y, position and it's angle.
   --Potential Bug: it's only add one type of tilequads
-  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  --tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
   -- call building.draw function in the building script, draw two of them
-  building1:draw(tilesetBatch, tileQuads);
-  building2:draw(tilesetBatch, tileQuads);
+  building1:draw(tilesetBatch, tileQuads, false);
+  building2:draw(tilesetBatch, tileQuads, true);
   --save tilesetBatch
   tilesetBatch:flush()
 end
