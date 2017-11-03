@@ -5,6 +5,10 @@ tileQuads = {} -- parts of the tileset used for different tiles
 
 local time = 0
 
+t = 0
+shakeDuration = -1
+shakeMagnitude = 0
+
 function love.load()
   -- Set the width and height of the window (in pixels)
   width = 910
@@ -107,7 +111,7 @@ function love.load()
 
   currentAnim = inAirAnim
 
---AUDIO
+ --AUDIO
  -- Cache the audio
   playDeathSound = true
   playRunSound = true
@@ -145,6 +149,7 @@ function love.load()
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
 end
+
 -- added function to round numbers
 function round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
@@ -164,6 +169,10 @@ function love.update(dt)
   distance = round(body:getX(),-1) -- -1 as decimal places, lol
   distanceText = distance/10 .. "m"
 
+  --Checking shake duration time and ending shake
+  if t < shakeDuration then 
+    t = t + dt
+  end
 
 if body:getY() > height then
       dead = true
@@ -226,8 +235,20 @@ if (dead==true) then
    gameOverText = "You ran " .. distanceText .. " before your death. Jump to retry your daring escape."
   love.graphics.print (gameOverText, body:getX()+width/2 - 650/2, height/1.7)
   end
+
+  --Draw screen shake
+  if t < shakeDuration then
+    local dx = love.math.random(-shakeMagnitude, shakeMagnitude)
+    local dy = love.math.random(-shakeMagnitude, shakeMagnitude)
+    love.graphics.translate(dx, dy)
+    print ("SHAKE DRAW")
+  end
+
 end
 
+function startShake(duration, magnitude)
+    t, shakeDuration, shakeMagnitude = 0, duration or 1, magnitude or 5
+end
 
 function updateTilesetBatch()
   tilesetBatch:clear()
@@ -290,7 +311,7 @@ function beginContact(bodyA, bodyB, coll)
 	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
          body:applyLinearImpulse(-500, 0)
          scrapeSound:play()
-         
+         startShake(3, 10)
     end
 
     landSound:play()
