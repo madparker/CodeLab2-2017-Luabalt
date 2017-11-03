@@ -553,6 +553,11 @@ function updateTilesetBatch()
   --add tilequads into tilesetbatch, with paramters of tilequad type, crate_body x, y, position and it's angle.
   --Potential Bug: it's only add one type of tilequads
   tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[1], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[2], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[3], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[4], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[5], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
   -- call building.draw function in the building script, draw two of them
   building1:draw(tilesetBatch, tileQuads);
   building2:draw(tilesetBatch, tileQuads);
@@ -613,8 +618,8 @@ function beginContact(bodyA, bodyB, coll)
 	state = GAME_OVER
   end
 
-  -- if one of the body is player, then do these:
-  if(aData == "Player" or bData == "Player") then
+  -- if one of the body is player, and the collider position is not the side of the building ,then do these: 
+  if((aData == "Player" or bData == "Player") and cy~= 0 )then
     --Yes, player is on ground
     onGround = true
     --set the current animation to roll anim
