@@ -259,6 +259,8 @@ function beginContact(bodyA, bodyB, coll)
 
 	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
          body:applyLinearImpulse(-500, 0)
+         bodyA:destroy()
+         
     end
 
 
@@ -281,6 +283,10 @@ function endContact(bodyA, bodyB, coll)
 -- If on the the jumping bodies is the Player, stop the running sound
   if(aData == "Player" or bData == "Player") then
     runSound:stop();
+  end
+
+  if (aData == "Crate" and bData == "Player") or (aData == "Player" and bData == "Crate") then
+    onGround = true
   end
 end
 
