@@ -215,8 +215,18 @@ end
 
 
 function love.draw()
+
   -- Sets up the level and player sprites / tilesets
   love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
+
+  --Draw screen shake
+  if t < shakeDuration then
+    local dx = love.math.random(-shakeMagnitude, shakeMagnitude)
+    local dy = love.math.random(-shakeMagnitude, shakeMagnitude)
+    love.graphics.translate(dx, dy)
+    print ("SHAKE DRAW: " .. dx)
+  end
+  
   love.graphics.setColor(255, 255, 255)
   --love.graphics.print(text, 10, 10)
   love.graphics.print(distanceText, 850, 10)
@@ -235,14 +245,6 @@ if (dead==true) then
   love.graphics.draw(tilesetImage,tileQuads[6],body:getX()+width/2 - 390/2, height/2 - 48/2)
    gameOverText = "You ran " .. distanceText .. " before your death. Jump to retry your daring escape."
   love.graphics.print (gameOverText, body:getX()+width/2 - 650/2, height/1.7)
-  end
-
-  --Draw screen shake
-  if t < shakeDuration then
-    local dx = love.math.random(-shakeMagnitude, shakeMagnitude)
-    local dy = love.math.random(-shakeMagnitude, shakeMagnitude)
-    love.graphics.translate(dx, dy)
-    print ("SHAKE DRAW")
   end
 
 end
