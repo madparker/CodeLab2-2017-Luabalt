@@ -72,7 +72,7 @@ function love.load()
   --Makes buildings by calling the "make building" function on the building script
 
   building1 = building:makeBuilding(650, 16)
-  building2 = building:makeBuilding(1330, 16)
+  building2 = building:makeBuilding(1310, 16)
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
@@ -145,7 +145,7 @@ function love.update(dt)
 
   updateTilesetBatch()
   distance = round(body:getX(),-2) -- -2 as decimal places, lol
-  distanceText = distance/100 .. "m"
+  distanceText = distance/10 .. "m"
 
 
 if body:getY() > height then
@@ -198,6 +198,8 @@ function love.draw()
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 if (dead==true) then
   love.graphics.draw(tilesetImage,tileQuads[6],body:getX()+width/2 - 390/2, height/2 - 48/2)
+  gameOverText = "You ran " .. distanceText .. " before your death. Jump to retry your daring escape."
+  love.graphics.print (gameOverText, body:getX()+width/2 - 650/2, height/1.7)
 end
 end
 
