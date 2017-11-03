@@ -144,8 +144,8 @@ function love.update(dt)
   building2:update(body, dt, building1)
 
   updateTilesetBatch()
-  distance = round(body:getX(),-2) -- -2 as decimal places, lol
-  distanceText = distance/100 .. "m"
+  distance = round(body:getX(),-1) -- -1 as decimal places, lol
+  distanceText = distance/10 .. "m"
 
 
 if body:getY() > height then
@@ -198,6 +198,8 @@ function love.draw()
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 if (dead==true) then
   love.graphics.draw(tilesetImage,tileQuads[6],body:getX()+width/2 - 390/2, height/2 - 48/2)
+   gameOverText = "You ran " .. distanceText .. " before your death. Jump to retry your daring escape."
+  love.graphics.print (gameOverText, body:getX()+width/2 - 650/2, height/1.7)
 end
 end
 
@@ -257,10 +259,8 @@ function beginContact(bodyA, bodyB, coll)
 
 	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
          body:applyLinearImpulse(-500, 0)
-         bodyA:destroy()
          
     end
-
 
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
