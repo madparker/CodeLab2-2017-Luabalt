@@ -8,6 +8,7 @@ local time = 0
 t = 0
 shakeDuration = -1
 shakeMagnitude = 0
+onGround = true;
 
 function love.load()
   -- Set the width and height of the window (in pixels)
