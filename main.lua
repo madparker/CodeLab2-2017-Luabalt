@@ -207,8 +207,8 @@ function love.load()
 	--				Building	
   
   -- These are the two buildings we see at the start of the game
-  building1 = building:makeBuilding(650, 16, false)
-  building2 = building:makeBuilding(1200, 16, true)
+  building1 = building:makeBuilding(650, 16)
+  building2 = building:makeBuilding(1200, 16)
 
   -- Sets player image
   playerImg = love.graphics.newImage("media/player2.png")
@@ -545,17 +545,19 @@ function drawEndScreen()
  love.graphics.print(text, width/10, height * 2 /3)
 end
 
+
+local hasCrate = false
 --Chao
 --This function is called when we need to render tiles on screen
 function updateTilesetBatch()
-  --clear all the tiles in the tilesetbatch
+  --clear all the tiles in the tiles tbatch
   tilesetBatch:clear()
   --add tilequads into tilesetbatch, with paramters of tilequad type, crate_body x, y, position and it's angle.
   --Potential Bug: it's only add one type of tilequads
   --tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
   -- call building.draw function in the building script, draw two of them
-  building1:draw(tilesetBatch, tileQuads, false);
-  building2:draw(tilesetBatch, tileQuads, true);
+  building1:draw(tilesetBatch, tileQuads);
+  building2:draw(tilesetBatch, tileQuads);
   --save tilesetBatch
   tilesetBatch:flush()
 end
@@ -644,6 +646,8 @@ function endContact(bodyA, bodyB, coll)
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   text = "Collision ended: " .. aData .. " and " .. bData
+
+
 
   --if contact ends between the player and something, then that means the player is not grounded
   --as such, the running sound, as declared in load, stops.

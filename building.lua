@@ -44,7 +44,6 @@ function building:setupBuilding(x, tileSize, hasCrate)
   self.tileSize = tileSize
   self.x = x
   self.y = 300
-  has_crate = hasCrate
 
   --set width and height, body, and shape, but with some new fun math
   --math.ceil (x): Returns the smallest integer larger than or equal to x.
@@ -67,12 +66,11 @@ function building:setupBuilding(x, tileSize, hasCrate)
 
   --now we can refer to the building by using the string "Building"
   fixture:setUserData("Building")
-  if has_crate then
-	self.crate_body = love.physics.newBody(world, self.x, self.y - (self.tileSize * (self.height - 5)), "dynamic")
-	self.crate_box = love.physics.newRectangleShape(9, 9, 18, 18);
-	fixture = love.physics.newFixture(self.crate_body, self.crate_box)
-	fixture:setUserData("Crate")
-  end
+  self.crate_body = love.physics.newBody(world, self.x, self.y - (self.tileSize * (self.height - 5)), "dynamic")
+  self.crate_box = love.physics.newRectangleShape(9, 9, 18, 18);
+  fixture = love.physics.newFixture(self.crate_body, self.crate_box)
+  fixture:setUserData("Crate")
+  
 end
 
 --this is the update function that runs on buildings that were made
@@ -114,7 +112,7 @@ end
 												-- from L
 	--
 	--	Returns: Nothing
-function building:draw(tilesetBatch, tileQuads, hasCrate)
+function building:draw(tilesetBatch, tileQuads)
 --these are the x and y of the building being drawn, grabbed from the metatable
   x1, y1 = self.shape:getPoints()
 
@@ -127,9 +125,7 @@ function building:draw(tilesetBatch, tileQuads, hasCrate)
   -- This adds the crate sprite to the tilsetBatch to render.
   -- I set this to be the building's height to show we are redning crates
   -- At this point no physics have been added to the crates so they will not fall
-  if hasCrate then
-	tilesetBatch:add(tileQuads[0], self.crate_body:getX(), self.crate_body:getY(), self.crate_body:getAngle())
-  end
+  tilesetBatch:add(tileQuads[0], self.crate_body:getX(), self.crate_body:getY(), self.crate_body:getAngle())
   for x=self.width - 1, 0, -1 do 
     for y=0,self.height - 1, 1 do
       if x == 0 and y == 0 then
