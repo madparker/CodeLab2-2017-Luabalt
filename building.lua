@@ -46,8 +46,8 @@ function building:setupBuilding(x, tileSize)
 
   --set width and height, body, and shape, but with some new fun math
   --math.ceil (x): Returns the smallest integer larger than or equal to x.
-  -- so we set a random height and width
-  self.width  = math.ceil((love.math.random( ) * 10) + 20)
+  -- so we set a random height and width love.math.random( ) 
+  self.width  = math.ceil((1 * 10) + 20)
   self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7 (I'm guessing the original code had uniform heights?)
 
