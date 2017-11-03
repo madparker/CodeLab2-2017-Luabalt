@@ -158,13 +158,13 @@ function love.update(dt) --delta time
     print (text)
   end
 
-  if crate_body:getX() < body:getX() - 100 then
-    if crate_fixture:isDestroyed() then
+  if crate_body:getX() < body:getX() - 100 then -- if the crate move outside of the screen
+    if crate_fixture:isDestroyed() then -- if the fixture has been destoryed
       crate_fixture = love.physics.newFixture(crate_body, crate_box) --creates and attaches a fixture to the body
       crate_fixture:setUserData("Crate") -- Set a string userdata
     end
-    crate_body:setAwake(true)
-    crate_body:setPosition(body:getX() + width * 2, 200)
+    crate_body:setAwake(true) -- wake up, cratey!
+    crate_body:setPosition(body:getX() + width * 2, 200) -- cratey movey
 
     -- text = text.."\n".."recreate"
   end
@@ -240,10 +240,12 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
 
   if((aData == "Player" or bData == "Player") and (aData == "Crate" or bData == "Crate")) then --if player is colliding FIRST BUG SOLVED YEAYAYAYAHA
     body:applyLinearImpulse(-50, 0)
-    currentAnim = rollAnim
+
+    currentAnim = rollAnim -- play roll animation
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-    crate_fixture:destroy()
+
+    crate_fixture:destroy() -- destory the fixture so the box can fall
   end
 
 end
