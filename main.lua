@@ -77,7 +77,8 @@ function love.load() --loads the game
   crate_fixture:setUserData("Crate") -- Set a string userdata
   crate_body:setMassData(crate_box:computeMass( 1 )) --sets mass
 
-  text = "hello World" --hi
+  -- text = "hello World" --hi
+  text = " "
 
   building1 = building:makeBuilding(750, 16) --
   building2 = building:makeBuilding(1800, 16) --
@@ -156,6 +157,17 @@ function love.update(dt) --delta time
     text = "You ran for "..math.floor (body:getX()).." pixels!\nPressy R to restarty!"
     print (text)
   end
+
+  if crate_body:getX() < body:getX() - 100 then
+    if crate_fixture:isDestroyed() then
+      crate_fixture = love.physics.newFixture(crate_body, crate_box) --creates and attaches a fixture to the body
+      crate_fixture:setUserData("Crate") -- Set a string userdata
+    end
+    crate_body:setAwake(true)
+    crate_body:setPosition(body:getX() + width * 2, 200)
+
+    -- text = text.."\n".."recreate"
+  end
 end
 
 
@@ -184,10 +196,10 @@ end
 function updateTilesetBatch()
   tilesetBatch:clear() --clearey batchey
 
-  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle()); --tiley addey
-
   building1:draw(tilesetBatch, tileQuads); --buildy drawey
   building2:draw(tilesetBatch, tileQuads); --secondy buildy drawey
+
+  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle()); --tiley addey
 
   tilesetBatch:flush() --send new and modified sprite data to graphic card
 end
@@ -212,9 +224,9 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
   local bData =bodyB:getUserData() --gets data for second body
 
   cx,cy = coll:getNormal() --direction of collision
-  text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
+  -- text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
-  print (text)
+  -- print (text)
 
   if((aData == "Player" or bData == "Player") and (aData ~= "Crate" and bData ~= "Crate") and cy ~= 0) then --if player is colliding FIRST BUG SOLVED YEAYAYAYAHA
 
@@ -243,7 +255,7 @@ function endContact(bodyA, bodyB, coll) --touchey stoppey pwease
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   cx,cy = coll:getNormal() --direction of collision
-  text = "Collision ended: " .. aData .. " and " .. bData
+  -- text = "Collision ended: " .. aData .. " and " .. bData
 
   if((aData == "Player" or bData == "Player")and (aData ~= "Crate" and bData ~= "Crate")) then
     runSound:stop() --stopey soundey when touchey stoppey pwease

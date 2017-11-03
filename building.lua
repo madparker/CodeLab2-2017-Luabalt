@@ -67,7 +67,7 @@ function building:draw(tilesetBatch, tileQuads)
       elseif x == self.width - 1 then
         tilesetBatch:add(tileQuads[6], x1 + x * tileSize, y1 + y * tileSize, 0)
       else 
-        num = math.floor(y + y1)
+        num = math.floor(y)
         if (num)%2 == 0 then
           tilesetBatch:add(tileQuads[7], x1 + x * tileSize, y1 + y * tileSize, 0)
         else
