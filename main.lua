@@ -107,15 +107,17 @@ function love.load()
 
   currentAnim = inAirAnim
 
+--AUDIO
  -- Cache the audio
   playDeathSound = true
+  playRunSound = true
 
   music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
   music:setVolume(0.1)
   love.audio.play(music)
 
   runSound = love.audio.newSource("media/footsteps.wav", "static")
-  runSound:setVolume(0.3)
+  runSound:setVolume(0.4)
   runSound:setLooping(true)
 
   scrapeSound = love.audio.newSource("media/scrape.wav", "static")
@@ -136,7 +138,10 @@ function love.load()
   deathSound:setVolume(0.4)
   
   landSound = love.audio.newSource("media/land.wav", "static")
-  landSound:setVolume(0.4)
+  landSound:setVolume(0.6)
+
+  rollSound = love.audio.newSource("media/roll.wav", "static")
+  rollSound:setVolume(0.4)
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
 end
@@ -169,7 +174,7 @@ if body:getY() > height then
   end
 
 if dead == true then
-      love.audio.stop(runSound)
+      --love.audio.stop(runSound)
       body:setLinearVelocity(0,0)
   end
 
@@ -188,6 +193,10 @@ if dead == true then
   if currentAnim == runAnim and dead == false then
     --apples a force on the player body (x value)
     --print("ON GROUND")
+    playRunSound = true
+    if playRunSound then
+      runSound:play()
+   end
     body:applyLinearImpulse(1100 * dt, 0)
   elseif dead == false then
     body:applyLinearImpulse(550 * dt, 0)
@@ -216,7 +225,7 @@ if (dead==true) then
   love.graphics.draw(tilesetImage,tileQuads[6],body:getX()+width/2 - 390/2, height/2 - 48/2)
    gameOverText = "You ran " .. distanceText .. " before your death. Jump to retry your daring escape."
   love.graphics.print (gameOverText, body:getX()+width/2 - 650/2, height/1.7)
-end
+  end
 end
 
 
@@ -284,11 +293,14 @@ function beginContact(bodyA, bodyB, coll)
          
     end
 
+    landSound:play()
     currentAnim = rollAnim
+    if (currentAnim == rollAnim) then
+      rollSound:play()
+    end
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-    landSound:play()
-    runSound:play()
+    --runSound:play()
 
   end
 end
@@ -303,6 +315,7 @@ function endContact(bodyA, bodyB, coll)
 -- If on the the jumping bodies is the Player, stop the running sound
   if(aData == "Player" or bData == "Player") then
     runSound:stop();
+    playRunSound = false
   end
 
   if (aData == "Crate" and bData == "Player") or (aData == "Player" and bData == "Crate") then
