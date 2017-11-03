@@ -14,7 +14,7 @@ function love.load()
   width = 910
   height = 320
   distance = 0
-  onGround = true;
+  --onGround = true;
   dead = false
 
   love.window.setMode(width, height, {resizable=false})
@@ -293,7 +293,7 @@ function beginContact(bodyA, bodyB, coll)
   cx,cy = coll:getNormal()
   --text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
-  --print (text)
+  --print(text)
 
 -- If one of the two objects that collided are The Player, set OnGround to true. 
   if(aData == "Player" or bData == "Player") then
@@ -341,7 +341,7 @@ function endContact(bodyA, bodyB, coll)
   end
 
   if (aData == "Crate" and bData == "Player") or (aData == "Player" and bData == "Crate") then
-    onGround = true
+    --onGround = true
     scrapeSound:stop();
   end
 end
