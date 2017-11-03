@@ -108,6 +108,8 @@ function love.load()
   currentAnim = inAirAnim
 
  -- Cache the audio
+  playDeathSound = true
+
   music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
   music:setVolume(0.1)
   love.audio.play(music)
@@ -116,12 +118,22 @@ function love.load()
   runSound:setVolume(0.3)
   runSound:setLooping(true)
 
+  scrapeSound = love.audio.newSource("media/scrape.wav", "static")
+  scrapeSound:setVolume(0.4)
+  scrapeSound:setLooping(true)
+
   --footstep1 = love.audio.newSource("media/foot1.wav"), "static")
   --footstep2 = love.audio.newSource("media/foot2.wav", "static")
   --footstep3 = love.audio.newSource("media/foot3.wav", "static")
 
   jumpSound = love.audio.newSource("media/jump.wav", "static")
   jumpSound:setVolume(0.4)
+
+  sideColSound = love.audio.newSource("media/sidecol.wav", "static")
+  sideColSound:setVolume(0.4)
+
+  deathSound = love.audio.newSource("media/death.mp3", "static")
+  deathSound:setVolume(0.4)
   
   landSound = love.audio.newSource("media/land.wav", "static")
   landSound:setVolume(0.4)
@@ -150,6 +162,10 @@ function love.update(dt)
 
 if body:getY() > height then
       dead = true
+      if playDeathSound then
+        deathSound:play()
+        playDeathSound = false
+     end
   end
 
 if dead == true then
@@ -255,10 +271,16 @@ function beginContact(bodyA, bodyB, coll)
     -- Checks for collision between player and building and compares the y normal to see if the player is grounded or not
     if(cy ~= 0 and ((aData == "Player" and bData == "Building") or (aData == "Building" and bData == "Player"))) then
 		onGround = true
-	end
+  end
+  --Checks for side collision and plays sound
+  if(cx ~= 0 and ((aData == "Player" and bData == "Building") or (aData == "Building" and bData == "Player"))) then
+    --play crash
+    sideColSound:play()
+  end
 
 	if(cx ~= 0 and ((aData == "Player" and bData == "Crate") or (aData == "Crate" and bData == "Player"))) then
          body:applyLinearImpulse(-500, 0)
+         scrapeSound:play()
          
     end
 
@@ -285,6 +307,7 @@ function endContact(bodyA, bodyB, coll)
 
   if (aData == "Crate" and bData == "Player") or (aData == "Player" and bData == "Crate") then
     onGround = true
+    scrapeSound:stop();
   end
 end
 
