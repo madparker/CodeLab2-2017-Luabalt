@@ -32,7 +32,7 @@ function building:setupBuilding(x,  tileSize, crateYes)
   self.y = 320
   self.crateYes = crateYes
 
-  self.width  = math.ceil((love.math.random( ) * 10) + 30)
+  self.width  = math.ceil((love.math.random( ) * 10) + 50)
   self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7
   self.body = love.physics.newBody(world, 0, 0, "static")

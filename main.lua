@@ -71,8 +71,8 @@ function love.load()
 
   --Makes buildings by calling the "make building" function on the building script
 
-  building1 = building:makeBuilding(650, 16, false)
-  building2 = building:makeBuilding(1330, 16, true)
+  building1 = building:makeBuilding(450, 16, false)
+  building2 = building:makeBuilding(1380, 16, true)
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
