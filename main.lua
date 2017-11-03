@@ -14,7 +14,7 @@ function love.load()
   width = 910
   height = 320
   distance = 0
-  --onGround = true;
+  onGround = true;
   dead = false
 
   love.window.setMode(width, height, {resizable=false})
@@ -272,6 +272,7 @@ function love.keypressed( key, isrepeat )
     time = love.timer.getTime( )
 
     love.audio.play(jumpSound)
+	onGround = false;
   end
     if key == "down" then
 
@@ -341,7 +342,7 @@ function endContact(bodyA, bodyB, coll)
   end
 
   if (aData == "Crate" and bData == "Player") or (aData == "Player" and bData == "Crate") then
-    --onGround = true
+    onGround = true
     scrapeSound:stop();
   end
 end
