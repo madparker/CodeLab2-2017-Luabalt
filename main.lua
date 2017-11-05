@@ -67,9 +67,9 @@ function love.load()
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
-  body = love.physics.newBody(world, 600, 100, "dynamic")
+  body = love.physics.newBody(world, 10, 450, "dynamic")
   -- Create a shape for the body.
-  player_box = love.physics.newRectangleShape(30, 30, 60, 60)
+  player_box = love.physics.newRectangleShape(45, 45, 30, 30)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
   fixture:setUserData("Player") -- Set a string userdata
@@ -138,6 +138,13 @@ function love.update(dt)
     --body:applyLinearImpulse(100 * dt, 0)
   end
 
+  if body:getX() < -100 then
+	body:setX(-100)
+  end
+
+  if body:getX() > 680 then
+    body:setX(680)
+  end
 
   if love.keyboard.isDown("d") then
 	body:applyLinearImpulse(750 * dt, 0)
