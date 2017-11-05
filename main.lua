@@ -146,8 +146,7 @@ function love.update(dt)
     --body:applyLinearImpulse(750 * dt, 0)
   else
     --body:applyLinearImpulse(100 * dt, 0)
-<<<<<<< .merge_file_oUtAxO
-=======
+
   end
 
   if love.keyboard.isDown("d") then
@@ -162,7 +161,7 @@ function love.update(dt)
 
   if body:getX() < -100 then
 	body:setX(-100)
->>>>>>> .merge_file_YAapCT
+
   end
 
   if body:getX() > 680 then
@@ -177,15 +176,15 @@ function love.draw()
   love.graphics.print(text, 10, 10)
 
 
-<<<<<<< .merge_file_oUtAxO
+
   --love.graphics.translate(width * 0.1 - body:getX(), 0)
    
-=======
+
   -- love.graphics.translate(width * 0.1 - body:getX(), 0)
 
   love.graphics.translate(width * 0.1, 0)
 
->>>>>>> .merge_file_YAapCT
+
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
   monsterAnim:draw(monsterImage, monster1.body:getX(), monster1.body:getY(), monster1.body:getAngle())
