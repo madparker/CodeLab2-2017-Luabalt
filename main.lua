@@ -30,6 +30,9 @@ function love.load() --loads the game
   -- Create a world with standard gravity
   world = love.physics.newWorld(0, 9.81*gravityScale, true)
 
+  rocketyShippyImage = love.graphics.newImage('media/play2_atlas0.png')
+  rocketyShippyImage:setFilter ("nearest", "nearest")
+
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
   background:setFilter("nearest", "nearest") --for image scaling, compression format
@@ -82,6 +85,9 @@ function love.load() --loads the game
   -- floor = love.graphics.newQuad(0, 0, 
   --   570, 32,
   --   floorImage:getWidth(), floorImage:getHeight())
+  rocketyShippyQuad = love.graphics.newQuad(128, 4, 
+    255, 118, 
+    rocketyShippyImage:getWidth(), rocketyShippyImage:getHeight())
 
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500) --creates a new sprite batch! max number of sprites the batch can contain
 
@@ -96,6 +102,8 @@ function love.load() --loads the game
 
   -- text = "hello World" --hi
   text = " "
+
+rocketyShippy = rocketyShippy:makerocketyShippy(width)
 
   upperBound1 = bound:makebound(0,109)
   upperBound2 = bound:makebound(570,109)
@@ -168,7 +176,7 @@ function love.update(dt) --delta time
   lowerBound1:update(body, dt, lowerBound2)
   lowerBound2:update(body, dt, lowerBound1)
 
-
+rocketyShippy:update(body, dt)
 
   updateTilesetBatch()
 
@@ -242,6 +250,8 @@ function love.draw() --drawey everythingey
   upperBound2:draw(floorImage)
   lowerBound1:draw(floorImage)
   lowerBound2:draw(floorImage)
+
+  rocketyShippy:draw(rocketyShippyQuad)
 
   
 end
