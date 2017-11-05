@@ -6,6 +6,7 @@ tileQuads = {} -- parts of the tileset used for different tiles
 local time = 0
 
 playerMoveSpeed = 100
+shootTime = 0.5
 
 t = 0
 shakeDuration = -1
@@ -40,9 +41,11 @@ function love.load()
   local g = anim8.newGrid(walkerImg:getWidth()/6, walkerImg:getHeight()/2, walkerImg:getWidth(), walkerImg:getHeight())
   idleAnim = anim8.newAnimation(g('1-1',1),1)
   walkAnim = anim8.newAnimation(g('1-6',1), 0.1)
-  --shootAnim = anim8.newAnimation(g('7-11',1), 0.1)
+  shootAnim = anim8.newAnimation(g('1-6',2), 0.1)
 
   currentAnim1 = idleAnim
+
+  shooting1 = false
   
   player1_body = love.physics.newBody(world, 400, 100, "dynamic")
   player1_box = love.physics.newRectangleShape(28, 28, 30, 30)
@@ -53,6 +56,8 @@ function love.load()
  
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
+shootTime1 = shootTime
+shootTime2 = shootTime
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -99,7 +104,13 @@ if love.keyboard.isDown( "d" ) then
    player1_velX = playerMoveSpeed
 end
 
-if (player1_velX ~= 0 or player1_velY ~= 0) then
+if shooting1 then
+  Shooting(dt)
+  end
+
+if shooting1 == true then
+  currentAnim1 = shootAnim
+elseif (player1_velX ~= 0 or player1_velY ~= 0) then
   currentAnim1 = walkAnim
   else
     currentAnim1 = idleAnim
@@ -117,6 +128,14 @@ player1_body:setLinearVelocity(player1_velX, player1_velY)
 
 end
 
+function Shooting(dt)
+  if shootTime1 > 0 then
+  shootTime1 = shootTime1-dt
+else
+  shooting1 = false
+  shootTime1=shootTime
+  end
+end
 
 function love.draw()
 
@@ -155,19 +174,12 @@ end
 -- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
   -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
-  -- if key == "w" then
-  --   print("up")
-  --   player1_body:
-  -- end
-  --   if key == "a" then
-  --     print("left")
-  -- end
-  -- if key == "s" then
-  --   print("down")
-  -- end
-  --   if key == "d" then
-  --     print("right")
-  -- end
+  if key == "space" and shooting1 == false then
+    print("shoot!")
+    shooting1 = true
+
+  end
+   
 end
 
 
