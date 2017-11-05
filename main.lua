@@ -31,6 +31,10 @@ function love.load() --loads the game
 
   --Get Tile Image
   tilesetImage=love.graphics.newImage('media/play1_atlas0.png')
+  floorImage = love.graphics.newImage('media/barytiley.png')
+  --media/barytiley.png
+
+  floorImage:setFilter("nearest", "nearest")
   --Make nearest neighbor, so pixels are sharp
   tilesetImage:setFilter("nearest", "nearest") -- this "linear filter" removes some artifacts if we were to scale the tiles
   tileSize = 16 --declares the size of the tile
@@ -70,6 +74,9 @@ function love.load() --loads the game
   endQuad = love.graphics.newQuad(40, 18,
     390, 50,
     tilesetImage:getWidth(), tilesetImage:getHeight())
+  floor = love.graphics.newQuad(0, 0, 
+    570, 32,
+    floorImage:getWidth(), floorImage:getHeight())
 
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500) --creates a new sprite batch! max number of sprites the batch can contain
 
@@ -79,6 +86,8 @@ function love.load() --loads the game
   crate_fixture = love.physics.newFixture(crate_body, crate_box) --creates and attaches a fixture to the body
   crate_fixture:setUserData("Crate") -- Set a string userdata
   crate_body:setMassData(crate_box:computeMass( 1 )) --sets mass
+
+  floor_body = love.physics.newBody(world, 0, height - 100, "dynamic")
 
   -- text = "hello World" --hi
   text = " "
@@ -182,6 +191,8 @@ function love.draw() --drawey everythingey
 
   love.graphics.draw(background, -backgroundOffset, 0, 0, 2, 2, 0, 30) 
   love.graphics.draw(background, -backgroundOffset + width, 0, 0, 2, 2, 0, 30) 
+  love.graphics.draw(floorImage, 0, height - 109, 0, 2, 2, 0, 0)
+
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
   if gameyEndy == true then
