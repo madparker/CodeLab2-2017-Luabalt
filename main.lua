@@ -80,8 +80,8 @@ function love.load() --loads the game
   -- text = "hello World" --hi
   text = " "
 
-  building1 = building:makeBuilding(750, 16) --
-  building2 = building:makeBuilding(1800, 16) --
+  --building1 = building:makeBuilding(750, 16) --
+  --building2 = building:makeBuilding(1800, 16) --
 
   playerImg = love.graphics.newImage("media/player2.png") --sets player img, getting spritey for playey
   -- Create a Body for the player.
@@ -129,8 +129,8 @@ function love.update(dt) --delta time
   currentAnim:update(dt)
   world:update(dt)
 
-  building1:update(body, dt, building2)
-  building2:update(body, dt, building1)
+  --building1:update(body, dt, building2)
+  --building2:update(body, dt, building1)
 
   updateTilesetBatch()
 
@@ -196,8 +196,8 @@ end
 function updateTilesetBatch()
   tilesetBatch:clear() --clearey batchey
 
-  building1:draw(tilesetBatch, tileQuads); --buildy drawey
-  building2:draw(tilesetBatch, tileQuads); --secondy buildy drawey
+  --building1:draw(tilesetBatch, tileQuads); --buildy drawey
+  --uilding2:draw(tilesetBatch, tileQuads); --secondy buildy drawey
 
   tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle()); --tiley addey
 
@@ -205,7 +205,7 @@ function updateTilesetBatch()
 end
 
 function love.keypressed( key, isrepeat ) --jumpey buttoney
-  if key == "up" and onGround then --if up key and grounded, get high
+  if key == "up" then--and onGround then --if up key and grounded, get high
     body:applyLinearImpulse(0, jumpForce) --applyey forcey uppy
     currentAnim = jumpAnim --anime changey jumpey
     currentAnim:gotoFrame(1) --framey changey
