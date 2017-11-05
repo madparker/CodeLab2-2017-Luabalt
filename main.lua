@@ -6,8 +6,8 @@ tileQuads = {} -- parts of the tileset used for different tiles
 local time = 0
 
 function love.load()
-  width = 600
-  height = 300
+  width = 800
+  height = 600
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -79,7 +79,7 @@ function love.load()
   body:setMassData(player_box:computeMass( 1 ))
   body:setFixedRotation(true)
   --the player an init push.
-  body:applyLinearImpulse(1000, 0)
+  --body:applyLinearImpulse(1000, 0)
 
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -127,20 +127,30 @@ function love.update(dt)
     currentAnim:gotoFrame(1)
   end
 
-  if(body:getY() >= 300) then
-    love.event.quit("restart")
-  end
+  --if(body:getY() >= 300) then
+    --love.event.quit("restart")
+  --end
 
   if(currentAnim == runAnim) then
     --print("ON GROUND")
-    body:applyLinearImpulse(750 * dt, 0)
+    --body:applyLinearImpulse(750 * dt, 0)
   else
-    body:applyLinearImpulse(100 * dt, 0)
+    --body:applyLinearImpulse(100 * dt, 0)
   end
+
+
+  if love.keyboard.isDown("d") then
+	body:applyLinearImpulse(750 * dt, 0)
+  end
+
+  if love.keyboard.isDown("a") then
+	body:applyLinearImpulse(-750 * dt, 0)
+  end
+
 end
 
 function love.draw()
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 50)
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
@@ -170,7 +180,7 @@ end
 
 --player jumps here
 function love.keypressed( key, isrepeat )
-  if key == "up" and onGround then
+  if key == "w" and onGround then
     body:applyLinearImpulse(0, -1000)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
