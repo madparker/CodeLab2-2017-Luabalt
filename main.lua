@@ -5,16 +5,17 @@ tileQuads = {} -- array? parts of the tileset used for different tiles
 
 local time = 0 
 
-local jumpForce = -1500;
-local gravityScale = 100;
+local jumpForce = -500;
+local gravityScale = 20;
 local runForce = 1000;
 
 
 function love.load() --loads the game
-  width = 600 --size of window
-  height = 300
+  width = 512 * 2 --size of window
+  height = 424 * 2
 
-  love.window.setMode(width, height, {resizable=false}) --sets display to width and height, makes static size
+  --love.window.setFullscreen(true)
+  love.window.setMode(width, height, {resizable = true}) --sets display to width and height, makes static size
   love.window.setTitle("Luabalt") --sets window title
 
   -- One meter is 32px in physics engine
@@ -173,7 +174,7 @@ end
 
 function love.draw() --drawey everythingey
 
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200) 
+  love.graphics.draw(background, 0, 0, 0, 2, 2, 0, 30) 
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
   if gameyEndy == true then
