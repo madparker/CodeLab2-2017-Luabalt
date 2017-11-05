@@ -1,6 +1,7 @@
 local anim8 = require 'anim8' --local is like private?
 require 'building' --require is like using
 require 'bound'
+require 'rocketyShippy'
 
 tileQuads = {} -- array? parts of the tileset used for different tiles
 
@@ -8,7 +9,7 @@ local time = 0
 
 local jumpForce = -5000
 local gravityScale = 15
-local runForce = 100
+local runForce = 1000
 local initialForce = 10000
 local backgroundOffset = 0
 local backgroundMoveSpeed = 200
@@ -23,7 +24,7 @@ function love.load() --loads the game
 
   --love.window.setFullscreen(true)
   love.window.setMode(width, height, {resizable = true}) --sets display to width and height, makes static size
-  love.window.setTitle("Luabalt") --sets window title
+  love.window.setTitle("Floaty Doggy") --sets window title
 
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
@@ -251,7 +252,7 @@ function love.draw() --drawey everythingey
   lowerBound1:draw(floorImage)
   lowerBound2:draw(floorImage)
 
-  rocketyShippy:draw(rocketyShippyQuad)
+  rocketyShippy:draw(rocketyShippyImage, rocketyShippyQuad)
 
   
 end

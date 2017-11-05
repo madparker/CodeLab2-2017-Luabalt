@@ -1,7 +1,7 @@
 rocketyShippy = {  
 
-  upperLimit = 109,
-  lowerLimit = 739,
+  -- upperLimit = 109,
+  -- lowerLimit = 739,
 
   x = 0,
   y = 0,
@@ -28,7 +28,7 @@ function rocketyShippy:setuprocketyShippy(x) --makes rocketyShippy
 
   --self.tileSize = tileSize --sets size, and positions
   self.x = x + love.math.random() * 100
-  self.y = love.math.random() * (lowerLimit - upperLimit) + upperLimit
+  self.y = love.math.random() * 630 + 109
 
   --self.width = math.ceil((love.math.random( ) * 10) + 50) --sets width and height randomly
   --self.height = math.ceil(5 + love.math.random( ) * 7)
@@ -47,14 +47,13 @@ function rocketyShippy:update(body, dt)
 
   if self.x + self.width/2 < body:getX() - 20 then 
       self:setuprocketyShippy(
-          other_rocketyShippy.x + other_rocketyShippy.width, 
-          other_rocketyShippy.y,
-          16)
+          body:getX() + 512 * 2)
   end
 end
 
-function rocketyShippy:draw(rocketyShippyImage)
+function rocketyShippy:draw(rocketyShippyImage, rocketyShippyQuad)
   x1, y1 = self.shape:getPoints()
-
-  love.graphics.draw(rocketyShippyImage, x1, y1, 0, 0.5, 0.5, 0, 0)
+  love.graphics.setColor(109, 109, 109)
+  love.graphics.draw(rocketyShippyImage, rocketyShippyQuad, x1, y1, 0, 0.5, 0.5, 0, 0)
+  love.graphics.setColor(255, 255, 255)
 end
