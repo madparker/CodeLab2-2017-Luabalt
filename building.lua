@@ -54,7 +54,7 @@ function building:setupBuilding(x, tileSize, hasCrate)
 
   --Body, as we saw in Chris' comments, is like the rigidBody and allows physics forces interact with it
   --we pass it the world, x & y coordinates of 0, and set it to static so that it DOES NOT MOVE
-  self.body = love.physics.newBody(world, 0, 0, "static")
+  self.body = love.physics.newBody(world, 0, 0, "kinematic")
 
   --attaches a collider to the body using all the variable set before this
   self.shape = love.physics.newRectangleShape(self.x, self.y, 
@@ -82,7 +82,7 @@ function building:update(body, dt, other_building)
 
 --it builds buildings based on the position of the player
 --this is some math: if the player is more than halfway across the building, make a new building?
-  if self.x + self.width/2 * self.tileSize < body:getX() then
+ if self.x + self.width/2 * self.tileSize < body:getX() then
       self:setupBuilding(
           other_building.x + other_building.width  * self.tileSize + 150, 
           16)

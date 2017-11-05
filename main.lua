@@ -216,6 +216,7 @@ function love.load()
   -- Create a Body for the player.
   -- "Dynamic" Bodytype collides with all bodies
   body = love.physics.newBody(world, 400, 100, "dynamic")
+  body:setGravityScale(0)
 
   -- Create a shape for the body.
   player_box = love.physics.newRectangleShape(15, 15, 30, 30)
@@ -254,7 +255,15 @@ function love.load()
 
   -- The player an init push.
   -- This is what makes the player move to the right
-  body:applyLinearImpulse(10000, 0)
+
+
+
+
+  --body:applyLinearImpulse(250, 0)
+
+
+
+
 
   -- setCallbacks Method
 	--	Signature:	setCallbacks(beginContact, endContact)
@@ -399,6 +408,27 @@ function gameScreen(dt)
 	-- Updates the world using deltaTime
 	world:update(dt)
 
+	--*****THIS MAKES THE WORLD MOVE*****
+	world:translateOrigin(0.25, 0)
+
+	--*****IF WE'RE OUTSIDE THE SCREEN, WE DIE*****
+	if(body:getX() > width or body:getX() < 0) then
+	state = GAME_OVER
+	end
+
+	if(love.keyboard.isDown("up")) then
+		body:setY(body:getY() - 1)
+	end
+	if(love.keyboard.isDown("down")) then
+		body:setY(body:getY() + 1)
+	end
+	if(love.keyboard.isDown("left")) then
+		body:setX(body:getX() - 1)
+	end
+	if(love.keyboard.isDown("right")) then
+		body:setX(body:getX() + 1)
+	end
+		
 	-- Updates the building using the player's body, deltaTime and the building itself
 	building1:update(body, dt, building2)
 	building2:update(body, dt, building1)
@@ -439,9 +469,9 @@ function gameScreen(dt)
 	  --print("ON GROUND")
 	  --changed 250 to 1000
 	  --changed 100 to 500
-	  body:applyLinearImpulse(1000 * dt, 0)
+	  --body:applyLinearImpulse(1000 * dt, 0)
 	else
-	  body:applyLinearImpulse(500 * dt, 0)
+	  --body:applyLinearImpulse(500 * dt, 0)
 	end
 end
 
@@ -512,7 +542,7 @@ function drawGameScreen()
 
   -- This keeps the player in the middle of the screen
   -- set it from 2 to 100 to put player at the edge of screen
-  love.graphics.translate(width/100 - body:getX(), 0)
+  --love.graphics.translate(width/2 - body:getX(), 0)
    
   -- Draws the current animation
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
@@ -566,16 +596,27 @@ end
 --Potential bug: isrepeat is not using in this function, which made the player could keep jumping and never fall.
 function love.keypressed( key, isrepeat )
   --If up key was pressed and the character is on the ground, then do these:
-  if key == "up" and onGround then
+  --if (key == "up") then --and onGround then
     -- apply a linear impulse to up direction on the character
-    body:applyLinearImpulse(0, -1500)
+    --body:applyLinearImpulse(0, -500)
+	--body:setY(body:getY() - 10)
     -- set the current animation to jump anim
-    currentAnim = jumpAnim
+    --currentAnim = jumpAnim
     --play jumpanim
-    currentAnim:gotoFrame(1)
+    --currentAnim:gotoFrame(1)
     -- get the time when we start to do the jump animation
-    time = love.timer.getTime( )
-  end
+    --time = love.timer.getTime( )
+	--elseif (key == "down") then
+		--body:applyLinearImpulse(0, 500)
+			--:setY(body:getY() + 10)
+	--elseif(key == "left") then
+		--body:applyLinearImpulse(-500, 0)
+			--body:setX(body:getX() - 10)
+	--elseif(key == "right") then
+		--body:applyLinearImpulse(500, 0)
+		--body:setX(body:getX() + 10)
+	--end
+  
 
   -- Press tab to return to the main menu from the GAME_PLAY screen and GAME_OVER screen
   if (key == "tab" and state ~= GAME_START) then
@@ -597,6 +638,18 @@ function love.keypressed( key, isrepeat )
   if (key == "backspace" and state == GAME_OVER) then
 	state = GAME_START
   end
+
+  if(key == "space") then
+	--Shoot()
+	end
+end
+
+function Shoot()
+
+bullet = love.physics.newBody(world, body:getX(), body:getY(), "dynamic")
+bulletShape = love.physics.newRectangleShape(15, 15, 30, 30)
+bullet:applyLinearImpulse(1000, 0)
+
 end
 
 -- This is called every time a collision begin.
@@ -609,7 +662,7 @@ function beginContact(bodyA, bodyB, coll)
   --save the information we got from aData and bData, and also the position where collision happened
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
   --print out the information we just saved
-  print (text)
+  --print (text)
 
   if((aData == "Player" and bData == "Shape") or(aData == "Shape" and bData == "Player")) then
 	state = GAME_OVER
