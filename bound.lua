@@ -37,7 +37,9 @@ function bound:setupbound(x, y, tileSize) --makes bound
   self.shape = love.physics.newRectangleShape(self.x, self.y, 
                                               self.width, 
                                               self.height)
+
   fixture = love.physics.newFixture(self.body, self.shape)
+  fixture:setFriction(0)
   fixture:setUserData("bound")
 end
 
