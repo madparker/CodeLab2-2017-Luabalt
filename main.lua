@@ -5,11 +5,14 @@ tileQuads = {} -- array? parts of the tileset used for different tiles
 
 local time = 0 
 
-local jumpForce = -500;
-local gravityScale = 20;
-local runForce = 1000;
-local backgroundOffset = 0;
-local backgroundMoveSpeed = 200;
+local jumpForce = -500
+local gravityScale = 20
+local runForce = 1000
+local backgroundOffset = 0
+local backgroundMoveSpeed = 200
+local floorOffset = 0
+local floorMoveSpeed = 500
+local floorWidth = 570 * 2
 
 
 function love.load() --loads the game
@@ -145,6 +148,11 @@ function love.update(dt) --delta time
   if backgroundOffset > width then
     backgroundOffset = backgroundOffset - width
   end
+
+  floorOffset = floorOffset + dt * floorMoveSpeed
+  if floorOffset > floorWidth then
+    floorOffset = floorOffset - floorWidth
+  end
   --building1:update(body, dt, building2)
   --building2:update(body, dt, building1)
 
@@ -191,7 +199,12 @@ function love.draw() --drawey everythingey
 
   love.graphics.draw(background, -backgroundOffset, 0, 0, 2, 2, 0, 30) 
   love.graphics.draw(background, -backgroundOffset + width, 0, 0, 2, 2, 0, 30) 
-  love.graphics.draw(floorImage, 0, height - 109, 0, 2, 2, 0, 0)
+
+  love.graphics.draw(floorImage, -floorOffset, height - 109, 0, 2, 2, 0, 0)
+  love.graphics.draw(floorImage, -floorOffset + floorWidth, height - 109, 0, 2, 2, 0, 0)
+
+  love.graphics.draw(floorImage, -floorOffset, 109 - 64, 0, 2, 2, 0, 0)
+  love.graphics.draw(floorImage, -floorOffset + floorWidth, 109 - 64 , 0, 2, 2, 0, 0)
 
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
