@@ -5,16 +5,17 @@ tileQuads = {} -- array? parts of the tileset used for different tiles
 
 local time = 0 
 
-local jumpForce = -1500;
-local gravityScale = 100;
+local jumpForce = -500;
+local gravityScale = 20;
 local runForce = 1000;
 
 
 function love.load() --loads the game
-  width = 600 --size of window
-  height = 300
+  width = 512 * 2 --size of window
+  height = 424 * 2
 
-  love.window.setMode(width, height, {resizable=false}) --sets display to width and height, makes static size
+  --love.window.setFullscreen(true)
+  love.window.setMode(width, height, {resizable = true}) --sets display to width and height, makes static size
   love.window.setTitle("Luabalt") --sets window title
 
   -- One meter is 32px in physics engine
@@ -80,8 +81,8 @@ function love.load() --loads the game
   -- text = "hello World" --hi
   text = " "
 
-  building1 = building:makeBuilding(750, 16) --
-  building2 = building:makeBuilding(1800, 16) --
+  --building1 = building:makeBuilding(750, 16) --
+  --building2 = building:makeBuilding(1800, 16) --
 
   playerImg = love.graphics.newImage("media/player2.png") --sets player img, getting spritey for playey
   -- Create a Body for the player.
@@ -129,8 +130,8 @@ function love.update(dt) --delta time
   currentAnim:update(dt)
   world:update(dt)
 
-  building1:update(body, dt, building2)
-  building2:update(body, dt, building1)
+  --building1:update(body, dt, building2)
+  --building2:update(body, dt, building1)
 
   updateTilesetBatch()
 
@@ -173,7 +174,7 @@ end
 
 function love.draw() --drawey everythingey
 
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200) 
+  love.graphics.draw(background, 0, 0, 0, 2, 2, 0, 30) 
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
   if gameyEndy == true then
@@ -196,8 +197,8 @@ end
 function updateTilesetBatch()
   tilesetBatch:clear() --clearey batchey
 
-  building1:draw(tilesetBatch, tileQuads); --buildy drawey
-  building2:draw(tilesetBatch, tileQuads); --secondy buildy drawey
+  --building1:draw(tilesetBatch, tileQuads); --buildy drawey
+  --uilding2:draw(tilesetBatch, tileQuads); --secondy buildy drawey
 
   tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle()); --tiley addey
 
@@ -205,7 +206,7 @@ function updateTilesetBatch()
 end
 
 function love.keypressed( key, isrepeat ) --jumpey buttoney
-  if key == "up" and onGround then --if up key and grounded, get high
+  if key == "up" then--and onGround then --if up key and grounded, get high
     body:applyLinearImpulse(0, jumpForce) --applyey forcey uppy
     currentAnim = jumpAnim --anime changey jumpey
     currentAnim:gotoFrame(1) --framey changey
