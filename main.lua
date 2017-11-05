@@ -69,7 +69,7 @@ function love.load()
   -- Create a Body for the player.
   body = love.physics.newBody(world, 600, 100, "dynamic")
   -- Create a shape for the body.
-  player_box = love.physics.newRectangleShape(15, 15, 30, 30)
+  player_box = love.physics.newRectangleShape(30, 30, 60, 60)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
   fixture:setUserData("Player") -- Set a string userdata
@@ -87,7 +87,7 @@ function love.load()
   love.graphics.setNewFont(12)
   love.graphics.setBackgroundColor(155,155,155)
 
-  local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
+  local g = anim8.newGrid(60, 60, playerImg:getWidth(), playerImg:getHeight())
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
@@ -155,8 +155,10 @@ function love.draw()
   love.graphics.print(text, 10, 10)
 
 
-  love.graphics.translate(width * 0.1 - body:getX(), 0)
-   
+  -- love.graphics.translate(width * 0.1 - body:getX(), 0)
+
+  love.graphics.translate(width * 0.1, 0)
+
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
   --love.graphics.setColor(255, 0, 0)
