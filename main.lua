@@ -74,9 +74,9 @@ function love.load()
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
-  body = love.physics.newBody(world, 600, 100, "dynamic")
+  body = love.physics.newBody(world, 10, 450, "dynamic")
   -- Create a shape for the body.
-  player_box = love.physics.newRectangleShape(15, 15, 30, 30)
+  player_box = love.physics.newRectangleShape(45, 45, 30, 30)
   -- Create fixture between body and shape
   fixture = love.physics.newFixture(body, player_box)
   fixture:setUserData("Player") -- Set a string userdata
@@ -94,7 +94,7 @@ function love.load()
   love.graphics.setNewFont(12)
   love.graphics.setBackgroundColor(155,155,155)
 
-  local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight())
+  local g = anim8.newGrid(60, 60, playerImg:getWidth(), playerImg:getHeight())
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
@@ -137,26 +137,55 @@ function love.update(dt)
     currentAnim:gotoFrame(1)
   end
 
-  if(body:getY() >= 300) then
-    love.event.quit("restart")
-  end
+  --if(body:getY() >= 300) then
+    --love.event.quit("restart")
+  --end
 
   if(currentAnim == runAnim) then
     --print("ON GROUND")
     --body:applyLinearImpulse(750 * dt, 0)
   else
     --body:applyLinearImpulse(100 * dt, 0)
+<<<<<<< .merge_file_oUtAxO
+=======
   end
+
+  if love.keyboard.isDown("d") then
+	--body:applyLinearImpulse(750 * dt, 0)
+	body:setX(body:getX() + (200 * dt))
+  end
+
+  if love.keyboard.isDown("a") then
+	--body:applyLinearImpulse(-750 * dt, 0)
+	body:setX(body:getX() - (200 * dt))
+  end
+
+  if body:getX() < -100 then
+	body:setX(-100)
+>>>>>>> .merge_file_YAapCT
+  end
+
+  if body:getX() > 680 then
+    body:setX(680)
+  end
+
 end
 
 function love.draw()
-  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 200)
+  love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 50)
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
 
+<<<<<<< .merge_file_oUtAxO
   --love.graphics.translate(width * 0.1 - body:getX(), 0)
    
+=======
+  -- love.graphics.translate(width * 0.1 - body:getX(), 0)
+
+  love.graphics.translate(width * 0.1, 0)
+
+>>>>>>> .merge_file_YAapCT
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
   monsterAnim:draw(monsterImage, monster1.body:getX(), monster1.body:getY(), monster1.body:getAngle())
@@ -181,7 +210,7 @@ end
 
 --player jumps here
 function love.keypressed( key, isrepeat )
-  if key == "up" and onGround then
+  if key == "w" and onGround then
     body:applyLinearImpulse(0, -1000)
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
@@ -239,4 +268,3 @@ end
 function love.quit()
   print("Thanks for playing! Come back soon!")
 end
-

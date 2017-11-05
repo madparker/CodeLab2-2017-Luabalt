@@ -27,11 +27,12 @@ function building:setupBuilding(x, tileSize)
 
   self.tileSize = tileSize
   self.x = x
-  self.y = 300
+  self.y = 600
 
-  self.width  = math.ceil((love.math.random( ) * 10) + 20)
-  self.height = math.ceil(5 + love.math.random( ) * 7)
-  --self.height = 7
+  --self.width  = math.ceil((love.math.random( ) * 10) + 20)
+  --self.height = math.ceil(5 + love.math.random( ) * 7)
+  self.width = 300
+  self.height = 7
   self.body = love.physics.newBody(world, 0, 0, "static")
   self.shape = love.physics.newRectangleShape(self.x, self.y, 
                                               self.tileSize * self.width, 
