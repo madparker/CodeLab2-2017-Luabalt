@@ -138,20 +138,22 @@ function love.update(dt)
     --body:applyLinearImpulse(100 * dt, 0)
   end
 
+  if love.keyboard.isDown("d") then
+	--body:applyLinearImpulse(750 * dt, 0)
+	body:setX(body:getX() + (200 * dt))
+  end
+
+  if love.keyboard.isDown("a") then
+	--body:applyLinearImpulse(-750 * dt, 0)
+	body:setX(body:getX() - (200 * dt))
+  end
+
   if body:getX() < -100 then
 	body:setX(-100)
   end
 
   if body:getX() > 680 then
     body:setX(680)
-  end
-
-  if love.keyboard.isDown("d") then
-	body:applyLinearImpulse(750 * dt, 0)
-  end
-
-  if love.keyboard.isDown("a") then
-	body:applyLinearImpulse(-750 * dt, 0)
   end
 
 end
@@ -247,4 +249,3 @@ end
 function love.quit()
   print("Thanks for playing! Come back soon!")
 end
-
