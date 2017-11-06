@@ -1,5 +1,6 @@
 local anim8 = require 'anim8'
 require 'building'
+require 'monster'
 
 tileQuads = {} -- parts of the tileset used for different tiles
 
@@ -29,6 +30,10 @@ function love.load()
   tilesetImage:setFilter("nearest", "nearest") -- this "linear filter" removes some artifacts if we were to scale the tiles
   tileSize = 16
  
+  -- monster
+  monsterImage = love.graphics.newImage('media/monsterjump_sprite.png')
+  monsterQuad = love.graphics.newQuad(0, 0, 500, 500, monsterImage:getWidth(), monsterImage:getHeight());
+
   -- crate
   tileQuads[0] = love.graphics.newQuad(0, 0, 
     18, 18,
@@ -68,6 +73,8 @@ function love.load()
   building1 = building:makeBuilding(700, 16)
   building2 = building:makeBuilding(1300, 16)
 
+  monster1 = monster:makeMonster(400)
+
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
   body = love.physics.newBody(world, 10, 450, "dynamic")
@@ -95,6 +102,9 @@ function love.load()
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
   rollAnim = anim8.newAnimation(g('9-19',2), 0.05)
+
+  local m = anim8.newGrid(400, 400, monsterImage:getWidth(), monsterImage:getHeight())
+  monsterAnim = anim8.newAnimation(m('1-4',1, 1,2), 0.4)
 
   currentAnim = inAirAnim
 
@@ -139,6 +149,7 @@ function love.update(dt)
     --body:applyLinearImpulse(750 * dt, 0)
   else
     --body:applyLinearImpulse(100 * dt, 0)
+
   end
 
   if love.keyboard.isDown("d") then
@@ -153,6 +164,7 @@ function love.update(dt)
 
   if body:getX() < -100 then
 	body:setX(-100)
+
   end
 
   if body:getX() > 680 then
@@ -173,12 +185,18 @@ function love.draw()
   love.graphics.print(text, 10, 10)
 
 
+
+  --love.graphics.translate(width * 0.1 - body:getX(), 0)
+   
+
   -- love.graphics.translate(width * 0.1 - body:getX(), 0)
 
   love.graphics.translate(width * 0.1, 0)
 
+
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
+  monsterAnim:draw(monsterImage, monster1.body:getX(), monster1.body:getY(), monster1.body:getAngle())
   --love.graphics.setColor(255, 0, 0)
   --love.graphics.polygon("line", building1.shape:getPoints())
   --love.graphics.polygon("line", building2.shape:getPoints())
