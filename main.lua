@@ -9,6 +9,8 @@ function love.load()
   width = 800
   height = 600
 
+  firedCrate = false
+
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
   
@@ -54,11 +56,12 @@ function love.load()
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
   -- Create a Body for the crate.
-  --crate_body = love.physics.newBody(world, 770, 200, "dynamic")
-  --crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
-  --fixture = love.physics.newFixture(crate_body, crate_box)
-  --fixture:setUserData("Crate") -- Set a string userdata
-  --crate_body:setMassData(crate_box:computeMass( 1 ))
+  crate_body = love.physics.newBody(world, 100, 300, "dynamic")
+  crate_box = love.physics.newRectangleShape(9, 9, 18, 18)
+  fixture = love.physics.newFixture(crate_body, crate_box)
+  fixture:setUserData("Crate") -- Set a string userdata
+  crate_body:setMassData(crate_box:computeMass( 1 ))
+  -- Create a Body for the crate.
 
   text = "hello World"
 
@@ -156,6 +159,12 @@ function love.update(dt)
     body:setX(680)
   end
 
+  if firedCrate == false then
+    crate_body:setLinearVelocity(0, 0)
+	crate_body:setX(body:getX() + 24);
+	crate_body:setY(body:getY() - 18);
+  end
+
 end
 
 function love.draw()
@@ -181,7 +190,7 @@ end
 function updateTilesetBatch()
   tilesetBatch:clear()
 
-  --tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
 
   building1:draw(tilesetBatch, tileQuads);
   building2:draw(tilesetBatch, tileQuads);
@@ -197,6 +206,13 @@ function love.keypressed( key, isrepeat )
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
   end
+end
+
+function love.keypressed( key, is)
+	if key == "space" and firedCrate == false then
+	firedCrate = true
+	 crate_body:applyLinearImpulse(300, -800)
+	end
 end
 
 -- This is called every time a collision begin.
@@ -223,6 +239,11 @@ function beginContact(bodyA, bodyB, coll)
     time = love.timer.getTime( )
     runSound:play()
 
+  end
+
+  if(aData == "Crate" or bData == "Crate") then
+	firedCrate = false
+	print("crate on the GROUND")
   end
 end
 
