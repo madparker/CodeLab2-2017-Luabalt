@@ -133,11 +133,15 @@ player1_body:setLinearVelocity(player1_velX, player1_velY)
 end
 
 function Shooting(dt)
+
   if shootTime1 > 0 then
   shootTime1 = shootTime1-dt
+  
 else
   shooting1 = false
-  shootTime1=shootTime
+  shootTime1 = shootTime
+  
+
   end
 end
 
@@ -159,8 +163,12 @@ function love.draw()
   currentAnim1:draw(walkerImg, player1_body:getX(), player1_body:getY(), player1_body:getAngle(), player1Orientation, 1,90,0)
 
   
-  love.graphics.setColor(255, 255, 255)
-
+  love.graphics.setColor(255, 0, 255)
+if shooting1 then
+  love.graphics.rectangle("line", player1_body:getX() - player1Orientation * 60, player1_body:getY(), 60, 50 )
+end
+love.graphics.setColor(255, 255, 0)
+love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), 30, 30 )
    
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
@@ -184,7 +192,6 @@ function love.keypressed( key, isrepeat )
     shootAnim:gotoFrame(1)
     shooting1 = true
     startShake(0.5,2)
-
   end
    
 end
