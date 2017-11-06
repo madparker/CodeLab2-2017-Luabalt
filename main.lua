@@ -22,7 +22,7 @@ function love.load()
 
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
-  -- Create a world with standard gravity
+  -- Create a world 0 gravity (top down)
   world = love.physics.newWorld(0, 0, true)
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
@@ -90,20 +90,20 @@ function love.update(dt)
   world:update(dt)
   
 
-if love.keyboard.isDown( "w" ) then
+if love.keyboard.isDown( "w" ) and shooting1 == false then
    player1_velY = -playerMoveSpeed
 end
 
-if love.keyboard.isDown( "a" ) then
+if love.keyboard.isDown( "a" ) and shooting1 == false then
    player1_velX = -playerMoveSpeed
    player1Orientation = 1
 end
 
-if love.keyboard.isDown( "s" ) then
+if love.keyboard.isDown( "s" ) and shooting1 == false then
    player1_velY = playerMoveSpeed
 end
 
-if love.keyboard.isDown( "d" ) then
+if love.keyboard.isDown( "d" ) and shooting1 == false then
    player1_velX = playerMoveSpeed
    player1Orientation = -1
 end
@@ -143,9 +143,6 @@ end
 
 function love.draw()
 
-  -- Sets up the level and player sprites / tilesets
-  love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
-
   --Draw screen shake
   if t < shakeDuration then
     local dx = love.math.random(-shakeMagnitude, shakeMagnitude)
@@ -153,6 +150,11 @@ function love.draw()
     love.graphics.translate(dx, dy)
     print ("SHAKE DRAW: " .. dx)
   end
+
+  -- Sets up the level and player sprites / tilesets
+  love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
+
+  
 
   currentAnim1:draw(walkerImg, player1_body:getX(), player1_body:getY(), player1_body:getAngle(), player1Orientation, 1,90,0)
 
@@ -178,10 +180,10 @@ end
 
 -- Called when key pressed. Takes input key and condition for executing code
 function love.keypressed( key, isrepeat )
-  -- If the up button is pressed and OnGround is true, apply force to player on the Y axis and play sprite animation
   if key == "space" and shooting1 == false then
-    print("shoot!")
+    shootAnim:gotoFrame(1)
     shooting1 = true
+    startShake(0.5,2)
 
   end
    
