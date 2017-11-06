@@ -53,6 +53,8 @@ function love.load()
   fixture1:setUserData("Player1")
   player1_body:setMassData(player1_box:computeMass( 1 ))
   player1_body:setFixedRotation(true)
+
+  player1Orientation = 1
  
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
@@ -94,6 +96,7 @@ end
 
 if love.keyboard.isDown( "a" ) then
    player1_velX = -playerMoveSpeed
+   player1Orientation = 1
 end
 
 if love.keyboard.isDown( "s" ) then
@@ -102,6 +105,7 @@ end
 
 if love.keyboard.isDown( "d" ) then
    player1_velX = playerMoveSpeed
+   player1Orientation = -1
 end
 
 if shooting1 then
@@ -150,7 +154,8 @@ function love.draw()
     print ("SHAKE DRAW: " .. dx)
   end
 
-  currentAnim1:draw(walkerImg, player1_body:getX(), player1_body:getY(), player1_body:getAngle())
+  currentAnim1:draw(walkerImg, player1_body:getX(), player1_body:getY(), player1_body:getAngle(), player1Orientation, 1,90,0)
+
   
   love.graphics.setColor(255, 255, 255)
 
