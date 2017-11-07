@@ -2,44 +2,65 @@ local anim8 = require 'anim8'
 require 'building'
 
 tileQuads = {} -- parts of the tileset used for different tiles
-
+humans = {}
 local time = 0
 
-playerMoveSpeed = 200
+playerMoveSpeed = 150
 shootTime = 0.5
 
 t = 0
 shakeDuration = -1
 shakeMagnitude = 0
 
-playerWidth = 40
+playerWidth = 50
 playerHeight = 20
 shootWidth = 80
 shootHeight =40
 
+humanSize = 20
+
+-- working on creating humans
+nrHumans = 0
+
+-- function CreateHuman()
+-- 	nrHumans +=1
+-- 	humanBody = love.physics.newBody(world, 200, 200, "dynamic")
+-- 	humanBox = love.physics.newRectangleShape(humanSize/2, humanSize/2, humanSize, humanSize)
+-- 	humanFixture = love.physics.newFixture(humanBody, humanBox)
+-- 	humanFixture:setUserData("human"..nrHumans)
+-- 	humanBody:setMassData(humanBody:computeMass( 1 ))
+-- 	humanBody:setFixedRotation(true)
+-- end
+
 function love.load()
-  -- Set the width and height of the window (in pixels)
   width = 700
   height = 700
   
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
 
-  -- One meter is 32px in physics engine
   love.physics.setMeter(15)
-  -- Create a world 0 gravity (top down)
+  -- create world without gravity ( top down)
   world = love.physics.newWorld(0, 0, true)
 
-  background=love.graphics.newImage('media/iPadMenu_atlas0.png')
-  --Make nearest neighbor, so pixels are sharp
-  background:setFilter("nearest", "nearest")
+ 	background=love.graphics.newImage('media/iPadMenu_atlas0.png')
+	background:setFilter("nearest", "nearest")
 
-  --Get Tile Image
+  --Get Tile Image for ground tiles?
   tilesetImage=love.graphics.newImage('media/play1_atlas0.png')
-  --Make nearest neighbor, so pixels are sharp
   tilesetImage:setFilter("nearest", "nearest") -- this "linear filter" removes some artifacts if we were to scale the tiles
   tileSize = 16
- 
+
+  -- grey ground tiles
+  tileQuads[0] = love.graphics.newQuad(100, 0, 
+    16, 16,
+    tilesetImage:getWidth(), tilesetImage:getHeight())
+
+  -- brick ground tiles
+  tileQuads[1] = love.graphics.newQuad(116, 0, 
+    16, 16,
+    tilesetImage:getWidth(), tilesetImage:getHeight())
+
  -- load spritesheet for walker
   walkerImg = love.graphics.newImage("media/images/walker2.png")
 
@@ -65,12 +86,6 @@ function love.load()
 
 shootTime1 = shootTime
 shootTime2 = shootTime
-
--- create level collisions
-
--- topBody = love.physics.newBody(world, 0,0, "static")
--- topBox = love.physics.newRectangleShape(0+width/2,50,width,100)
--- fixture2 = love.physics.newFixture(topBody,topBox)
 
 -- test coll
 
@@ -171,7 +186,8 @@ function love.draw()
   end
 
   -- Sets up the level and player sprites / tilesets
-  love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
+  love.graphics.draw(background, 0, -120, 0, 1.78, 1.56, 0, 200)
+  DrawBackground()
 
   currentAnim1:draw(walkerImg, player1_body:getX()+playerWidth/2, player1_body:getY()-60, player1_body:getAngle(), player1Orientation, 1,90,0)
 
@@ -187,10 +203,6 @@ end
 -- debug show player coll
 love.graphics.setColor(255, 255, 0)
 love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
- 
- -- debug show top coll 
---  love.graphics.setColor(123, 200, 255)
--- love.graphics.rectangle("line", topBody:getX(),topBody:getY(),width,100)
 
 -- debug show test coll
 love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
@@ -208,6 +220,8 @@ end
 function updateTilesetBatch()
   tilesetBatch:clear()
 
+  -- tilesetBatch:add(tileQuads[0])
+  -- DrawBackground(tilesetBatch, tileQuads)
 
   tilesetBatch:flush()
 end
@@ -220,6 +234,32 @@ function love.keypressed( key, isrepeat )
     startShake(0.5,2)
   end
    
+end
+
+function DrawBackground()
+
+  for x=width - 1, 0, -1 do 
+    for y=height - 1, 1 do
+      if x == 0 and y == 0 then
+        tilesetBatch:add(tileQuads[0], x1 + x * tileSize, y1 + y * tileSize, 0)
+      else
+        if y == 0 and x == self.width - 1 then
+          tilesetBatch:add(tileQuads[1], x1 + x * tileSize, y1 + y * tileSize, 0)
+        else 
+          if y == 0 then
+            tilesetBatch:add(tileQuads[0], x1 + x * tileSize, y1 + y * tileSize, 0)
+          else 
+            num = math.floor(x + y + x1 + y1)
+            if (num)%5 == 0 then
+              --tilesetBatch:add(tileQuads[5], x1 + x * tileSize, y1 + y * tileSize, 0)
+            else
+              tilesetBatch:add(tileQuads[1], x1 + x * tileSize, y1 + y * tileSize, 0)
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
 
