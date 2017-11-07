@@ -5,7 +5,7 @@ tileQuads = {} -- parts of the tileset used for different tiles
 
 local time = 0
 
-playerMoveSpeed = 150
+playerMoveSpeed = 200
 shootTime = 0.5
 
 t = 0
@@ -14,8 +14,8 @@ shakeMagnitude = 0
 
 playerWidth = 40
 playerHeight = 20
-shootWidth = 100
-shootHeight =50
+shootWidth = 80
+shootHeight =40
 
 function love.load()
   -- Set the width and height of the window (in pixels)
@@ -68,9 +68,9 @@ shootTime2 = shootTime
 
 -- create level collisions
 
-topBody = love.physics.newBody(world, 0,0, "static")
-topBox = love.physics.newRectangleShape(0+width/2,10,width,50)
-fixture2 = love.physics.newFixture(topBody,topBox)
+-- topBody = love.physics.newBody(world, 0,0, "static")
+-- topBox = love.physics.newRectangleShape(0+width/2,50,width,100)
+-- fixture2 = love.physics.newFixture(topBody,topBox)
 
 -- test coll
 
@@ -105,20 +105,20 @@ function love.update(dt)
   
 -- player 1 inputs
 
-if love.keyboard.isDown( "w" ) and shooting1 == false then
+if love.keyboard.isDown( "w" ) and shooting1 == false  and player1_body:getY()>100 then
    player1_velY = -playerMoveSpeed
 end
 
-if love.keyboard.isDown( "a" ) and shooting1 == false then
+if love.keyboard.isDown( "a" ) and shooting1 == false and player1_body:getX()>0 then
    player1_velX = -playerMoveSpeed
    player1Orientation = 1
 end
 
-if love.keyboard.isDown( "s" ) and shooting1 == false then
+if love.keyboard.isDown( "s" ) and shooting1 == false and player1_body:getY()<height-playerHeight then
    player1_velY = playerMoveSpeed
 end
 
-if love.keyboard.isDown( "d" ) and shooting1 == false then
+if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<width-playerWidth then
    player1_velX = playerMoveSpeed
    player1Orientation = -1
 end
@@ -181,16 +181,18 @@ function love.draw()
 
 if shooting1 then
   love.graphics.rectangle("line",
-  player1_body:getX() + playerWidth/2-50 - player1Orientation*(playerWidth/2+shootWidth/2),
-  player1_body:getY(), shootWidth, shootHeight)
+  player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
+  player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
 end
 -- debug show player coll
 love.graphics.setColor(255, 255, 0)
 love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
  
  -- debug show top coll 
- love.graphics.setColor(123, 200, 255)
-love.graphics.rectangle("line", topBody:getX(),topBody:getY(),width,50)
+--  love.graphics.setColor(123, 200, 255)
+-- love.graphics.rectangle("line", topBody:getX(),topBody:getY(),width,100)
+
+-- debug show test coll
 love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
 
 
