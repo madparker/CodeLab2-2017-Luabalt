@@ -5,12 +5,17 @@ tileQuads = {} -- parts of the tileset used for different tiles
 
 local time = 0
 
-playerMoveSpeed = 100
+playerMoveSpeed = 150
 shootTime = 0.5
 
 t = 0
 shakeDuration = -1
 shakeMagnitude = 0
+
+playerWidth = 40
+playerHeight = 20
+shootWidth = 100
+shootHeight =50
 
 function love.load()
   -- Set the width and height of the window (in pixels)
@@ -47,8 +52,8 @@ function love.load()
 
   shooting1 = false
   
-  player1_body = love.physics.newBody(world, 400, 100, "dynamic")
-  player1_box = love.physics.newRectangleShape(28, 28, 30, 30)
+  player1_body = love.physics.newBody(world, 100, 100, "dynamic")
+  player1_box = love.physics.newRectangleShape(playerWidth/2, playerHeight/2, playerWidth, playerHeight)
   fixture1 = love.physics.newFixture(player1_body, player1_box)
   fixture1:setUserData("Player1")
   player1_body:setMassData(player1_box:computeMass( 1 ))
@@ -60,6 +65,18 @@ function love.load()
 
 shootTime1 = shootTime
 shootTime2 = shootTime
+
+-- create level collisions
+
+topBody = love.physics.newBody(world, 0,0, "static")
+topBox = love.physics.newRectangleShape(0+width/2,10,width,50)
+fixture2 = love.physics.newFixture(topBody,topBox)
+
+-- test coll
+
+body1 = love.physics.newBody(world, 200,200, "static")
+box1 = love.physics.newRectangleShape(25,25,50,50)
+fixture3 = love.physics.newFixture(body1,box1)
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -70,9 +87,6 @@ shootTime2 = shootTime
 
  --AUDIO
  -- Cache the audio
-  
-
-  shape = love.physics.newRectangleShape(450, 500, 100, 100)
 
   player1_velX = 0
   player1_velY = 0
@@ -89,6 +103,7 @@ function love.update(dt)
   
   world:update(dt)
   
+-- player 1 inputs
 
 if love.keyboard.isDown( "w" ) and shooting1 == false then
    player1_velY = -playerMoveSpeed
@@ -158,18 +173,27 @@ function love.draw()
   -- Sets up the level and player sprites / tilesets
   love.graphics.draw(background, 0, 0, 0, 1.78, 1.56, 0, 200)
 
-  
-
-  currentAnim1:draw(walkerImg, player1_body:getX(), player1_body:getY(), player1_body:getAngle(), player1Orientation, 1,90,0)
+  currentAnim1:draw(walkerImg, player1_body:getX()+playerWidth/2, player1_body:getY()-60, player1_body:getAngle(), player1Orientation, 1,90,0)
 
   
   love.graphics.setColor(255, 0, 255)
+  -- debug show shooting area 5- player1Orientation * 80
+
 if shooting1 then
-  love.graphics.rectangle("line", player1_body:getX() - player1Orientation * 60, player1_body:getY(), 60, 50 )
+  love.graphics.rectangle("line",
+  player1_body:getX() + playerWidth/2-50 - player1Orientation*(playerWidth/2+shootWidth/2),
+  player1_body:getY(), shootWidth, shootHeight)
 end
+-- debug show player coll
 love.graphics.setColor(255, 255, 0)
-love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), 30, 30 )
-   
+love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
+ 
+ -- debug show top coll 
+ love.graphics.setColor(123, 200, 255)
+love.graphics.rectangle("line", topBody:getX(),topBody:getY(),width,50)
+love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
+
+
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 
