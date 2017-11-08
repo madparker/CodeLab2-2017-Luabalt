@@ -5,10 +5,11 @@ rocketyShippy = {
 
   x = 0,
   y = 0,
-  width = 255/2,
-  height = 118/2,
+  width = 255/4,
+  height = 118/4,
   body,
-  shape
+  shape,
+  fixture
 } -- the table representing the class, which will double as the metatable for the instances
 
 rocketyShippy.__index = rocketyShippy -- failed table lookups on the instances should fallback to the class table, to get methods
@@ -26,6 +27,7 @@ end
 
 function rocketyShippy:setuprocketyShippy(x) --makes rocketyShippy
 
+
   --self.tileSize = tileSize --sets size, and positions
   self.x = x + love.math.random() * 100
   self.y = love.math.random() * 630 + 109
@@ -33,19 +35,23 @@ function rocketyShippy:setuprocketyShippy(x) --makes rocketyShippy
   --self.width = math.ceil((love.math.random( ) * 10) + 50) --sets width and height randomly
   --self.height = math.ceil(5 + love.math.random( ) * 7)
   --self.height = 7
-  self.body = love.physics.newBody(world, 0, 0, "static") --sets stuff for physics, physics styuffs
+  self.body = love.physics.newBody(world, self.width * 0.5, self.height * 0.5, "static") --sets stuff for physics, physics styuffs
   self.shape = love.physics.newRectangleShape(self.x, self.y, 
                                               self.width, 
                                               self.height)
 
-  fixture = love.physics.newFixture(self.body, self.shape)
-  fixture:setFriction(0)
-  fixture:setUserData("rocketyShippy")
+  self.fixture = love.physics.newFixture(self.body, self.shape)
+  self.fixture:setFriction(0)
+  self.fixture:setUserData("rocketyShippy")
+  self.body:setMassData(self.shape:computeMass( 1 ))
+  --self.body:applyLinearImpulse(-109, 0)
+  --self.body:setLinearVelocity(-100,0)
 end
 
 function rocketyShippy:update(body, dt)
-
-  if self.x + self.width/2 < body:getX() - 20 then 
+-- self.body:applyLinearImpulse(-10900, 0)
+  --self.body:setLinearVelocity(-10000,0)
+  if self.x + self.width/2 < body:getX() - 109 then 
       self:setuprocketyShippy(
           body:getX() + 512 * 2)
   end

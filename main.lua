@@ -5,7 +5,9 @@ require 'rocketyShippy'
 
 tileQuads = {} -- array? parts of the tileset used for different tiles
 
-local time = 0 
+local rocketyShippys = {}
+local timer = 0.109
+local timeBetweenShippys = 1.09 * 10
 
 local jumpForce = -5000
 local gravityScale = 15
@@ -17,11 +19,19 @@ local floorOffset = 0
 local floorMoveSpeed = 500
 local floorWidth = 570 * 2
 
+local gameyEndy = false
+
+local screenyShakeyMagnitudey = 1.09 *3
+local screenyShakeyMultiplier = 10.9 * 25
+local shakeyDurationy = 1.09
+local shakeyTime = 0
+
 
 function love.load() --loads the game
   width = 512 * 2 --size of window
-  height = 424 * 2
+  height = 424 * 2 - 20
 
+  timer = 0.109
   --love.window.setFullscreen(true)
   love.window.setMode(width, height, {resizable = true}) --sets display to width and height, makes static size
   love.window.setTitle("Floaty Doggy") --sets window title
@@ -33,6 +43,10 @@ function love.load() --loads the game
 
   rocketyShippyImage = love.graphics.newImage('media/play2_atlas0.png')
   rocketyShippyImage:setFilter ("nearest", "nearest")
+
+  rocketyShippyQuad = love.graphics.newQuad(128, 4, 
+    255, 118, 
+    rocketyShippyImage:getWidth(), rocketyShippyImage:getHeight())
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
@@ -47,7 +61,8 @@ function love.load() --loads the game
   --Make nearest neighbor, so pixels are sharp
   tilesetImage:setFilter("nearest", "nearest") -- this "linear filter" removes some artifacts if we were to scale the tiles
   tileSize = 16 --declares the size of the tile
- 
+
+
   -- cratey
   tileQuads[0] = love.graphics.newQuad(0, 0,  --this is grabbing the graphics from the sprite sheet
     18, 18,
@@ -86,9 +101,7 @@ function love.load() --loads the game
   -- floor = love.graphics.newQuad(0, 0, 
   --   570, 32,
   --   floorImage:getWidth(), floorImage:getHeight())
-  rocketyShippyQuad = love.graphics.newQuad(128, 4, 
-    255, 118, 
-    rocketyShippyImage:getWidth(), rocketyShippyImage:getHeight())
+  
 
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500) --creates a new sprite batch! max number of sprites the batch can contain
 
@@ -104,7 +117,6 @@ function love.load() --loads the game
   -- text = "hello World" --hi
   text = " "
 
-rocketyShippy = rocketyShippy:makerocketyShippy(width)
 
   upperBound1 = bound:makebound(0,109)
   upperBound2 = bound:makebound(570,109)
@@ -119,9 +131,9 @@ rocketyShippy = rocketyShippy:makerocketyShippy(width)
   -- Create a shape for the body.
   player_box = love.physics.newRectangleShape(64, 66, 120, 58) --playey boxey
   -- Create fixture between body and shape
-  fixture = love.physics.newFixture(body, player_box)
-  fixture:setFriction(0)
-  fixture:setUserData("Player") -- Set a string userdata
+  player_fixture = love.physics.newFixture(body, player_box)
+  player_fixture:setFriction(0)
+  player_fixture:setUserData("Player") -- Set a string userdata
   
   -- Calculate the mass of the body based on attached shapes.
   -- This gives realistic simulations.
@@ -136,6 +148,9 @@ rocketyShippy = rocketyShippy:makerocketyShippy(width)
   love.graphics.setNewFont(12) --fontey settey
   love.graphics.setBackgroundColor(155,155,155) --rgb color
 
+  rocketyShippys[#rocketyShippys+1] = rocketyShippy:makerocketyShippy(body:getX()+width)
+
+
   -- local g = anim8.newGrid(30, 30, playerImg:getWidth(), playerImg:getHeight()) --ANIMATION SETTY
   -- runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   -- jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
@@ -144,12 +159,15 @@ rocketyShippy = rocketyShippy:makerocketyShippy(width)
 
   -- currentAnim = inAirAnim --starts with this jumpy anime
 
-  music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream") --boppy setty
+  music = love.audio.newSource("media/run.mp3", "stream") --boppy setty
   music:setVolume(0.1) --loudy setty
   love.audio.play(music) --boppy playey
 
   runSound = love.audio.newSource("media/foot1.mp3", "static") --runny soundy
-  runSound:setLooping(true); --runny loopy
+  runSound:setLooping(true) --runny loopy
+
+  floatSound = love.audio.newSource("media/jump1.mp3", "static")
+  hitSound = love.audio.newSource("media/bomb_explode.mp3","static")
 
 
   --shape = love.physics.newRectangleShape(450, 500, 100, 100) --??????? HERPY DERPY
@@ -157,18 +175,35 @@ end
 
 function love.update(dt) --delta time
 
+
+  if shakeyTime > 0 then
+    shakeyTime = shakeyTime - dt
+    if shakeyTime < 0 then
+      shakeyTime = 0
+    end
+  end
+
+
+
+  timer = timer + dt
+  if timer > timeBetweenShippys then
+    rocketyShippys[#rocketyShippys+1] = rocketyShippy:makerocketyShippy(body:getX()+width)
+    timer = 0
+  end
   -- currentAnim:update(dt)
   world:update(dt)
 
-  backgroundOffset = backgroundOffset + dt * backgroundMoveSpeed
-  if backgroundOffset > width then
-    backgroundOffset = backgroundOffset - width
+  if gameyEndy == false then
+    backgroundOffset = backgroundOffset + dt * backgroundMoveSpeed
+    if backgroundOffset > width then
+      backgroundOffset = backgroundOffset - width
+    end
   end
 
-  floorOffset = floorOffset + dt * floorMoveSpeed
-  if floorOffset > floorWidth then
-    floorOffset = floorOffset - floorWidth
-  end
+  -- floorOffset = floorOffset + dt * floorMoveSpeed
+  -- if floorOffset > floorWidth then
+  --   floorOffset = floorOffset - floorWidth
+  -- end
   --building1:update(body, dt, building2)
   --building2:update(body, dt, building1)
   upperBound1:update(body, dt, upperBound2)
@@ -177,9 +212,18 @@ function love.update(dt) --delta time
   lowerBound1:update(body, dt, lowerBound2)
   lowerBound2:update(body, dt, lowerBound1)
 
-rocketyShippy:update(body, dt)
-
+for count = 1, #rocketyShippys do
+  rocketyShippys[count]:update(body, dt)
+end
   updateTilesetBatch()
+
+  -- if gameyEndy == true then
+  --   body:setLinearVelocity(0,0)
+    
+  -- end
+
+  --text = "Pixels traveled "..math.floor (body:getX())
+  --print (text)
 
   -- if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then --transition from jumpy to airy
   --   currentAnim = inAirAnim
@@ -194,7 +238,9 @@ rocketyShippy:update(body, dt)
   -- if(body:getY() < height) then
   --   if(currentAnim == runAnim) then
   --     --print("ON GROUND")
+    if gameyEndy == false then
       body:applyLinearImpulse(runForce * dt, 0) --continually apply forces, higher if we are running
+    end
   --   else
   --     body:applyLinearImpulse(runForce * 0.5 * dt, 0)
   --   end
@@ -219,9 +265,15 @@ end
 
 
 function love.draw() --drawey everythingey
+  dm = screenyShakeyMagnitudey + (shakeyTime/shakeyDurationy)*screenyShakeyMultiplier
+  dx = love.math.random(-dm, dm)
+  dy = love.math.random(-dm, dm)
+  love.graphics.translate (dx, dy)
 
-  love.graphics.draw(background, -backgroundOffset, 0, 0, 2, 2, 0, 30) 
-  love.graphics.draw(background, -backgroundOffset + width, 0, 0, 2, 2, 0, 30) 
+
+
+  love.graphics.draw(background, -backgroundOffset, -10, 0, 2, 2, 0, 30) 
+  love.graphics.draw(background, -backgroundOffset + width, -10, 0, 2, 2, 0, 30) 
 
   -- love.graphics.draw(floorImage, -floorOffset, height - 109, 0, 2, 2, 0, 0)
   -- love.graphics.draw(floorImage, -floorOffset + floorWidth, height - 109, 0, 2, 2, 0, 0)
@@ -233,7 +285,7 @@ function love.draw() --drawey everythingey
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
   if gameyEndy == true then
-    love.graphics.draw(tilesetImage, endQuad, 105, 50)
+    love.graphics.draw(tilesetImage, endQuad, 300, 200)
   end
   love.graphics.translate(width/40 - body:getX(), 0) -- camerey movey
    
@@ -252,8 +304,9 @@ function love.draw() --drawey everythingey
   lowerBound1:draw(floorImage)
   lowerBound2:draw(floorImage)
 
-  rocketyShippy:draw(rocketyShippyImage, rocketyShippyQuad)
-
+for count = 1, #rocketyShippys do
+  rocketyShippys[count]:draw(rocketyShippyImage, rocketyShippyQuad)
+end
   
 end
 
@@ -269,8 +322,9 @@ function updateTilesetBatch()
 end
 
 function love.keypressed( key, isrepeat ) --jumpey buttoney
-  if key == "up" then--and onGround then --if up key and grounded, get high
+  if key == "up" and gameyEndy == false then--and onGround then --if up key and grounded, get high
     body:applyLinearImpulse(0, jumpForce) --applyey forcey uppy
+    floatSound:play()
     -- currentAnim = jumpAnim --anime changey jumpey
     -- currentAnim:gotoFrame(1) --framey changey
     -- time = love.timer.getTime( ) --timey getty timey setty
@@ -278,6 +332,8 @@ function love.keypressed( key, isrepeat ) --jumpey buttoney
   if key == "r" and gameyEndy == true then
     gameyEndy = false
     love.audio.stop()
+    while #rocketyShippys ~= 0 do rawset(rocketyShippys, #rocketyShippys, nil)
+    end
     love.load()
   end
 end
@@ -288,9 +344,25 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
   local bData =bodyB:getUserData() --gets data for second body
 
   cx,cy = coll:getNormal() --direction of collision
- text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
+ --text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
   print (text)
+
+  if(aData == "Player" or bData == "Player") and (aData == "rocketyShippy" or bData == "rocketyShippy") 
+    and gameyEndy == false then
+    
+  shakeyTime = shakeyDurationy
+
+    hitSound:play()
+    body:setLinearVelocity(0,0)
+    gameyEndy = true
+    player_fixture:destroy()
+    text = "You ran for "..math.floor (body:getX()).." pixels!\nPressy R to restarty!"
+    print (text)
+
+    
+    
+  end
 
   -- if((aData == "Player" or bData == "Player") and (aData ~= "Crate" and bData ~= "Crate") and cy ~= 0) then --if player is colliding FIRST BUG SOLVED YEAYAYAYAHA
 
@@ -321,7 +393,7 @@ function endContact(bodyA, bodyB, coll) --touchey stoppey pwease
   local aData=bodyA:getUserData()
   local bData=bodyB:getUserData()
   cx,cy = coll:getNormal() --direction of collision
-  text = "Collision ended: " .. aData .. " and " .. bData
+  --text = "Collision ended: " .. aData .. " and " .. bData
 
   -- if((aData == "Player" or bData == "Player")and (aData ~= "Crate" and bData ~= "Crate")) then
   --   runSound:stop() --stopey soundey when touchey stoppey pwease
