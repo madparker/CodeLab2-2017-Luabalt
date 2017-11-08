@@ -145,7 +145,7 @@ function love.load() --loads the game
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact) 
 
-  love.graphics.setNewFont(12) --fontey settey
+  love.graphics.setNewFont(10.9 * 2) --fontey settey
   love.graphics.setBackgroundColor(155,155,155) --rgb color
 
   rocketyShippys[#rocketyShippys+1] = rocketyShippy:makerocketyShippy(body:getX()+width)
@@ -283,9 +283,11 @@ function love.draw() --drawey everythingey
 
 
   love.graphics.setColor(255, 255, 255)
-  love.graphics.print(text, 10, 10)
+  -- love.graphics.print(text, 10, 10)
   if gameyEndy == true then
     love.graphics.draw(tilesetImage, endQuad, 300, 200)
+    text = "You ran for "..math.floor (body:getX()).." pixels!\nPressy R to restarty!"
+    love.graphics.print (text, 375, 275)
   end
   love.graphics.translate(width/40 - body:getX(), 0) -- camerey movey
    
@@ -307,6 +309,8 @@ function love.draw() --drawey everythingey
 for count = 1, #rocketyShippys do
   rocketyShippys[count]:draw(rocketyShippyImage, rocketyShippyQuad)
 end
+
+    
   
 end
 
@@ -346,7 +350,7 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
   cx,cy = coll:getNormal() --direction of collision
  --text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
-  print (text)
+  -- print (text)
 
   if(aData == "Player" or bData == "Player") and (aData == "rocketyShippy" or bData == "rocketyShippy") 
     and gameyEndy == false then
@@ -357,8 +361,8 @@ function beginContact(bodyA, bodyB, coll) --the two bodys
     body:setLinearVelocity(0,0)
     gameyEndy = true
     player_fixture:destroy()
-    text = "You ran for "..math.floor (body:getX()).." pixels!\nPressy R to restarty!"
-    print (text)
+    -- text = "You ran for "..math.floor (body:getX()).." pixels!\nPressy R to restarty!"
+    -- print (text, 400, 275)
 
     
     
