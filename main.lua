@@ -71,7 +71,10 @@ function love.load()
 	--
 	--	Returns: 
 	--				Quad
-  
+  bullet = love.graphics.newQuad(0, 0, 
+    18, 18,
+    tilesetImage:getWidth(), tilesetImage:getHeight())
+
   -- Reference quad for the crate
   tileQuads[0] = love.graphics.newQuad(0, 0, 
     18, 18,
