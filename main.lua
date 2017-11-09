@@ -103,7 +103,7 @@ function love.load()
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
   rollAnim = anim8.newAnimation(g('9-19',2), 0.05)
 
-  local m = anim8.newGrid(400, 400, monsterImage:getWidth(), monsterImage:getHeight())
+  local m = anim8.newGrid(300, 300, monsterImage:getWidth(), monsterImage:getHeight())
   monsterAnim = anim8.newAnimation(m('1-4',1, 1,2), 0.4)
 
   currentAnim = inAirAnim
