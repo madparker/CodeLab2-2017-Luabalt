@@ -9,6 +9,7 @@ local time = 0
 function love.load()
   width = 800
   height = 600
+  monsterSpeed = 200;
 
   firedCrate = false
 
@@ -73,7 +74,7 @@ function love.load()
   building1 = building:makeBuilding(700, 16)
   building2 = building:makeBuilding(1300, 16)
 
-  monster1 = monster:makeMonster(400)
+  monster1 = monster:makeMonster(300)
 
   playerImg = love.graphics.newImage("media/player2.png")
   -- Create a Body for the player.
@@ -160,6 +161,18 @@ function love.update(dt)
   if love.keyboard.isDown("a") then
 	--body:applyLinearImpulse(-750 * dt, 0)
 	body:setX(body:getX() - (200 * dt))
+  end
+
+  monster1.body:setX(monster1.body:getX() - (monsterSpeed * dt))
+  -- monster1.body:applyLinearImpulse(200 * dt, -9.81*15 *dt)
+  if monster1.body:getX() < -100 then
+    monsterSpeed = -200
+    -- monster1.body:setX(-100)
+  end
+  
+  if monster1.body:getX() > 600 then
+    monsterSpeed = 200  
+    -- monster1.body:setX(680)
   end
 
   if body:getX() < -100 then
