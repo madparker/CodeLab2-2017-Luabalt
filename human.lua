@@ -30,9 +30,9 @@ function human:setupHuman(x,y)
   self.height = 30
 
   self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-  self.shape = love.physics.newRectangleShape(self.x, self.y, self.width, self.height)
+  self.shape = love.physics.newRectangleShape(self.width/2, self.height/2, self.width, self.height)
 
-  self.body:setMassData(self.shape:computeMass(1))
+  self.body:setMassData(self.shape:computeMass(2))
   self.body:setFixedRotation(true)
 
   fixture = love.physics.newFixture(self.body, self.shape)
@@ -54,7 +54,7 @@ function human:setupHuman(x,y)
 
  function human:draw()
 
- 	currentAnim2:draw(self.image, self.x, self.y, self.body:getAngle(), 1, 1)
+ 	currentAnim2:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), 1, 1)
 
   
   love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
