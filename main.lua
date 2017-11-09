@@ -1,5 +1,7 @@
 local anim8 = require 'anim8'
 require 'building'
+require 'human'
+
 
 tileQuads = {} -- parts of the tileset used for different tiles
 humans = {}
@@ -108,6 +110,8 @@ fixture3 = love.physics.newFixture(body1,box1)
 
   player1_velX = 0
   player1_velY = 0
+
+  human:setUpHuman(100,200)
 end
 
 
@@ -216,6 +220,8 @@ love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
 
    -- Print Score
   love.graphics.print("Player 1 : " .. player1Score, 20, 10)
+
+  human:draw()
 
 end
 
