@@ -1,13 +1,14 @@
 local anim8 = require 'anim8'
 
 human = {
-  x = 0,
-  y = 0,
-  width = 0,
-  height = 0,
+  x = x,
+  y = y,
+  width = width,
+  height = height,
   body,
   shape,
   image,
+  fixture,
   
 	
 }
@@ -23,10 +24,10 @@ function human:makeHuman(x,y)
 	return self
 end
 
-function human:setUpHuman(x,  tileSize, crateYes)
+function human:setUpHuman()
 
-	self.x = x
-  	self.y = 320
+	self.x = 100
+  	self.y = 200
 
   	self.width = 30
   	self.height = 30
@@ -36,22 +37,28 @@ function human:setUpHuman(x,  tileSize, crateYes)
   	self.body:setFixedRotation(true)
 	self.shape = love.physics.newRectangleShape(self.x, self.y, self.width, self.height)
 
-	fixture = love.physics.newFixture(self.body, self.shape)
-  	fixture:setUserData("Human")
+	self.fixture = love.physics.newFixture(self.body, self.shape)
+  	self.fixture:setUserData("Human")
 
   	self.image = love.graphics.newImage("media/player2.png")
   	local g = anim8.newGrid(self.image:getWidth()/19, self.image:getHeight()/2, self.image:getWidth(), self.image:getHeight())
-  	runAnim = anim8.newAnimation(g('1-19',1),1)
+  	runAnim = anim8.newAnimation(g('1-16',1),0.05)
     jumpAnim = anim8.newAnimation(g('1-9',2), 0.1)
 
-    currentAnim1 = idleAnim
+    currentAnim2 = runAnim
 
+ end
+  function human:update(dt)
+ 	
+ 	currentAnim2:update(dt)
  end
 
  function human:draw()
 
- 	currentAnim1:draw(self.image, self.body:getX()+self.width/2, self.body:getY()-60, self.body:getAngle(), 1, 1,90,0)
+ 	currentAnim2:draw(self.image, self.x, self.y, self.body:getAngle(), 1, 1)
  end
+
+
 
 
 -- function CreateHuman()

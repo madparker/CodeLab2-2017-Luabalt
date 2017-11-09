@@ -111,7 +111,7 @@ fixture3 = love.physics.newFixture(body1,box1)
   player1_velX = 0
   player1_velY = 0
 
-  human:setUpHuman(100,200)
+  human:setUpHuman()
 end
 
 
@@ -124,6 +124,7 @@ function love.update(dt)
   currentAnim1:update(dt)
   
   world:update(dt)
+  human:update(dt)
   
 -- player 1 inputs
 
