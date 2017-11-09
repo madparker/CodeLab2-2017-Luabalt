@@ -80,7 +80,10 @@ function love.load()
   player1_body:setMassData(player1_box:computeMass( 1 ))
   player1_body:setFixedRotation(true)
 
+  -- Used to make player face the direction they are walking
   player1Orientation = 1
+
+  player1Score = 0
  
   tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
@@ -210,6 +213,9 @@ love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
 
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
+
+   -- Print Score
+  love.graphics.print("Player 1 : " .. player1Score, 20, 10)
 
 end
 
