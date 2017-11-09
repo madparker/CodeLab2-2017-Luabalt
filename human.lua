@@ -8,6 +8,7 @@ human = {
   body,
   shape,
   image,
+  orientation,
 }
 
 human.__index = human
@@ -46,29 +47,25 @@ function human:setupHuman(x,y)
 
   currentAnim2 = runAnim
 
+  if self.x > 0 then
+    self.orientation = -1
+  else 
+    self.orientation = 1
+  end
+
  end
   function human:update(dt)
  	
  	currentAnim2:update(dt)
+  self.body:setLinearVelocity((love.math.random(2000,4000)* self.orientation) * dt,0)
  end
 
  function human:draw()
 
- 	currentAnim2:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), 1, 1)
+ 	currentAnim2:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.orientation, 1,self.width/2, 0)
 
   
   love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
  end
 
 
-
-
--- function CreateHuman()
--- 	nrHumans +=1
--- 	humanBody = love.physics.newBody(world, 200, 200, "dynamic")
--- 	humanBox = love.physics.newRectangleShape(humanSize/2, humanSize/2, humanSize, humanSize)
--- 	humanFixture = love.physics.newFixture(humanBody, humanBox)
--- 	humanFixture:setUserData("human"..nrHumans)
--- 	humanBody:setMassData(humanBody:computeMass( 1 ))
--- 	humanBody:setFixedRotation(true)
--- end
