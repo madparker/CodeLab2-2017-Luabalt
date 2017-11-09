@@ -24,43 +24,42 @@ function human:makeHuman(x,y)
 	return self
 end
 
-function human:setUpHuman()
+function human:setUpHuman(x,y)
 
-	self.x = 100
-  	self.y = 200
+	self.x = x
+  self.y = y
 
-  	self.width = 30
-  	self.height = 30
+  self.width = 30
+  self.height = 30
 
-  	self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
+  self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
+  
+  self.body:setFixedRotation(true)
 	self.shape = love.physics.newRectangleShape(self.x, self.y, self.width, self.height)
+
 	self.fixture = love.physics.newFixture(self.body, self.shape)
-  	self.fixture:setUserData("Human")
-	self.body:setMassData(self.shape:computeMass(1))
-  	self.body:setFixedRotation(true)
+  self.fixture:setUserData("Human")
+  self.body:setMassData(self.shape:computeMass(1))
 
-  	self.image = love.graphics.newImage("media/player2.png")
-  	local g = anim8.newGrid(self.image:getWidth()/19, self.image:getHeight()/2, self.image:getWidth(), self.image:getHeight())
-  	runAnim = anim8.newAnimation(g('1-16',1),0.05)
-    jumpAnim = anim8.newAnimation(g('1-9',2), 0.1)
+  self.image = love.graphics.newImage("media/player2.png")
+  local g = anim8.newGrid(self.image:getWidth()/19, self.image:getHeight()/2, self.image:getWidth(), self.image:getHeight())
+  runAnim = anim8.newAnimation(g('1-16',1),0.05)
+  jumpAnim = anim8.newAnimation(g('1-9',2), 0.1)
 
-    currentAnim2 = runAnim
+  currentAnim2 = runAnim
 
  end
   function human:update(dt)
  	
  	currentAnim2:update(dt)
-
  end
 
  function human:draw()
 
  	currentAnim2:draw(self.image, self.x, self.y, self.body:getAngle(), 1, 1)
 
-	-- debug show human coll
-	--love.graphics.setColor(255, 255, 0)
-	love.graphics.rectangle("line", self.body:getX(),self.body:getY(), self.width, self.height )
-
+  
+  love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
  end
 
 
