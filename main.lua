@@ -106,13 +106,17 @@ function love.load()
   box1 = love.physics.newRectangleShape(25,25,50,50)
   fixture3 = love.physics.newFixture(body1,box1)
 
-  human1 = human:setupHuman(love.math.random( 50, 600 ),love.math.random( 100, 200 ))
+ 
+
+  human1 = human:setupHuman(GetScreenSide(),love.math.random( 100, 200 ))
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
 
   love.graphics.setNewFont("media/Flixel.ttf", 14)
   love.graphics.setBackgroundColor(155,155,155)
+
+  start = love.timer.getTime()
 
 
  --AUDIO
@@ -131,6 +135,12 @@ function love.update(dt)
   
   world:update(dt)
   human:update(dt)
+
+if love.timer.getTime() - start > 10 then
+  human2 = human:setupHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  start = love.timer.getTime()
+end
+
   
 -- player 1 inputs
 
@@ -282,6 +292,14 @@ function DrawBackground()
   end
 end
 
+function GetScreenSide()
+
+  if love.math.random(1,100) % 2 == 0 then
+    return width + 30
+  else
+    return -30
+  end
+end
 
 
 -- Checks if game window is active and selected (in focus) 
