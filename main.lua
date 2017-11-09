@@ -118,6 +118,29 @@ function love.load()
  --AUDIO
  -- Cache the audio
 
+ playDeathSound = true
+ playRunSound = true
+
+ music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
+ music:setVolume(0.1)
+ love.audio.play(music)
+
+ --footstep1 = love.audio.newSource("media/foot1.wav"), "static")
+ --footstep2 = love.audio.newSource("media/foot2.wav", "static")
+ --footstep3 = love.audio.newSource("media/foot3.wav", "static")
+
+ --sound layers of the Laser
+    laser1 = love.audio.newSource("media/crumble.mp3", "static")
+    laser1:setVolume(0.2)
+    laser2 = love.audio.newSource("media/flyby.mp3", "static")
+    laser2:setVolume(0.6)
+    laser3 = love.audio.newSource("media/bomb_launch.mp3", "static")
+    laser3:setVolume(0.2)
+    laser4 = love.audio.newSource("media/giant_leg.mp3", "static")
+    laser4:setVolume(0.4)
+
+ shape = love.physics.newRectangleShape(450, 500, 100, 100)
+
 end
 
 
@@ -154,6 +177,11 @@ end
 
 if shooting1 then
   Shooting(dt)
+  laser1:play()
+  laser2:play()
+  laser3:play()
+  laser4:play()
+  
   end
 
 if shooting1 == true then
