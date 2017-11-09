@@ -10,6 +10,9 @@ function love.load()
   width = 800
   height = 600
   monsterSpeed = 200;
+  offsetX = 0;
+  --this is the direction the sprite is facing
+  playerSpriteDir = 1;
 
   firedCrate = false
 
@@ -106,7 +109,7 @@ function love.load()
   rollAnim = anim8.newAnimation(g('9-19',2), 0.05)
 
   local m = anim8.newGrid(300, 300, monsterImage:getWidth(), monsterImage:getHeight())
-  monsterAnim = anim8.newAnimation(m('1-4',1, 1,2), 0.4)
+  monsterAnim = anim8.newAnimation(m('1-4',1, 1,2), 0.2)
 
   currentAnim = inAirAnim
 
@@ -159,14 +162,18 @@ function love.update(dt)
 
   if love.keyboard.isDown("d") then
 	--body:applyLinearImpulse(750 * dt, 0)
-	body:setX(body:getX() + (200 * dt))
+  body:setX(body:getX() + (200 * dt))
+  playerSpriteDir = 1
+  offsetX = 0
 	currentAnim = runAnim
   end
 
   if love.keyboard.isDown("a") then
 	--body:applyLinearImpulse(-750 * dt, 0)
 	body:setX(body:getX() - (200 * dt))
-	currentAnim = runAnim
+  currentAnim = runAnim
+  offsetX = 60
+  playerSpriteDir = -1
   end
 
   monster1.body:setX(monster1.body:getX() - (monsterSpeed * dt))
@@ -213,7 +220,8 @@ function love.draw()
   love.graphics.translate(width * 0.1, 0)
 
 
-  currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
+  currentAnim:draw(playerImg, body:getX() + offsetX, body:getY(), body:getAngle(), playerSpriteDir, 1)
+
 
   monsterAnim:draw(monsterImage, monster1.body:getX(), monster1.body:getY(), monster1.body:getAngle())
   --love.graphics.setColor(255, 0, 0)
