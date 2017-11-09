@@ -99,6 +99,7 @@ function love.load()
   love.graphics.setBackgroundColor(155,155,155)
 
   local g = anim8.newGrid(60, 60, playerImg:getWidth(), playerImg:getHeight())
+  idleAnim = anim8.newAnimation(g('19-19', 2), 0.05)
   runAnim = anim8.newAnimation(g('1-14',1), 0.05)
   jumpAnim = anim8.newAnimation(g('15-19',1), 0.1)
   inAirAnim = anim8.newAnimation(g('1-8',2), 0.1)
@@ -122,7 +123,7 @@ function love.load()
 end
 
 function love.update(dt)
-
+  monsterAnim:update(dt)
   currentAnim:update(dt)
   world:update(dt)
 
@@ -130,6 +131,9 @@ function love.update(dt)
   building2:update(body, dt, building1)
 
   updateTilesetBatch()
+
+  --set current animation to idleAnim
+  currentAnim = idleAnim
 
   if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then
     currentAnim = inAirAnim
@@ -156,11 +160,13 @@ function love.update(dt)
   if love.keyboard.isDown("d") then
 	--body:applyLinearImpulse(750 * dt, 0)
 	body:setX(body:getX() + (200 * dt))
+	currentAnim = runAnim
   end
 
   if love.keyboard.isDown("a") then
 	--body:applyLinearImpulse(-750 * dt, 0)
 	body:setX(body:getX() - (200 * dt))
+	currentAnim = runAnim
   end
 
   monster1.body:setX(monster1.body:getX() - (monsterSpeed * dt))
@@ -242,7 +248,7 @@ end
 function love.keypressed( key, is)
 	if key == "space" and firedCrate == false then
 	firedCrate = true
-	 crate_body:applyLinearImpulse(300, -800)
+	crate_body:applyLinearImpulse(300, -800)
 	end
 end
 
