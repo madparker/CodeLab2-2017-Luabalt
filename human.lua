@@ -1,16 +1,13 @@
 local anim8 = require 'anim8'
 
 human = {
-  x = x,
-  y = y,
-  width = width,
-  height = height,
+  x = 0,
+  y = 0,
+  width = 0,
+  height = 0,
   body,
   shape,
   image,
-  fixture,
-  
-	
 }
 
 human.__index = human
@@ -24,22 +21,23 @@ function human:makeHuman(x,y)
 	return self
 end
 
-function human:setUpHuman(x,y)
+function human:setupHuman(x,y)
 
-	self.x = x
+  self.x = x
   self.y = y
 
   self.width = 30
   self.height = 30
 
   self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-  
-  self.body:setFixedRotation(true)
-	self.shape = love.physics.newRectangleShape(self.x, self.y, self.width, self.height)
+  self.shape = love.physics.newRectangleShape(self.x, self.y, self.width, self.height)
 
-	self.fixture = love.physics.newFixture(self.body, self.shape)
-  self.fixture:setUserData("Human")
   self.body:setMassData(self.shape:computeMass(1))
+  self.body:setFixedRotation(true)
+
+  fixture = love.physics.newFixture(self.body, self.shape)
+  fixture:setUserData("Human")
+ 
 
   self.image = love.graphics.newImage("media/player2.png")
   local g = anim8.newGrid(self.image:getWidth()/19, self.image:getHeight()/2, self.image:getWidth(), self.image:getHeight())

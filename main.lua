@@ -45,8 +45,8 @@ function love.load()
   -- create world without gravity ( top down)
   world = love.physics.newWorld(0, 0, true)
 
- 	background=love.graphics.newImage('media/iPadMenu_atlas0.png')
-	background:setFilter("nearest", "nearest")
+  background=love.graphics.newImage('media/iPadMenu_atlas0.png')
+  background:setFilter("nearest", "nearest")
 
   --Get Tile Image for ground tiles?
   tilesetImage=love.graphics.newImage('media/play1_atlas0.png')
@@ -63,7 +63,10 @@ function love.load()
     16, 16,
     tilesetImage:getWidth(), tilesetImage:getHeight())
 
- -- load spritesheet for walker
+	
+  tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
+
+  -- load spritesheet for walker
   walkerImg = love.graphics.newImage("media/images/walker2.png")
 
   local g = anim8.newGrid(walkerImg:getWidth()/6, walkerImg:getHeight()/2, walkerImg:getWidth(), walkerImg:getHeight())
@@ -73,8 +76,13 @@ function love.load()
 
   currentAnim1 = idleAnim
 
+  -- Used to make player face the direction they are walking
+  player1Orientation = 1
+
+  --Bool for shooting
   shooting1 = false
   
+  --Player Physics Components
   player1_body = love.physics.newBody(world, 100, 100, "dynamic")
   player1_box = love.physics.newRectangleShape(playerWidth/2, playerHeight/2, playerWidth, playerHeight)
   fixture1 = love.physics.newFixture(player1_body, player1_box)
@@ -82,21 +90,23 @@ function love.load()
   player1_body:setMassData(player1_box:computeMass( 1 ))
   player1_body:setFixedRotation(true)
 
-  -- Used to make player face the direction they are walking
-  player1Orientation = 1
+  --Players Velocity
+  player1_velX = 0
+  player1_velY = 0
+
+
 
   player1Score = 0
- 
-  tilesetBatch = love.graphics.newSpriteBatch(tilesetImage, 1500)
 
-shootTime1 = shootTime
-shootTime2 = shootTime
+  shootTime1 = shootTime
+  shootTime2 = shootTime
 
--- test coll
+  -- test collider
+  body1 = love.physics.newBody(world, 200,200, "static")
+  box1 = love.physics.newRectangleShape(25,25,50,50)
+  fixture3 = love.physics.newFixture(body1,box1)
 
-body1 = love.physics.newBody(world, 200,200, "static")
-box1 = love.physics.newRectangleShape(25,25,50,50)
-fixture3 = love.physics.newFixture(body1,box1)
+  human1 = human:setupHuman(love.math.random( 50, 600 ),love.math.random( 100, 200 ))
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -108,10 +118,6 @@ fixture3 = love.physics.newFixture(body1,box1)
  --AUDIO
  -- Cache the audio
 
-  player1_velX = 0
-  player1_velY = 0
-
-  human:setUpHuman(love.math.random( 50, 600 ),love.math.random( 100, 200 ))
 end
 
 
@@ -208,6 +214,7 @@ if shooting1 then
   player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
   player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
 end
+
 -- debug show player coll
 love.graphics.setColor(255, 255, 0)
 love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
