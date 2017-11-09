@@ -116,6 +116,17 @@ function love.load()
 
 
  --AUDIO
+--audio functions
+
+    function RandomizePitch(min, max)
+      randomPitch = love.math.random(min,max)
+    end
+
+    function RandomizeVolume(min, max)
+      randomVol = love.math.random(min,max)
+    end
+ 
+
  -- Cache the audio
 
  playDeathSound = true
