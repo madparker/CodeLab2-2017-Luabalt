@@ -32,13 +32,12 @@ function human:setUpHuman()
   	self.width = 30
   	self.height = 30
 
-  	self.body = love.physics.newBody(world, 200, 200, "dynamic")
-  	--self.body:setMassData(self.body:computeMass(1))
-  	self.body:setFixedRotation(true)
+  	self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
 	self.shape = love.physics.newRectangleShape(self.x, self.y, self.width, self.height)
-
 	self.fixture = love.physics.newFixture(self.body, self.shape)
   	self.fixture:setUserData("Human")
+	self.body:setMassData(self.shape:computeMass(1))
+  	self.body:setFixedRotation(true)
 
   	self.image = love.graphics.newImage("media/player2.png")
   	local g = anim8.newGrid(self.image:getWidth()/19, self.image:getHeight()/2, self.image:getWidth(), self.image:getHeight())
@@ -51,11 +50,17 @@ function human:setUpHuman()
   function human:update(dt)
  	
  	currentAnim2:update(dt)
+
  end
 
  function human:draw()
 
  	currentAnim2:draw(self.image, self.x, self.y, self.body:getAngle(), 1, 1)
+
+	-- debug show human coll
+	--love.graphics.setColor(255, 255, 0)
+	love.graphics.rectangle("line", self.body:getX(),self.body:getY(), self.width, self.height )
+
  end
 
 

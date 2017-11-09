@@ -108,8 +108,10 @@ fixture3 = love.physics.newFixture(body1,box1)
  --AUDIO
  -- Cache the audio
 
+ --Player Velocity
   player1_velX = 0
   player1_velY = 0
+
 
   human:setUpHuman()
 end
