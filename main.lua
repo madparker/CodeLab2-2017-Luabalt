@@ -111,7 +111,7 @@ fixture3 = love.physics.newFixture(body1,box1)
   player1_velX = 0
   player1_velY = 0
 
-  human:setUpHuman()
+  human:setUpHuman(love.math.random( 50, 600 ),love.math.random( 100, 200 ))
 end
 
 
