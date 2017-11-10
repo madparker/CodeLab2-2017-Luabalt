@@ -166,7 +166,7 @@ function love.load()
  function PlayMonsterFootstepSound ()
   randomMonsterStep = monsterSteps [math.random(#monsterSteps)]
   RandomizeVolume(0.98, 1, randomMonsterStep)
-  RandomizePitch(0.1, 1, randomMonsterStep)
+  RandomizePitch(0.98, 1, randomMonsterStep)
   randomMonsterStep:play()
  end
 
@@ -377,7 +377,7 @@ function  beginContact( bodyA, bodyB, coll )
   if(aData == "Laser" and bData == "Human" or aData ==  "Human" and bData == "Laser") then
   player1Score = player1Score + 1
   RandomizeVolume(0.4, 0.5, incrementScoreSound)
-  RandomizePitch(0.9, 1.1, incrementScoreSound)
+  RandomizePitch(0.7, 1, incrementScoreSound)
   incrementScoreSound:play()
     if player1Score == 6 then
       music1:stop()
