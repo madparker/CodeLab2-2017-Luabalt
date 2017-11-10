@@ -1,6 +1,7 @@
 local anim8 = require 'anim8'
 require 'building'
 require 'human'
+require 'laser'
 
 
 tileQuads = {} -- parts of the tileset used for different tiles
@@ -239,12 +240,14 @@ function Shooting(dt)
 
   if shootTime1 > 0 then
   shootTime1 = shootTime1-dt
+  laserObject = laser:makeLaser(player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
+                player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
   
 else
+  laserObject:destroyLaser()
   shooting1 = false
   shootTime1 = shootTime
   
-
   end
 end
 
@@ -255,7 +258,7 @@ function love.draw()
     local dx = love.math.random(-shakeMagnitude, shakeMagnitude)
     local dy = love.math.random(-shakeMagnitude, shakeMagnitude)
     love.graphics.translate(dx, dy)
-    print ("SHAKE DRAW: " .. dx)
+    --print ("SHAKE DRAW: " .. dx)
   end
 
   -- Sets up the level and player sprites / tilesets
