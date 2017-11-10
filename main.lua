@@ -112,12 +112,16 @@ function love.load()
  --AUDIO
 --audio functions
 
-    function RandomizePitch(min, max)
+    function RandomizePitch(min, max, sound)
       randomPitch = love.math.random(min,max)
+      sound:setPitch(randomPitch)
+      print("pitch is randomized")
     end
 
-    function RandomizeVolume(min, max)
+    function RandomizeVolume(min, max, sound)
       randomVol = love.math.random(min,max)
+      sound:setVolume(randomVol)
+      print("volume is randomized")
     end
  
 
@@ -139,20 +143,24 @@ function love.load()
  
   function PlayHumanFootstepSound ()
    randomHumanStep = humanSteps [math.random(#humanSteps)]
+   RandomizeVolume(4.9, 5.1, randomHumanStep)
+   RandomizePitch(0.9, 1, randomHumanStep)
    randomHumanStep:play()
   end
 
  monsterStep1 = love.audio.newSource("media/flap1.mp3", "static")
- monsterStep1:setVolume(1)
+ monsterStep1:setVolume(5)
  monsterStep2 = love.audio.newSource("media/flap2.mp3", "static")
- monsterStep2:setVolume(1) 
+ monsterStep2:setVolume(5) 
  monsterStep3 = love.audio.newSource("media/flap3.mp3", "static")
- monsterStep3:setVolume(1) 
+ monsterStep3:setVolume(5) 
 
  monsterSteps = {[1] = monsterStep1, [2] = monsterStep2, [3] = monsterStep3}
 
  function PlayMonsterFootstepSound ()
   randomMonsterStep = monsterSteps [math.random(#monsterSteps)]
+  RandomizeVolume(4.9, 5.1, randomMonsterStep)
+  RandomizePitch(0.1, 1, randomMonsterStep)
   randomMonsterStep:play()
  end
 
@@ -204,6 +212,7 @@ function love.update(dt)
       PlayMonsterFootstepSound()
       WalkCounterReset()
     end
+    print("Play walk sound")
   end
 
 
@@ -213,7 +222,7 @@ function love.update(dt)
 if love.keyboard.isDown( "w" ) and shooting1 == false  and player1_body:getY()>100 then
    player1_velY = -playerMoveSpeed
    isWalking = true
-  else
+   else
     isWalking = false
 end
 
@@ -221,14 +230,14 @@ if love.keyboard.isDown( "a" ) and shooting1 == false and player1_body:getX()>0 
    player1_velX = -playerMoveSpeed
    player1Orientation = 1
    isWalking = true
-  else
+   else
     isWalking = false
 end
 
 if love.keyboard.isDown( "s" ) and shooting1 == false and player1_body:getY()<height-playerHeight then
    player1_velY = playerMoveSpeed
    isWalking = true
-  else
+   else
     isWalking = false
 end
 
@@ -407,16 +416,16 @@ function love.keypressed( key, isrepeat )
     print ("FUCKKKK" .. walkstart)
   end
 
+  if key == "d" then
+    WalkCounterReset()
+    print ("FUCKKKK" .. walkstart)
+  end
+
   if key == "a" then
     WalkCounterReset()
     print ("FUCKKKK" .. walkstart)
   end
 
-  if key == "d" then
-    WalkCounterReset()
-    print ("FUCKKKK" .. walkstart)
-  end
-   
 end
 
 function DrawBackground()
