@@ -143,8 +143,11 @@ function love.load()
   end
 
  monsterStep1 = love.audio.newSource("media/flap1.mp3", "static")
+ monsterStep1:setVolume(1)
  monsterStep2 = love.audio.newSource("media/flap2.mp3", "static")
+ monsterStep2:setVolume(1) 
  monsterStep3 = love.audio.newSource("media/flap3.mp3", "static")
+ monsterStep3:setVolume(1) 
 
  monsterSteps = {[1] = monsterStep1, [2] = monsterStep2, [3] = monsterStep3}
 
@@ -197,7 +200,7 @@ function love.update(dt)
   end
 
   if isWalking == true then
-    if love.timer.getTime() - walkstart >= 0.7 then
+    if love.timer.getTime() - walkstart >= 0.4 then
       PlayMonsterFootstepSound()
       WalkCounterReset()
     end
@@ -269,28 +272,13 @@ player1_body:setLinearVelocity(player1_velX, player1_velY)
 
 end
 
-function love.keypressed ("w")
-  WalkCounterReset()
-end
-
-function love.keypressed ("a")
-  WalkCounterReset()
-end
-
-function love.keypressed ("s")
-  WalkCounterReset()
-end
-
-function love.keypressed ("d")
-  WalkCounterReset()
-end
-
 function CounterReset()
   start = love.timer.getTime()
 end
 
 function WalkCounterReset()
   walkstart = love.timer.getTime()
+  print("walkCounterREST DID FUCKING RUN")
 end
 
 function Shooting(dt)
@@ -407,6 +395,26 @@ function love.keypressed( key, isrepeat )
     shootAnim:gotoFrame(1)
     shooting1 = true
     startShake(0.5,2)
+  end
+
+  if key == "s" then
+    WalkCounterReset()
+    print ("FUCKKKK" .. walkstart)
+  end
+
+  if key == "w" then
+    WalkCounterReset()
+    print ("FUCKKKK" .. walkstart)
+  end
+
+  if key == "a" then
+    WalkCounterReset()
+    print ("FUCKKKK" .. walkstart)
+  end
+
+  if key == "d" then
+    WalkCounterReset()
+    print ("FUCKKKK" .. walkstart)
   end
    
 end
