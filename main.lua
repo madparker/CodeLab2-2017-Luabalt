@@ -114,6 +114,9 @@ function love.load()
 
   local m = anim8.newGrid(300, 300, monsterImage:getWidth(), monsterImage:getHeight())
   monsterAnim = anim8.newAnimation(m('1-4',1, 1,2), 0.2)
+  monsterDie = anim8.newAnimation(m('2-2', 2, 2,2), 0.2)
+
+  currentMonsterAnim = monsterAnim
 
   currentAnim = inAirAnim
 
@@ -154,9 +157,10 @@ function love.update(dt)
     currentAnim:gotoFrame(1)
   end
 
-  --if(body:getY() >= 300) then
+  if(monster1.body:getY() >= 400) then
     --love.event.quit("restart")
-  --end
+	love.load()
+  end
 
   if(currentAnim == runAnim) then
     --print("ON GROUND")
