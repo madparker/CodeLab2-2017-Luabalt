@@ -288,7 +288,7 @@ end
 
 function WalkCounterReset()
   walkstart = love.timer.getTime()
-  print("walkCounterREST DID FUCKING RUN")
+  print("WalkCounterReset is running.")
 end
 
 function Shooting(dt)
@@ -415,22 +415,22 @@ function love.keypressed( key, isrepeat )
 
   if key == "s" then
     WalkCounterReset()
-    print ("FUCKKKK" .. walkstart)
+    print ("Walkstart:" .. walkstart)
   end
 
   if key == "w" then
     WalkCounterReset()
-    print ("FUCKKKK" .. walkstart)
+    print ("Walkstart:" .. walkstart)
   end
 
   if key == "d" then
     WalkCounterReset()
-    print ("FUCKKKK" .. walkstart)
+    print ("Walkstart:" .. walkstart)
   end
 
   if key == "a" then
     WalkCounterReset()
-    print ("FUCKKKK" .. walkstart)
+    print ("Walkstart:" .. walkstart)
   end
 
 end
