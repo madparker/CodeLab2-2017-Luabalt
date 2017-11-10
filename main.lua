@@ -138,6 +138,8 @@ function love.load()
  music2:setVolume(0.2)
  --love.audio.play(music)
 
+ incrementScoreSound = love.audio.newSource("media/death.mp3", "static")
+
  footstep1 = love.audio.newSource("media/foot1.mp3", "static")
  footstep2 = love.audio.newSource("media/foot2.mp3", "static")
  footstep3 = love.audio.newSource("media/foot3.mp3", "static")
@@ -374,6 +376,9 @@ function  beginContact( bodyA, bodyB, coll )
 
   if(aData == "Laser" and bData == "Human" or aData ==  "Human" and bData == "Laser") then
   player1Score = player1Score + 1
+  RandomizeVolume(0.4, 0.5, incrementScoreSound)
+  RandomizePitch(0.9, 1.1, incrementScoreSound)
+  incrementScoreSound:play()
     if player1Score == 6 then
       music1:stop()
       music2:play()
