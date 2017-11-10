@@ -2,6 +2,7 @@ local anim8 = require 'anim8'
 require 'building'
 require 'human'
 require 'laser'
+local cron = require 'cron' --library of time operations
 
 
 tileQuads = {} -- parts of the tileset used for different tiles
