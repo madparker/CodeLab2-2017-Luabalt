@@ -282,9 +282,18 @@ function love.draw()
     --print ("SHAKE DRAW: " .. dx)
   end
 
-  -- Sets up the level and player sprites / tilesets
+    -- Sets up the level and player sprites / tilesets
   love.graphics.draw(background, 0, -120, 0, 1.78, 1.56, 0, 200)
   DrawBackground()
+
+   for i =1,nrHumans do 
+  if humans[i] ~= nil then
+    if humans[i]:deathCheck() == false then 
+      humans[i]:draw()
+    end
+  end
+end
+
 
   currentAnim1:draw(walkerImg, player1_body:getX()+playerWidth/2, player1_body:getY()-60, player1_body:getAngle(), player1Orientation, 1,90,0)
 
@@ -315,13 +324,7 @@ function love.draw()
   --human1:draw()
  -- human2:draw()
 
- for i =1,nrHumans do 
-  if humans[i] ~= nil then
-  	if humans[i]:deathCheck() == false then 
-      humans[i]:draw()
-    end
-  end
-end
+
 
 
 end
