@@ -18,7 +18,11 @@ function love.load()
   crateForceX = 300
   crateForceY = -800
 
-  monsterHP = 10
+  monsterHP = 100
+
+  uiText = "HIT " .. "SPACE " .. "TO START"
+  uiTextX = 170
+  uiTextY = 250
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -170,7 +174,7 @@ function love.update(dt)
 
   end
 
-  if love.keyboard.isDown("d") then
+  if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 	--body:applyLinearImpulse(750 * dt, 0)
     body:setX(body:getX() + (200 * dt))
 	crateForceX = 300
@@ -179,7 +183,7 @@ function love.update(dt)
 	currentAnim = runAnim
   end
 
-  if love.keyboard.isDown("a") then
+  if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
 	--body:applyLinearImpulse(-750 * dt, 0)
 	body:setX(body:getX() - (200 * dt))
 	crateForceX = -300
@@ -191,7 +195,11 @@ function love.update(dt)
   if monsterHP > 0 then
 	monster1.body:setX(monster1.body:getX() - (monsterSpeed * dt))
   else
+    currentMonsterAnim = monsterDie
+	uiText = "YOU WIN!!!"
+	uiTextX = 250
 	monster1.body:setY(monster1.body:getY() - (-30 * dt))
+	monster1.shape = love.physics.newRectangleShape(0, 0, 0, 0)
   end
 
   -- monster1.body:applyLinearImpulse(200 * dt, -9.81*15 *dt)
@@ -239,7 +247,7 @@ function love.draw()
   currentAnim:draw(playerImg, body:getX() + offsetX, body:getY(), body:getAngle(), playerSpriteDir, 1)
 
 
-  monsterAnim:draw(monsterImage, monster1.body:getX(), monster1.body:getY(), monster1.body:getAngle())
+  currentMonsterAnim:draw(monsterImage, monster1.body:getX(), monster1.body:getY(), monster1.body:getAngle())
   --love.graphics.setColor(255, 0, 0)
   --love.graphics.polygon("line", building1.shape:getPoints())
   --love.graphics.polygon("line", building2.shape:getPoints())
@@ -248,6 +256,8 @@ function love.draw()
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 
   love.graphics.print("Monster HP: " .. monsterHP, 400,10)
+
+  love.graphics.print(uiText, uiTextX, uiTextY)
 end
 
 function updateTilesetBatch()
@@ -274,6 +284,7 @@ end
 function love.keypressed( key, is)
 	if key == "space" and firedCrate == false then
 	firedCrate = true
+	uiText = ""
 	crate_body:applyLinearImpulse(crateForceX, crateForceY)
 	end
 end
@@ -312,7 +323,7 @@ function beginContact(bodyA, bodyB, coll)
   end
 
   if(aData == "monster" or bData == "monster") then
-    monsterHP = monsterHP - 1
+    monsterHP = monsterHP - 10
   end
 end
 
