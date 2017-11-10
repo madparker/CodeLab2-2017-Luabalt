@@ -33,21 +33,21 @@ function laser:setupLaser(x,y)
   self.body = love.physics.newBody(world, self.x, self.y, "static")
   self.shape = love.physics.newRectangleShape(self.width/2, self.height/2, self.width, self.height)
 
-  self.body:setMassData(self.shape:computeMass(1))
-  self.body:setFixedRotation(true)
 
   self.fixture = love.physics.newFixture(self.body, self.shape)
+  --self.fixture:setSensor(true)
   self.fixture:setUserData("laser")
   --fixture:setFilterData(1,1,-1)
 
 end
 
 function laser:draw()
+
 	love.graphics.rectangle("line", self.x,self.y, self.width, self.height)
 end
 
-function laser:destroyLaser()
 
-	self.fixture:destroy()
-
+function laser:destroyTable()
+	print("test")
+	setmetatable(self,nil)
 end

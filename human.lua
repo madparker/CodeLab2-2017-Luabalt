@@ -74,4 +74,3 @@ function human:draw()
   --love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
 end
 
-

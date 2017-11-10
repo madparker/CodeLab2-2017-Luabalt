@@ -1,7 +1,7 @@
 local anim8 = require 'anim8'
 require 'building'
 require 'human'
-require 'laser'
+--require 'laser'
 
 
 tileQuads = {} -- parts of the tileset used for different tiles
@@ -20,7 +20,7 @@ playerHeight = 20
 shootWidth = 80
 shootHeight =40
 
-humanSize = 20
+--humanSize = 20
 
 --Set how many humans we want spawned when the game starts
 nrHumans = 8
@@ -73,6 +73,7 @@ function love.load()
 
   --Bool for shooting
   shooting1 = false
+  isCreated = false
   
   --Player Physics Components
   player1_body = love.physics.newBody(world, 100, 100, "dynamic")
@@ -240,16 +241,34 @@ function Shooting(dt)
 
   if shootTime1 > 0 then
   shootTime1 = shootTime1-dt
-  laserObject = laser:makeLaser(player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
-                player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
+    if isCreated == false then
+      CreateLaser(player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
+                  player1_body:getY() - shootHeight/2)
+      isCreated = true
+    end
   
 else
-  laserObject:destroyLaser()
+   
+  isCreated = false
+
   shooting1 = false
   shootTime1 = shootTime
+  laserObject_fixture:destroy()
   
   end
 end
+
+function CreateLaser(x,y)
+
+  laserObject_body = love.physics.newBody(world, x, y, "static")
+  laserObject_shape = love.physics.newRectangleShape(shootWidth/2, shootHeight/2, shootWidth, shootHeight)
+
+
+  laserObject_fixture = love.physics.newFixture(laserObject_body, laserObject_shape)
+  laserObject_fixture:setUserData("laser")
+  --fixture:setFilterData(1,1,-1)
+end
+
 
 function love.draw()
 
@@ -271,11 +290,11 @@ function love.draw()
   love.graphics.setColor(255, 0, 255)
   -- debug show shooting area 5- player1Orientation * 80
 
-if shooting1 then
-  love.graphics.rectangle("line",
-  player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
-  player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
-end
+--if shooting1 then
+  --love.graphics.rectangle("line",
+  --player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
+  --player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
+--end
 
 -- debug show player coll
 love.graphics.setColor(255, 255, 0)
