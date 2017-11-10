@@ -256,7 +256,7 @@ function love.update(dt)
       PlayMonsterFootstepSound()
       WalkCounterReset()
     end
-    print("Play walk sound")
+    --print("Play walk sound")
   end
 
   if shooting1 then
@@ -415,22 +415,22 @@ function love.keypressed( key, isrepeat )
 
   if key == "s" then
     WalkCounterReset()
-    print ("Walkstart:" .. walkstart)
+    --print ("Walkstart:" .. walkstart)
   end
 
   if key == "w" then
     WalkCounterReset()
-    print ("Walkstart:" .. walkstart)
+    --print ("Walkstart:" .. walkstart)
   end
 
   if key == "d" then
     WalkCounterReset()
-    print ("Walkstart:" .. walkstart)
+    --print ("Walkstart:" .. walkstart)
   end
 
   if key == "a" then
     WalkCounterReset()
-    print ("Walkstart:" .. walkstart)
+    --print ("Walkstart:" .. walkstart)
   end
 
 end
