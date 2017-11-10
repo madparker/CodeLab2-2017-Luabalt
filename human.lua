@@ -65,7 +65,7 @@ function human:update(dt)
   self.body:setLinearVelocity((love.math.random(2000,4000)* self.orientation) * dt,0)
 
   if love.timer.getTime() - start > 10 then
-  self:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  self:setupHuman(GetScreenSide(),love.math.random( 100, 200 ))
   self:counterReset()
   end 
 end
