@@ -130,9 +130,13 @@ function love.load()
  playDeathSound = true
  playRunSound = true
 
- --[[music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
- music:setVolume(0.1)
- love.audio.play(music) --]]
+ music1 = love.audio.newSource("media/run.mp3", "stream")
+ music1:setVolume(0.2)
+ love.audio.play(music1)
+
+ music2 = love.audio.newSource("media/daringescape.mp3", "stream")
+ music2:setVolume(0.2)
+ --love.audio.play(music)
 
  footstep1 = love.audio.newSource("media/foot1.mp3", "static")
  footstep2 = love.audio.newSource("media/foot2.mp3", "static")
@@ -370,7 +374,10 @@ function  beginContact( bodyA, bodyB, coll )
 
   if(aData == "Laser" and bData == "Human" or aData ==  "Human" and bData == "Laser") then
   player1Score = player1Score + 1
-
+    if player1Score == 6 then
+      music1:stop()
+      music2:play()
+    end
   if(bData == "Human") then 
 	bodyB:destroy()
 
