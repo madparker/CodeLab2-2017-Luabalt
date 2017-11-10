@@ -28,7 +28,7 @@ nrHumans = 8
 
 function love.load()
   width = 700
-  height = 700
+  height = 270
   
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
