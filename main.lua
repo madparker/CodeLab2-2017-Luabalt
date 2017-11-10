@@ -2,8 +2,6 @@ local anim8 = require 'anim8'
 require 'building'
 require 'human'
 require 'laser'
-local cron = require 'cron' --library of time operations
-
 
 tileQuads = {} -- parts of the tileset used for different tiles
 humans = {}
@@ -224,10 +222,14 @@ function PlayLaserSound()
   laser4:play()
 end
 
+local function printMessage()
+  print('CRONNNNNNNNN')
+end
+
 if shooting1 then
   Shooting(dt)
   PlayLaserSound()
-  end
+end
 
 if shooting1 == true then
   currentAnim1 = shootAnim
