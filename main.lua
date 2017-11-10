@@ -140,9 +140,15 @@ function love.load()
  music:setVolume(0.1)
  love.audio.play(music)
 
- --footstep1 = love.audio.newSource("media/foot1.wav"), "static")
- --footstep2 = love.audio.newSource("media/foot2.wav", "static")
- --footstep3 = love.audio.newSource("media/foot3.wav", "static")
+ footstep1 = love.audio.newSource("media/foot1.mp3"), "static")
+ footstep2 = love.audio.newSource("media/foot2.mp3", "static")
+ footstep3 = love.audio.newSource("media/foot3.mp3", "static")
+ footstep3 = love.audio.newSource("media/foot3.mp3", "static")
+
+ monsterStep1 = love.audio.newSource("media/flap1.mp3"), "static")
+ monsterStep2 = love.audio.newSource("media/flap2.mp3", "static")
+ monsterStep3 = love.audio.newSource("media/flap3.mp3", "static")
+
 
  --sound layers of the Laser
     laser1 = love.audio.newSource("media/crumble.mp3", "static")
