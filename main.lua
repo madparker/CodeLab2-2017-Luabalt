@@ -15,6 +15,10 @@ function love.load()
   playerSpriteDir = 1;
 
   firedCrate = false
+  crateForceX = 300
+  crateForceY = -800
+
+  monsterHP = 10
 
   love.window.setMode(width, height, {resizable=false})
   love.window.setTitle("Luabalt")
@@ -162,21 +166,28 @@ function love.update(dt)
 
   if love.keyboard.isDown("d") then
 	--body:applyLinearImpulse(750 * dt, 0)
-  body:setX(body:getX() + (200 * dt))
-  playerSpriteDir = 1
-  offsetX = 0
+    body:setX(body:getX() + (200 * dt))
+	crateForceX = 300
+    playerSpriteDir = 1
+    offsetX = 0
 	currentAnim = runAnim
   end
 
   if love.keyboard.isDown("a") then
 	--body:applyLinearImpulse(-750 * dt, 0)
 	body:setX(body:getX() - (200 * dt))
-  currentAnim = runAnim
-  offsetX = 60
+	crateForceX = -300
+    currentAnim = runAnim
+    offsetX = 60
   playerSpriteDir = -1
   end
 
-  monster1.body:setX(monster1.body:getX() - (monsterSpeed * dt))
+  if monsterHP > 0 then
+	monster1.body:setX(monster1.body:getX() - (monsterSpeed * dt))
+  else
+	monster1.body:setY(monster1.body:getY() - (-30 * dt))
+  end
+
   -- monster1.body:applyLinearImpulse(200 * dt, -9.81*15 *dt)
   if monster1.body:getX() < -100 then
     monsterSpeed = -200
@@ -209,8 +220,6 @@ function love.draw()
   love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 50)
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
-
-
 
   --love.graphics.translate(width * 0.1 - body:getX(), 0)
    
@@ -256,7 +265,7 @@ end
 function love.keypressed( key, is)
 	if key == "space" and firedCrate == false then
 	firedCrate = true
-	crate_body:applyLinearImpulse(300, -800)
+	crate_body:applyLinearImpulse(crateForceX, crateForceY)
 	end
 end
 
@@ -288,7 +297,9 @@ function beginContact(bodyA, bodyB, coll)
 
   if(aData == "Crate" or bData == "Crate") then
 	firedCrate = false
+	monsterHP = monsterHP - 10
 	print("crate on the GROUND")
+	print("monsterHP" .. monsterHP)
   end
 end
 
