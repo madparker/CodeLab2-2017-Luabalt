@@ -163,7 +163,8 @@ function love.update(dt)
 
   if(monster1.body:getY() >= 400) then
     --love.event.quit("restart")
-	love.load()
+    love.audio.stop()
+    love.load()
   end
 
   if(currentAnim == runAnim) then
