@@ -184,6 +184,13 @@ function love.load()
 
 end
 
+function PlayLaserSound()
+  laser1:play()
+  laser2:play()
+  laser3:play()
+  laser4:play()
+end
+
 function love.update(dt)
 
   player1_velX = 0
@@ -193,7 +200,6 @@ function love.update(dt)
   currentAnim0:update(dt)
   
   world:update(dt)
-
 
   if love.timer.getTime() - start > 2 then
     for i = 1,nrHumans do
@@ -213,72 +219,60 @@ function love.update(dt)
    end
   end
 
-  
-
-
-  
 -- player 1 inputs
 
-if love.keyboard.isDown( "w" ) and shooting1 == false  and player1_body:getY()>100 then
-   player1_velY = -playerMoveSpeed
-   isWalking = true
-   else
+  if love.keyboard.isDown( "w" ) and shooting1 == false  and player1_body:getY()>100 then
+    player1_velY = -playerMoveSpeed
+    isWalking = true
+  else
     isWalking = false
-end
-
-if love.keyboard.isDown( "a" ) and shooting1 == false and player1_body:getX()>0 then
-   player1_velX = -playerMoveSpeed
-   player1Orientation = 1
-   isWalking = true
-   else
-    isWalking = false
-end
-
-if love.keyboard.isDown( "s" ) and shooting1 == false and player1_body:getY()<height-playerHeight then
-   player1_velY = playerMoveSpeed
-   isWalking = true
-   else
-    isWalking = false
-end
-
-if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<width-playerWidth then
-   player1_velX = playerMoveSpeed
-   player1Orientation = -1
-   isWalking = true
-   else
-    isWalking = false
-end
-
-if math.abs(player1_velX) > 0 or math.abs(player1_velY) > 0 then
-  if love.timer.getTime() - walkstart >= 0.4 then
-    PlayMonsterFootstepSound()
-    WalkCounterReset()
   end
-  print("Play walk sound")
-end
 
-function PlayLaserSound()
-  laser1:play()
-  laser2:play()
-  laser3:play()
-  laser4:play()
-end
+  if love.keyboard.isDown( "a" ) and shooting1 == false and player1_body:getX()>0 then
+    player1_velX = -playerMoveSpeed
+    player1Orientation = 1
+    isWalking = true
+  else
+    isWalking = false
+  end
 
-if shooting1 then
-  Shooting(dt)
-  PlayLaserSound()
-end
+  if love.keyboard.isDown( "s" ) and shooting1 == false and player1_body:getY()<height-playerHeight then
+    player1_velY = playerMoveSpeed
+    isWalking = true
+  else
+    isWalking = false
+  end
 
-if shooting1 == true then
-  currentAnim1 = shootAnim
-elseif (player1_velX ~= 0 or player1_velY ~= 0) then
-  currentAnim1 = walkAnim
+  if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<width-playerWidth then
+    player1_velX = playerMoveSpeed
+    player1Orientation = -1
+    isWalking = true
+  else
+    isWalking = false
+  end
+
+  if math.abs(player1_velX) > 0 or math.abs(player1_velY) > 0 then
+    if love.timer.getTime() - walkstart >= 0.4 then
+      PlayMonsterFootstepSound()
+      WalkCounterReset()
+    end
+    print("Play walk sound")
+  end
+
+  if shooting1 then
+    Shooting(dt)
+    PlayLaserSound()
+  end
+
+  if shooting1 == true then
+    currentAnim1 = shootAnim
+  elseif (player1_velX ~= 0 or player1_velY ~= 0) then
+    currentAnim1 = walkAnim
   else
     currentAnim1 = idleAnim
-end
+  end
 
-
-player1_body:setLinearVelocity(player1_velX, player1_velY)
+  player1_body:setLinearVelocity(player1_velX, player1_velY)
  
   updateTilesetBatch()
  
@@ -286,8 +280,7 @@ player1_body:setLinearVelocity(player1_velX, player1_velY)
   if t < shakeDuration then 
     t = t + dt
   end
-
-end
+end -- End Update
 
 function CounterReset()
   start = love.timer.getTime()
