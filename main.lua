@@ -17,8 +17,8 @@ shakeMagnitude = 0
 
 playerWidth = 50
 playerHeight = 20
-shootWidth = 80
-shootHeight =40
+shootWidth = 50
+shootHeight =10
 
 humanSize = 20
 

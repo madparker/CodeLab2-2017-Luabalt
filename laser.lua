@@ -27,8 +27,8 @@ function laser:setupLaser(x,y)
   self.x = x
   self.y = y
 
-  self.width = 80
-  self.height = 40
+  self.width = 50
+  self.height = 10
 
   self.body = love.physics.newBody(world, self.x, self.y, "static")
   self.shape = love.physics.newRectangleShape(self.width/2, self.height/2, self.width, self.height)
