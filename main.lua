@@ -196,10 +196,11 @@ function love.update(dt)
    end
   end
 
-  if isWalking = true then
+  if isWalking == true then
     if love.timer.getTime() - walkstart >= 0.7 then
       PlayMonsterFootstepSound()
       WalkCounterReset()
+    end
   end
 
 
@@ -243,10 +244,6 @@ function PlayLaserSound()
   laser4:play()
 end
 
-local function printMessage()
-  print('CRONNNNNNNNN')
-end
-
 if shooting1 then
   Shooting(dt)
   PlayLaserSound()
@@ -270,6 +267,22 @@ player1_body:setLinearVelocity(player1_velX, player1_velY)
     t = t + dt
   end
 
+end
+
+function love.keypressed ("w")
+  WalkCounterReset()
+end
+
+function love.keypressed ("a")
+  WalkCounterReset()
+end
+
+function love.keypressed ("s")
+  WalkCounterReset()
+end
+
+function love.keypressed ("d")
+  WalkCounterReset()
 end
 
 function CounterReset()
