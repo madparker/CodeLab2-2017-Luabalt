@@ -53,19 +53,29 @@ function human:setupHuman(x,y)
     self.orientation = 1
   end
 
- end
-  function human:update(dt)
+end
+
+function human:counterReset()
+  start = love.timer.getTime()
+end
+
+function human:update(dt)
  	
  	currentAnim2:update(dt)
   self.body:setLinearVelocity((love.math.random(2000,4000)* self.orientation) * dt,0)
- end
 
- function human:draw()
+  if love.timer.getTime() - start > 10 then
+  self:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  self:counterReset()
+  end 
+end
+
+function human:draw()
 
  	currentAnim2:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.orientation, 1,self.width/2, 0)
 
   
   love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
- end
+end
 
 

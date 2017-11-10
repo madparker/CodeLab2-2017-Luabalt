@@ -116,7 +116,7 @@ function love.load()
   love.graphics.setNewFont("media/Flixel.ttf", 14)
   love.graphics.setBackgroundColor(155,155,155)
 
-  start = love.timer.getTime()
+  human:counterReset()
 
 
  --AUDIO
@@ -158,11 +158,6 @@ function love.update(dt)
   
   world:update(dt)
   human:update(dt)
-
-if love.timer.getTime() - start > 10 then
-  human2 = human:setupHuman(GetScreenSide(),love.math.random( 100, 200 ))
-  start = love.timer.getTime()
-end
 
   
 -- player 1 inputs
