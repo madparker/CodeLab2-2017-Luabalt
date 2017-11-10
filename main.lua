@@ -101,14 +101,10 @@ function love.load()
   shootTime1 = shootTime
   shootTime2 = shootTime
 
-  -- test collider
-  body1 = love.physics.newBody(world, 200,200, "static")
-  box1 = love.physics.newRectangleShape(25,25,50,50)
-  fixture3 = love.physics.newFixture(body1,box1)
-
-
   human1 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
 
+  human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  human3 = nil
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -175,14 +171,17 @@ function love.update(dt)
   
   world:update(dt)
   human1:update(human1,dt)
+  human2:update(human2,dt)
 
-  if (human2 ~= nil) then
-    human2:update(human2,dt)
+
+  if human3 ~= nil then
+    human3:update(human3,dt)
   end
 
+
   if love.timer.getTime() - start > 10 then
-  human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
-  CounterReset()
+    human3 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ),2)
+    CounterReset()
   end 
 
   
@@ -283,7 +282,7 @@ love.graphics.setColor(255, 255, 0)
 love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
 
 -- debug show test coll
-love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
+--love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
 
 
   love.graphics.setColor(255, 255, 255)
@@ -293,9 +292,10 @@ love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
   love.graphics.print("Player 1 : " .. player1Score, 20, 10)
 
   human1:draw()
+  human2:draw()
 
-   if (human2 ~= nil) then
-    human2:draw()
+  if human3 ~= nil then 
+    human3:draw()
   end
 
 end
