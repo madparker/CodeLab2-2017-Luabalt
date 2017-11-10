@@ -21,9 +21,12 @@ shootHeight =10
 
 humanSize = 20
 
+walkTimer = 0
+
 --Set how many humans we want spawned when the game starts
 nrHumans = 8
 
+isWalking = false
 
 function love.load()
   width = 700
@@ -193,26 +196,44 @@ function love.update(dt)
    end
   end
 
+  if isWalking = true then
+    if love.timer.getTime() - walkstart >= 0.7 then
+      PlayMonsterFootstepSound()
+      WalkCounterReset()
+  end
+
 
   
 -- player 1 inputs
 
 if love.keyboard.isDown( "w" ) and shooting1 == false  and player1_body:getY()>100 then
    player1_velY = -playerMoveSpeed
+   isWalking = true
+  else
+    isWalking = false
 end
 
 if love.keyboard.isDown( "a" ) and shooting1 == false and player1_body:getX()>0 then
    player1_velX = -playerMoveSpeed
    player1Orientation = 1
+   isWalking = true
+  else
+    isWalking = false
 end
 
 if love.keyboard.isDown( "s" ) and shooting1 == false and player1_body:getY()<height-playerHeight then
    player1_velY = playerMoveSpeed
+   isWalking = true
+  else
+    isWalking = false
 end
 
 if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<width-playerWidth then
    player1_velX = playerMoveSpeed
    player1Orientation = -1
+   isWalking = true
+   else
+    isWalking = false
 end
 
 function PlayLaserSound()
@@ -253,6 +274,10 @@ end
 
 function CounterReset()
   start = love.timer.getTime()
+end
+
+function WalkCounterReset()
+  walkstart = love.timer.getTime()
 end
 
 function Shooting(dt)
