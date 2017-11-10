@@ -9,6 +9,7 @@ human = {
   shape,
   image,
   orientation,
+  fixture
 }
 
 human.__index = human
@@ -38,9 +39,9 @@ function human:setupHuman(x,y)
   self.body:setMassData(self.shape:computeMass(2))
   self.body:setFixedRotation(true)
 
-  fixture = love.physics.newFixture(self.body, self.shape)
-  fixture:setUserData("Human")
-  fixture:setFilterData(1,1,-1)
+  self.fixture = love.physics.newFixture(self.body, self.shape)
+  self.fixture:setUserData("Human")
+  self.fixture:setFilterData(1,1,-1)
  
 
   self.image = love.graphics.newImage("media/player2.png")
@@ -68,14 +69,17 @@ end
 
 function human:draw()
 
- 	currentAnim0:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.orientation, 1,self.width/2, 0)
+ currentAnim0:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.orientation, 1,self.width/2, 0)
 
   
   --love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
 end
 
 function human:deathCheck()
-	if self.body:isDestroyed() then 
-	print("DEAD")
+	if self.fixture:isDestroyed() then 
+	--print("DEAD")
+  return true
+  else return false
+
 	end
 end

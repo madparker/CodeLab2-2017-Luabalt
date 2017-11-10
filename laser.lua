@@ -43,7 +43,7 @@ function laser:setupLaser(x,y)
 end
 
 function laser:draw()
-	love.graphics.rectangle("line", self.x,self.y, self.width, self.height)
+	--love.graphics.rectangle("line", self.x,self.y, self.width, self.height)
 end
 
 function laser:destroyLaser()

@@ -165,7 +165,7 @@ function love.update(dt)
 
   if love.timer.getTime() - start > 2 then
     for i = 1,nrHumans do
-      if humans[i] == nil then 
+      if humans[i] == nil or humans[i]:deathCheck() == true then 
         humans[i] = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
         CounterReset()
       end
@@ -273,15 +273,15 @@ function love.draw()
   love.graphics.setColor(255, 0, 255)
   -- debug show shooting area 5- player1Orientation * 80
 
-if shooting1 then
-  love.graphics.rectangle("line",
-  player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
-  player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
-end
+--if shooting1 then
+  --love.graphics.rectangle("line",
+  --player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
+  --player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
+--end
 
 -- debug show player coll
-love.graphics.setColor(255, 255, 0)
-love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
+--love.graphics.setColor(255, 255, 0)
+--love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), playerWidth, playerHeight )
 
 -- debug show test coll
 --love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
@@ -298,8 +298,9 @@ love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), player
 
  for i =1,nrHumans do 
   if humans[i] ~= nil then
-    humans[i]:draw()
-	humans[i]:deathCheck()
+  	if humans[i]:deathCheck() == false then 
+      humans[i]:draw()
+    end
   end
 end
 
@@ -315,6 +316,7 @@ function  beginContact( bodyA, bodyB, coll )
 
   if(bData == "Human") then 
 	bodyB:destroy()
+
   end
 
   if(aData == "Human") then 
