@@ -127,6 +127,8 @@ function love.load()
 
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100)
+  love.graphics.setNewFont("media/Flixel.ttf", 24)
+  
 end
 
 function love.update(dt)
@@ -219,8 +221,9 @@ end
 function love.draw()
   love.graphics.draw(background, 0, 0, 0, 1.56, 1.56, 0, 50)
   love.graphics.setColor(255, 255, 255)
-  love.graphics.print(text, 10, 10)
+  -- love.graphics.print(text, 10, 10)
 
+  
   --love.graphics.translate(width * 0.1 - body:getX(), 0)
    
 
@@ -239,6 +242,8 @@ function love.draw()
 
   love.graphics.setColor(255, 255, 255)
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
+
+  love.graphics.print("Monster HP: " .. monsterHP, 400,10)
 end
 
 function updateTilesetBatch()
@@ -297,9 +302,13 @@ function beginContact(bodyA, bodyB, coll)
 
   if(aData == "Crate" or bData == "Crate") then
 	firedCrate = false
-	monsterHP = monsterHP - 10
+	-- monsterHP = monsterHP - 10
 	print("crate on the GROUND")
 	print("monsterHP" .. monsterHP)
+  end
+
+  if(aData == "monster" or bData == "monster") then
+    monsterHP = monsterHP - 1
   end
 end
 
