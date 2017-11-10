@@ -124,19 +124,32 @@ function love.load()
  playDeathSound = true
  playRunSound = true
 
- music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
+ --[[music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
  music:setVolume(0.1)
- love.audio.play(music)
+ love.audio.play(music) --]]
 
  footstep1 = love.audio.newSource("media/foot1.mp3", "static")
  footstep2 = love.audio.newSource("media/foot2.mp3", "static")
  footstep3 = love.audio.newSource("media/foot3.mp3", "static")
- footstep3 = love.audio.newSource("media/foot3.mp3", "static")
+ footstep4 = love.audio.newSource("media/foot4.mp3", "static")
+
+ humanSteps = {[1] = footstep1, [2] = footstep2, [3] = footstep3, [4] = footstep4} 
+ 
+  function PlayHumanFootstepSound ()
+   randomHumanStep = humanSteps [math.random(#humanSteps)]
+   randomHumanStep:play()
+  end
 
  monsterStep1 = love.audio.newSource("media/flap1.mp3", "static")
  monsterStep2 = love.audio.newSource("media/flap2.mp3", "static")
  monsterStep3 = love.audio.newSource("media/flap3.mp3", "static")
 
+ monsterSteps = {[1] = monsterStep1, [2] = monsterStep2, [3] = monsterStep3}
+
+ function PlayMonsterFootstepSound ()
+  randomMonsterStep = monsterSteps [math.random(#monsterSteps)]
+  randomMonsterStep:play()
+ end
 
  --sound layers of the Laser
     laser1 = love.audio.newSource("media/crumble.mp3", "static")
@@ -203,17 +216,16 @@ if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<wi
    player1Orientation = -1
 end
 
---function PlayLaserSound()
-  --laser1:play()
-  --laser2:play()
-  --laser3:play()
-  --laser4:play()
---end
+function PlayLaserSound()
+  laser1:play()
+  laser2:play()
+  laser3:play()
+  laser4:play()
+end
 
 if shooting1 then
   Shooting(dt)
-  --PlayHumanFootstepSound()
-  --PlayLaserSound()
+  PlayLaserSound()
   end
 
 if shooting1 == true then
