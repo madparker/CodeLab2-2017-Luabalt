@@ -25,7 +25,6 @@ end
 
 function human:setupHuman(x,y)
 
-  print("reaching here")
 
   self.x = x
   self.y = y
@@ -49,7 +48,8 @@ function human:setupHuman(x,y)
   runAnim = anim8.newAnimation(g('1-16',1),0.05)
   jumpAnim = anim8.newAnimation(g('1-9',2), 0.1)
 
-  currentAnim2 = runAnim
+  currentAnim0 = runAnim
+
 
   if self.x > 0 then
     self.orientation = -1
@@ -61,17 +61,17 @@ end
 
 function human:update(body,dt)
  	
- 	currentAnim2:update(dt)
+ 	--currentAnim0:update(dt)
   self.body:setLinearVelocity((love.math.random(2000,4000)* self.orientation) * dt,0)
 
 end
 
 function human:draw()
 
- 	currentAnim2:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.orientation, 1,self.width/2, 0)
+ 	currentAnim0:draw(self.image, self.body:getX(), self.body:getY(), self.body:getAngle(), self.orientation, 1,self.width/2, 0)
 
   
-  love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
+  --love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
 end
 
 

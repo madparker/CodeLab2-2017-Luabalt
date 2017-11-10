@@ -21,18 +21,9 @@ shootHeight =40
 
 humanSize = 20
 
--- working on creating humans
-nrHumans = 0
+--Set how many humans we want spawned when the game starts
+nrHumans = 8
 
--- function CreateHuman()
--- 	nrHumans +=1
--- 	humanBody = love.physics.newBody(world, 200, 200, "dynamic")
--- 	humanBox = love.physics.newRectangleShape(humanSize/2, humanSize/2, humanSize, humanSize)
--- 	humanFixture = love.physics.newFixture(humanBody, humanBox)
--- 	humanFixture:setUserData("human"..nrHumans)
--- 	humanBody:setMassData(humanBody:computeMass( 1 ))
--- 	humanBody:setFixedRotation(true)
--- end
 
 function love.load()
   width = 700
@@ -101,10 +92,10 @@ function love.load()
   shootTime1 = shootTime
   shootTime2 = shootTime
 
-  human1 = nil
+  humans = {h1,h2,h3,h4,h5}
 
-  human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
-  human3 = nil
+  for i = 1,nrHumans do humans[i] = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 )) end
+
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -166,34 +157,29 @@ function love.update(dt)
   player1_velY = 0
 
   currentAnim1:update(dt)
+  currentAnim0:update(dt)
   
   world:update(dt)
 
-  if human3 ~= nil then
-    human3:update(human3,dt)
-  end
-
-  if human1 ~= nil then
-    human1:update(human1,dt)
-  end
-
-   if human2 ~= nil then
-    human2:update(human2,dt)
-  end
-
 
   if love.timer.getTime() - start > 2 then
-    if human1 == nil then
-      human1 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
-      CounterReset()
-    elseif human2 == nil then 
-      human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
-      CounterReset()
-    elseif human3 == nil then 
-      human3 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
-      CounterReset()
+    for i = 1,nrHumans do
+      if humans[i] == nil then 
+        humans[i] = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+        CounterReset()
+      end
     end
-  end 
+  end
+
+  for i = 1,nrHumans do 
+    if humans[i] ~= nil then
+      humans[i]:update(humans[i],dt)
+      if humans[i].body:getX() < -30 or humans[i].body:getX() > width + 30  then
+       humans[i] = nil
+      end
+   end
+  end
+
 
   
 -- player 1 inputs
@@ -300,18 +286,17 @@ love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), player
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 
    -- Print Score
-  love.graphics.print("Player 1 : " .. player1Score, 20, 10)
+  love.graphics.print("Humans Purged : " .. player1Score, 20, 10)
 
   --human1:draw()
-  human2:draw()
+ -- human2:draw()
 
-  if human3 ~= nil then 
-    human3:draw()
+ for i =1,nrHumans do 
+  if humans[i] ~= nil then
+    humans[i]:draw()
   end
+end
 
-  if human1 ~= nil then 
-    human1:draw()
-  end
 
 end
 
@@ -320,7 +305,7 @@ function  beginContact( bodyA, bodyB, coll )
   local bData =bodyB:getUserData()
 
   if(aData == "Player1" and bData == "Human") then
-    
+
   end
 
 
