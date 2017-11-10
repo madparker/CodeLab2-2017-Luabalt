@@ -106,9 +106,9 @@ function love.load()
   box1 = love.physics.newRectangleShape(25,25,50,50)
   fixture3 = love.physics.newFixture(body1,box1)
 
- 
 
-  human1 = human:setupHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  human1 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+
  
   -- Set the collision callback.
   world:setCallbacks(beginContact,endContact)
@@ -116,7 +116,7 @@ function love.load()
   love.graphics.setNewFont("media/Flixel.ttf", 14)
   love.graphics.setBackgroundColor(155,155,155)
 
-  human:counterReset()
+  CounterReset()
 
 
  --AUDIO
@@ -168,7 +168,16 @@ function love.update(dt)
   currentAnim1:update(dt)
   
   world:update(dt)
-  human:update(dt)
+  human1:update(human1,dt)
+
+  if (human2 ~= nil) then
+    human2:update(human2,dt)
+  end
+
+  if love.timer.getTime() - start > 10 then
+  human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  CounterReset()
+  end 
 
   
 -- player 1 inputs
@@ -218,6 +227,10 @@ player1_body:setLinearVelocity(player1_velX, player1_velY)
     t = t + dt
   end
 
+end
+
+function CounterReset()
+  start = love.timer.getTime()
 end
 
 function Shooting(dt)
@@ -273,7 +286,11 @@ love.graphics.rectangle("line", body1:getX(),body1:getX(),50,50)
    -- Print Score
   love.graphics.print("Player 1 : " .. player1Score, 20, 10)
 
-  human:draw()
+  human1:draw()
+
+   if (human2 ~= nil) then
+    human2:draw()
+  end
 
 end
 

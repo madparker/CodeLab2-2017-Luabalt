@@ -17,12 +17,15 @@ function human:makeHuman(x,y)
 
 	local self = setmetatable({},human)
 
-	self:setUpHuman(x,y)
+	self:setupHuman(x,y)
+
 
 	return self
 end
 
 function human:setupHuman(x,y)
+
+  print("reaching here")
 
   self.x = x
   self.y = y
@@ -55,19 +58,11 @@ function human:setupHuman(x,y)
 
 end
 
-function human:counterReset()
-  start = love.timer.getTime()
-end
-
-function human:update(dt)
+function human:update(body,dt)
  	
  	currentAnim2:update(dt)
   self.body:setLinearVelocity((love.math.random(2000,4000)* self.orientation) * dt,0)
 
-  if love.timer.getTime() - start > 10 then
-  self:setupHuman(GetScreenSide(),love.math.random( 100, 200 ))
-  self:counterReset()
-  end 
 end
 
 function human:draw()
