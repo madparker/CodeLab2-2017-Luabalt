@@ -37,7 +37,7 @@ function laser:setupLaser(x,y)
   self.body:setFixedRotation(true)
 
   self.fixture = love.physics.newFixture(self.body, self.shape)
-  self.fixture:setUserData("laser")
+  self.fixture:setUserData("Laser")
   --fixture:setFilterData(1,1,-1)
 
 end
@@ -49,5 +49,7 @@ end
 function laser:destroyLaser()
 
 	self.fixture:destroy()
+	--self.body:destroy()
+
 
 end

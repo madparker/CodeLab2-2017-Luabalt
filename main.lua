@@ -240,11 +240,13 @@ function Shooting(dt)
 
   if shootTime1 > 0 then
   shootTime1 = shootTime1-dt
-  laserObject = laser:makeLaser(player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
+	 if laserObject == nil then
+		laserObject = laser:makeLaser(player1_body:getX() + playerWidth/2-shootWidth/2 - player1Orientation*(playerWidth/2+shootWidth/2),
                 player1_body:getY() - shootHeight/2, shootWidth, shootHeight)
-  
+		end
 else
   laserObject:destroyLaser()
+  laserObject = nil;
   shooting1 = false
   shootTime1 = shootTime
   
@@ -297,6 +299,7 @@ love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), player
  for i =1,nrHumans do 
   if humans[i] ~= nil then
     humans[i]:draw()
+	humans[i]:deathCheck()
   end
 end
 
@@ -307,8 +310,17 @@ function  beginContact( bodyA, bodyB, coll )
   local aData=bodyA:getUserData()
   local bData =bodyB:getUserData()
 
-  if(aData == "Player1" and bData == "Human") then
+  if(aData == "Laser" and bData == "Human" or aData ==  "Human" and bData == "Laser") then
+  player1Score = player1Score + 1
 
+  if(bData == "Human") then 
+	bodyB:destroy()
+  end
+
+  if(aData == "Human") then 
+	bodyA:destroy()
+  end
+  
   end
 
 

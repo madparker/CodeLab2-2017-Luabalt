@@ -74,4 +74,8 @@ function human:draw()
   --love.graphics.rectangle("line", self.body:getX(), self.body:getY(), self.width, self.height )
 end
 
-
+function human:deathCheck()
+	if self.body:isDestroyed() then 
+	print("DEAD")
+	end
+end
