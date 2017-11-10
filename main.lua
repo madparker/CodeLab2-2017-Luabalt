@@ -149,7 +149,7 @@ function love.load()
  
   function PlayHumanFootstepSound ()
    randomHumanStep = humanSteps [math.random(#humanSteps)]
-   RandomizeVolume(4.9, 5.1, randomHumanStep)
+   RandomizeVolume(0.98, 1, randomHumanStep)
    RandomizePitch(0.9, 1, randomHumanStep)
    randomHumanStep:play()
   end
@@ -165,7 +165,7 @@ function love.load()
 
  function PlayMonsterFootstepSound ()
   randomMonsterStep = monsterSteps [math.random(#monsterSteps)]
-  RandomizeVolume(4.9, 5.1, randomMonsterStep)
+  RandomizeVolume(0.98, 1, randomMonsterStep)
   RandomizePitch(0.1, 1, randomMonsterStep)
   randomMonsterStep:play()
  end
