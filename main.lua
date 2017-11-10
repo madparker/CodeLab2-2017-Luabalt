@@ -213,13 +213,7 @@ function love.update(dt)
    end
   end
 
-  if isWalking == true then
-    if love.timer.getTime() - walkstart >= 0.4 then
-      PlayMonsterFootstepSound()
-      WalkCounterReset()
-    end
-    print("Play walk sound")
-  end
+  
 
 
   
@@ -253,6 +247,14 @@ if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<wi
    isWalking = true
    else
     isWalking = false
+end
+
+if math.abs(player1_velX) > 0 or math.abs(player1_velY) > 0 then
+  if love.timer.getTime() - walkstart >= 0.4 then
+    PlayMonsterFootstepSound()
+    WalkCounterReset()
+  end
+  print("Play walk sound")
 end
 
 function PlayLaserSound()
