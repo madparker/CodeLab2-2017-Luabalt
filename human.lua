@@ -41,6 +41,7 @@ function human:setupHuman(x,y)
 
   fixture = love.physics.newFixture(self.body, self.shape)
   fixture:setUserData("Human")
+  fixture:setFilterData(1,1,-1)
  
 
   self.image = love.graphics.newImage("media/player2.png")

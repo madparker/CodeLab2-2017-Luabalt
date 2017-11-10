@@ -101,7 +101,7 @@ function love.load()
   shootTime1 = shootTime
   shootTime2 = shootTime
 
-  human1 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+  human1 = nil
 
   human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
   human3 = nil
@@ -160,8 +160,6 @@ function love.load()
 
 end
 
-
-
 function love.update(dt)
 
   player1_velX = 0
@@ -170,18 +168,31 @@ function love.update(dt)
   currentAnim1:update(dt)
   
   world:update(dt)
-  human1:update(human1,dt)
-  human2:update(human2,dt)
-
 
   if human3 ~= nil then
     human3:update(human3,dt)
   end
 
+  if human1 ~= nil then
+    human1:update(human1,dt)
+  end
 
-  if love.timer.getTime() - start > 10 then
-    human3 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ),2)
-    CounterReset()
+   if human2 ~= nil then
+    human2:update(human2,dt)
+  end
+
+
+  if love.timer.getTime() - start > 2 then
+    if human1 == nil then
+      human1 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+      CounterReset()
+    elseif human2 == nil then 
+      human2 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+      CounterReset()
+    elseif human3 == nil then 
+      human3 = human:makeHuman(GetScreenSide(),love.math.random( 100, 200 ))
+      CounterReset()
+    end
   end 
 
   
@@ -291,12 +302,27 @@ love.graphics.rectangle("line", player1_body:getX(), player1_body:getY(), player
    -- Print Score
   love.graphics.print("Player 1 : " .. player1Score, 20, 10)
 
-  human1:draw()
+  --human1:draw()
   human2:draw()
 
   if human3 ~= nil then 
     human3:draw()
   end
+
+  if human1 ~= nil then 
+    human1:draw()
+  end
+
+end
+
+function  beginContact( bodyA, bodyB, coll )
+  local aData=bodyA:getUserData()
+  local bData =bodyB:getUserData()
+
+  if(aData == "Player1" and bData == "Human") then
+    
+  end
+
 
 end
 
