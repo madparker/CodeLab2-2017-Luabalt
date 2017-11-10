@@ -203,13 +203,17 @@ if love.keyboard.isDown( "d" ) and shooting1 == false and player1_body:getX()<wi
    player1Orientation = -1
 end
 
+--function PlayLaserSound()
+  --laser1:play()
+  --laser2:play()
+  --laser3:play()
+  --laser4:play()
+--end
+
 if shooting1 then
   Shooting(dt)
-  laser1:play()
-  laser2:play()
-  laser3:play()
-  laser4:play()
-  
+  --PlayHumanFootstepSound()
+  --PlayLaserSound()
   end
 
 if shooting1 == true then
